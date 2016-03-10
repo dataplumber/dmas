@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+Copyright 2007-2008, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+
+$Id: site.xml 5896 2010-09-18 00:22:50Z thuang $
+-->
+
+<project name="Ingest Domain Binding">
+  <bannerLeft>
+    <src>images/podaac_logo.jpg</src>
+    <href>http://podaac-cm.jpl.nasa.gov/</href>
+  </bannerLeft>
+
+  <bannerRight>
+    <name>Ingest Domain Binding&nbsp;&nbsp;</name>
+  </bannerRight>
+
+  <body>
+    <links>
+      <item name="Ingest Domain Binding" href="http://podaac-cm.jpl.nasa.gov/docs/ingest/ingest-gen/ingest-domain/index.html" />
+    </links>
+
+    <menu name="Software Documentation">
+      <item name="About Ingest Domain Binding" href="index.html"/>
+      <item name="XSD Docs" href="xsddoc/index.html"/>
+      <item name="JavaDoc" href="apidocs/index.html"/>
+    </menu>
+
+    <menu ref="reports"/>
+  </body>
+</project>

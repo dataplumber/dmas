@@ -1,0 +1,485 @@
+<?xml version="1.0"?>
+
+<!-- $Id: Dataset.hbm.xml 14546 2015-12-10 14:58:41Z nchung $ -->
+
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="gov.nasa.podaac.inventory.model">
+	<class name="Dataset" table="DATASET">
+		<id name="datasetId" column="DATASET_ID">
+			<generator class="sequence">
+				<param name="sequence">dataset_id_seq</param>
+			</generator>
+		</id>
+		<property name="persistentId" column="PERSISTENT_ID" length="24"/>
+		<property name="shortName" column="SHORT_NAME" length="160"/>
+		<property name="longName" column="LONG_NAME"/>
+		<property name="originalProvider" column="ORIGINAL_PROVIDER" length="160"/>
+		<property name="providerDatasetName" column="PROVIDER_DATASET_NAME" length="160"/>
+		<property name="processingLevel" column="PROCESSING_LEVEL" length="10"/>
+		<property name="latitudeResolution" column="LATITUDE_RESOLUTION" />
+		<property name="longitudeResolution" column="LONGITUDE_RESOLUTION" />
+        <property name="horizontalResolutionRange" column="HORIZONTAL_RESOLUTION_RANGE" length="80"/>
+		<property name="altitudeResolution" column="ALTITUDE_RESOLUTION" length="80"/>
+		<property name="depthResolution" column="DEPTH_RESOLUTION" length="80"/>
+		<property name="temporalResolution" column="TEMPORAL_RESOLUTION" length="1024"/>
+        <property name="temporalResolutionRange" column="TEMPORAL_RESOLUTION_RANGE" length="80"/>
+        <property name="acrossTrackResolution" column="ACROSS_TRACK_RESOLUTION" />
+        <property name="alongTrackResolution" column="ALONG_TRACK_RESOLUTION" />
+        <property name="ascendingNodeTime" column="ASCENDING_NODE_TIME" length="80"/>
+		<property name="ellipsoidType" column="ELLIPSOID_TYPE" length="160"/>
+		<property name="projectionType" column="PROJECTION_TYPE" length="160"/>
+		<property name="projectionDetail" column="PROJECTION_DETAIL" length="1024"/>
+		<property name="remoteDataset" column="REMOTE_DATASET" length="1"/>
+		<property name="reference" length="1024"/>
+		<!-- TBD: handle description as CLOB -->
+		<property name="description" length="2048"/>
+		<property name="metadata" length="1024"/>
+		<property name="sampleFrequency" column="SAMPLE_FREQUENCY"/>
+		<property name="swathWidth" column="SWATH_WIDTH"/>
+		<property name="temporalRepeat" column="TEMPORAL_REPEAT"/>
+		<property name="temporalRepeatMin" column="TEMPORAL_REPEAT_MIN"/>
+		<property name="temporalRepeatMax" column="TEMPORAL_REPEAT_MAX"/>
+		<property name="note" column="note"/>
+		<!-- Dependent objects -->
+		<set name="DatasetCharacterSet" table="DATASET_CHARACTER" >       
+         <key column="DATASET_ID" foreign-key="DATASET_CHARACTER_FK1" />
+         <composite-element node="DatasetCharacter"
+            class="DatasetCharacter">
+            <property name="value" />
+            <many-to-one name="datasetElement"
+               class="DatasetElement" not-null="true"
+               column="DE_ID" foreign-key="DATASET_CHARACTER_FK2" />
+         </composite-element>
+      </set>
+      <set name="DatasetIntegerSet" table="DATASET_INTEGER" >
+         <key column="DATASET_ID" foreign-key="DATASET_INTEGER_FK1" />
+         <composite-element node="DatasetInteger"
+            class="DatasetInteger">
+            <property name="value" />
+            <property name="units" length="10">
+               <column name="units" />
+            </property>
+            <many-to-one cascade="all" name="datasetElement"
+               class="DatasetElement" not-null="true"
+               column="DE_ID" foreign-key="DATASET_CHARACTER_FK2" />
+         </composite-element>
+      </set>
+      <set name="DatasetRealSet" cascade="all,save-update, delete-orphan" table="DATASET_REAL">
+         <key column="DATASET_ID" foreign-key="DATASET_REAL_FK1" />
+         <composite-element  node="DatasetReal" class="DatasetReal">
+            <property name="value">
+               <column name="VALUE" sql-type="number" />
+            </property>
+            <property name="units" length="10">
+               <column name="units" />
+            </property>
+           <many-to-one name="datasetElement" 
+               class="DatasetElement" not-null="true"
+               column="DE_ID" foreign-key="DATASET_REAL_FK2" />
+         </composite-element>
+      </set>
+      <set name="DatasetDateTimeSet" table="DATASET_DATETIME" >
+         <key column="DATASET_ID" foreign-key="DATASET_DATETIME_FK1" />
+         <composite-element node="DatasetDateTime"
+            class="DatasetDateTime">
+            <property name="valueLong">
+               <column name="VALUE_LONG" sql-type="NUMBER" />
+            </property>
+            <many-to-one name="datasetElement"
+               class="DatasetElement" not-null="true"
+               column="DE_ID" foreign-key="DATASET_CHARACTER_FK2" />
+         </composite-element>
+      </set>
+		<set name="citationSet" table="DATASET_CITATION">
+			<key column="DATASET_ID" foreign-key="DATASET_CITATION_FK1"/>
+			<composite-element node="datasetCitation" class="DatasetCitation">
+				<property name="title"/>
+				<property name="creator"/>
+				<property name="version" length="80"/>
+				<property name="publisher" length="100"/>
+				<property name="seriesName" column="SERIES_NAME" length="160"/>
+				<property name="releaseDateLong" column="RELEASE_DATE_LONG"/>
+				<property name="releasePlace" column="RELEASE_PLACE" length="100"/>
+				<property name="citationDetail" column="CITATION_DETAIL"/>
+				<property name="onlineResource" column="ONLINE_RESOURCE"/>
+			</composite-element>
+		</set>
+		<set name="resourceSet" table="DATASET_RESOURCE">
+			<key column="DATASET_ID" foreign-key="DATASET_RESOURCE_FK1"/>
+			<composite-element node="datasetResource" class="DatasetResource">
+				<property name="resourceName" column="NAME" length="80"/>
+				<property name="resourcePath" column="PATH" />
+				<property name="resourceType" column="TYPE" length="31" />
+				<property name="resourceDescription" column="DESCRIPTION" length="1024"/>
+			</composite-element>
+		</set>
+		<set name="softwareSet" table="DATASET_SOFTWARE">
+			<key column="DATASET_ID" foreign-key="DATASET_SOFTWARE_FK1"/>
+			<composite-element node="datasetSoftware" class="DatasetSoftware">
+				<property name="softwareName" column="NAME" length="80"/>
+				<property name="softwareType" column="TYPE" length="31"/>
+				<property name="softwarePath" column="PATH"/>
+				<property name="softwareDateLong" column="RELEASE_DATE_LONG"/>
+				<property name="softwareVersion" column="VERSION" length="20"/>
+				<property name="softwareLanguage" column="LANGUAGE" length="20"/>
+				<property name="softwarePlatform" column="PLATFORM" length="20"/>
+				<property name="softwareDescription" column="DESCRIPTION" length="1024"/>
+			</composite-element>
+		</set>
+		<set name="locationPolicySet" table="DATASET_LOCATION_POLICY">
+			<key column="DATASET_ID" foreign-key="DATASET_LOCATION_POLICY_FK1"/>
+			<composite-element node="datasetLocationPolicy" class="DatasetLocationPolicy">
+				<property name="type" length="20"/>
+				<property name="basePath" column="BASE_PATH"/>
+			</composite-element>
+		</set>
+		<set cascade="all,delete-orphan" name="parameterSet" table="DATASET_PARAMETER">
+		   <key column="DATASET_ID" foreign-key="DATASET_PARAMETER_FK1" />
+		   <composite-element node="datasetParameter"
+		      class="DatasetParameter">
+		      <property name="category" length="80" />
+		      <property name="topic" length="80" />
+		      <property name="term" length="80" />
+		      <property name="variable" length="80" />
+		      <property name="variableDetail" column="VARIABLE_DETAIL"
+		         length="160" />
+		   </composite-element>
+		</set>
+		<set cascade="all,delete-orphan" lazy="false" fetch="join" name="regionSet" table="DATASET_REGION">
+		   <key column="DATASET_ID" foreign-key="DATASET_REGION_FK1" />
+		   <composite-element node="datasetRegion"
+		      class="DatasetRegion">
+		      <property name="region" length="128" />
+		      <property name="regionDetail" column="REGION_DETAIL" length="1024" />
+		   </composite-element>
+		</set>
+
+        <!-- include xml mapping here can cause heap memory problem -->
+        
+         <!-- removed: cascade="all-delete-orphan" -->
+		<set name="granuleSet" inverse="true" embed-xml="false" > <!-- cascade="all-delete-orphan" -->
+		   <key column="DATASET_ID" foreign-key="GRANULE_FK1" />
+		   <one-to-many class="Granule" />
+		</set>
+
+       <!-- classes with composite-id that hibernate does not have a way to exclude its key-many-to-one FK -->
+		<set name="datasetElementSet" inverse="true" embed-xml="false" 
+		   cascade="all,delete-orphan">
+		   <key column="DATASET_ID" />
+		   <one-to-many class="DatasetElement"  not-found="ignore"/>
+		</set>
+		
+		<!-- cascade="all-delete-orphan" -->
+ 		<set name="versionSet" inverse="true" cascade="all,delete-orphan" embed-xml="false">
+		   <key column="DATASET_ID" />
+		   <one-to-many class="DatasetVersion" />
+		</set>
+		<set name="metaHistorySet" inverse="true" fetch="join" embed-xml="false"
+		   cascade="all-delete-orphan">
+		   <key column="DATASET_ID" />
+		   <one-to-many class="DatasetMetaHistory" />
+		</set>
+		<set name="sourceSet" inverse="true" embed-xml="false"
+		   cascade="all-delete-orphan">
+		   <key column="DATASET_ID" />
+		   <one-to-many class="DatasetSource" />
+		</set>
+		<!-- cascade="all-delete-orphan" cascade="all,delete-orphan"-->
+		<set name="contactSet" inverse="false"   cascade="all,delete-orphan" embed-xml="false">
+		   <key column="DATASET_ID" update="false" />
+		   <one-to-many class="DatasetContact"   />
+		</set>
+		<set name="collectionDatasetSet" inverse="true" embed-xml="false"
+		   cascade="all-delete-orphan">
+		   <key column="DATASET_ID"/>
+		   <one-to-many class="CollectionDataset" />
+		</set>
+        <set name="projectSet" inverse="true" embed-xml="false"
+           cascade="all-delete-orphan">
+           <key column="DATASET_ID" />
+           <one-to-many class="DatasetProject" />
+        </set>
+
+		<!-- A one-to-one shared primary key entity association -->
+		<one-to-one name="datasetPolicy" class="DatasetPolicy"
+            constrained="true" cascade="delete" />
+
+		<one-to-one name="datasetCoverage" class="DatasetCoverage"
+		   constrained="true" cascade="delete"/>
+
+		<!-- many-to-one entities -->
+		<many-to-one name="provider" class="Provider"
+		   column="PROVIDER_ID" foreign-key="DATASET_FK1" />
+
+	</class>
+
+	<!-- Class Definitions for entities with one-to-one Dataset -->
+	<class name="DatasetPolicy" table="DATASET_POLICY">
+		<!-- Shared primary key generator, dependend on "dataset" property -->
+		<id name="datasetId" column="DATASET_ID">
+			<generator class="foreign">
+				<param name="property">dataset</param>
+			</generator>
+		</id>
+		<property name="dataClass" column="DATA_CLASS" length="20" />
+		<property name="dataFrequency">
+		   <column name="DATA_FREQUENCY" sql-type="number" />
+		</property>
+		<property name="dataVolume">
+		   <column name="DATA_VOLUME" sql-type="number" />
+		</property>
+		<property name="dataDuration">
+		   <column name="DATA_DURATION" sql-type="number" />
+		</property>
+		<property name="dataLatency">
+		   <column name="DATA_LATENCY" sql-type="number" />
+		</property>
+		<property name="accessType" column="ACCESS_TYPE" length="20" />
+		<property name="basePathAppendType" column="BASE_PATH_APPEND_TYPE" length="20" />
+		<property name="dataFormat" column="DATA_FORMAT" length="20" />
+		<property name="compressType" column="COMPRESS_TYPE"
+			length="20" />
+		<property name="checksumType" column="CHECKSUM_TYPE"
+		   length="20" />
+		<property name="spatialType" column="SPATIAL_TYPE"
+		   length="20" />
+		<property name="accessConstraint" column="ACCESS_CONSTRAINT"
+			length="1024" />
+		<property name="useConstraint" column="USE_CONSTRAINT"
+			length="1024" />
+		<property name="viewOnline" column="VIEW_ONLINE"
+			length="1" />
+		<!-- <property name="versioned" column="versioned"
+			length="1" />
+		<property name="versionPolicy" column="VERSION_POLICY"
+			length="20" /> -->
+		<!-- A shared primary key association, the identifier generator uses the
+			identifier value of the associated instance.-->
+		<one-to-one  name="dataset" class="Dataset" constrained="true" embed-xml="false"
+            foreign-key="DATASET_POLICY_FK1"/>
+	</class>
+
+	<class name="DatasetCoverage" table="DATASET_COVERAGE">
+		<!-- Shared primary key generator, dependend on "dataset" property -->
+		<id name="datasetId" column="DATASET_ID">
+			<generator class="foreign">
+				<param name="property">dataset</param>
+			</generator>
+		</id>
+		<property name="startTimeLong">
+			<column name="START_TIME_LONG" sql-type="NUMBER"/>
+		</property>
+		<property name="stopTimeLong">
+			<column name="STOP_TIME_LONG" sql-type="NUMBER"/>
+		</property>
+		<property name="northLat">
+			<column name="NORTH_LAT" sql-type="NUMBER"/>
+		</property>
+		<property name="southLat">
+			<column name="SOUTH_LAT" sql-type="NUMBER"/>
+		</property>
+		<property name="eastLon">
+			<column name="EAST_LON" sql-type="NUMBER"/>
+		</property>
+		<property name="westLon">
+			<column name="WEST_LON" sql-type="NUMBER"/>
+		</property>
+		<property name="minAltitude">
+			<column name="MIN_ALTITUDE" sql-type="NUMBER"/>
+		</property>
+		<property name="maxAltitude">
+			<column name="MAX_ALTITUDE" sql-type="NUMBER"/>
+		</property>
+		<property name="minDepth">
+			<column name="MIN_DEPTH" sql-type="NUMBER"/>
+		</property>
+		<property name="maxDepth">
+			<column name="MAX_DEPTH" sql-type="NUMBER"/>
+		</property>
+	        <property name="granuleRange360" column="GRANULE_RANGE_360" length="1"/>
+		<!-- A shared primary key association, the identifier generator uses the
+         		identifier value of the associated instance. -->
+		<one-to-one name="dataset" class="Dataset" constrained="true" embed-xml="false"
+            foreign-key="DATASET_COVERAGE_FK1"/>
+	</class>
+
+	<!-- Class Definitions for entities with many-to-one Dataset -->
+	<class name="DatasetVersion" table="DATASET_VERSION">
+		<composite-id name="datasetVersionPK" class="DatasetVersion$DatasetVersionPK">
+			<key-many-to-one name="dataset" class="Dataset"
+							column="DATASET_ID" foreign-key="DATASET_VERSION_FK1"/>
+			<!-- versionId is the max number within the dataset -->
+			<key-property name="versionId" column="VERSION_ID"/>
+		</composite-id>
+		<property name="version" length="80"/>
+		<property name="versionDateLong" column="VERSION_DATE_LONG"/>
+		<property name="description" length="1024"/>
+	</class>
+
+	<class name="DatasetMetaHistory" table="DATASET_META_HISTORY">
+		<composite-id name="metaHistoryPK" class="DatasetMetaHistory$DatasetMetaHistoryPK">
+			<key-many-to-one name="dataset" class="Dataset"
+							column="DATASET_ID" foreign-key="DATASET_META_HISTORY_FK1"/>
+			<!-- versionId is the max number within the dataset -->
+			<key-property name="versionId" column="VERSION_ID"/>
+		</composite-id>
+		<property name="creationDateLong" column="CREATION_DATE_LONG"/>
+		<property name="lastRevisionDateLong" column="LAST_REVISION_DATE_LONG"/>
+		<property name="revisionHistory" column="REVISION_HISTORY" length="1024"/>
+      		<property name="echoSubmitDateLong" column="ECHO_SUBMIT_DATE_LONG" />
+	</class>
+
+	<class name="DatasetContact" table="DATASET_CONTACT">
+		<composite-id name="datasetContactPK" class="DatasetContact$DatasetContactPK">
+			<key-many-to-one name="dataset" class="Dataset" 
+							column="DATASET_ID" foreign-key="DATASET_CONTACT_FK1"/>
+			<key-many-to-one name="contact" class="Contact"
+							column="CONTACT_ID" foreign-key="DATASET_CONTACT_FK2"/>
+		</composite-id>
+	</class>
+
+	<class name="DatasetSource" table="DATASET_SOURCE">
+		<composite-id name="datasetSourcePK" class="DatasetSource$DatasetSourcePK">
+			<key-many-to-one name="dataset" class="Dataset"
+							column="DATASET_ID" foreign-key="DATASET_SOURCE_FK1"/>
+			<key-many-to-one name="source" class="Source"
+							column="SOURCE_ID" foreign-key="DATASET_SOURCE_FK2"/>
+			<key-many-to-one name="sensor" class="Sensor"
+							column="SENSOR_ID" foreign-key="DATASET_SOURCE_FK3"/>
+		</composite-id>
+	</class>
+
+    <class name="DatasetProject" table="DATASET_PROJECT">
+        <composite-id name="datasetProjectPK" class="DatasetProject$DatasetProjectPK">
+         <key-many-to-one name="dataset" class="Dataset"
+                     column="DATASET_ID" foreign-key="DATASET_PROJECT_FK1"/>
+         <key-many-to-one name="project" class="Project"
+                     column="PROJECT_ID" foreign-key="DATASET_PROJECT_FK2"/>
+        </composite-id>
+    </class>
+
+	<class name="Source" table="SOURCE">
+		<id name="sourceId" column="SOURCE_ID">
+			<generator class="sequence">
+				<param name="sequence">source_id_seq</param>
+			</generator>
+		</id>
+		<property name="sourceShortName" column="SHORT_NAME" length="31"/>
+		<property name="sourceLongName" column="LONG_NAME" length="80"/>
+		<property name="sourceType" column="TYPE" length="80"/>
+		<property name="orbitPeriod">
+		   <column name="ORBIT_PERIOD" sql-type="number" />
+		</property>
+		<property name="inclinationAngle">
+		   <column name="INCL_ANGLE" sql-type="number" />
+		</property>
+		<property name="sourceDescription" column="DESCRIPTION" length="1024"/>
+		<set name="datasetSourceSet" inverse="true" embed-xml="false">
+			<key column="SOURCE_ID" />
+			<one-to-many class="DatasetSource"/>
+		</set>
+		<!-- <set name="sensorSet" inverse="true">
+			<key column="SOURCE_ID" />
+			<one-to-many class="Sensor"/>
+		</set> -->
+	</class>
+
+	<class name="Sensor" table="SENSOR">
+		<id name="sensorId" column="SENSOR_ID">
+			<generator class="sequence">
+				<param name="sequence">sensor_id_seq</param>
+			</generator>
+		</id>
+		<property name="sensorShortName" column="SHORT_NAME" length="1024"/>
+		<property name="sensorLongName" column="LONG_NAME" length="80"/>
+		<property name="swathWidth">
+			<column name="SWATH_WIDTH" sql-type="number"/>
+		</property>
+		<property name="sampleFrequency" column="SAMPLE_FREQUENCY"/>
+		<property name="sensorDescription" column="DESCRIPTION" length="1024"/>
+		<set name="datasetSourceSet" inverse="true" embed-xml="false">
+			<key column="SENSOR_ID"/>
+			<one-to-many class="DatasetSource"/>
+		</set>
+	</class>
+
+	<class name="MetadataManifest" table="METADATA_MANIFEST">
+		 <id name="manifestId" column="MANIFEST_ID">
+         <generator class="sequence">
+            <param name="sequence">metadata_manifest_id_seq</param>
+         </generator>
+         </id>
+         <property name="user" length="20" column="USERNAME"/>
+         <property name="submissionDate" type="java.lang.Long">
+         	<column sql-type="number" name="SUBMISSION_DATE_LONG"/>
+         </property>
+         <property name="itemId" column="ITEM_ID"/>
+         <property name="type" column="TYPE" length="10"/>
+         <property name="manifest" column="MANIFEST" />
+         <property name="diff" column="DIFF" />
+	</class>
+
+    <class name="Project" table="PROJECT">
+      <id name="projectId" column="PROJECT_ID">
+         <generator class="sequence">
+            <param name="sequence">project_id_seq</param>
+         </generator>
+      </id>
+      <property name="projectShortName" column="SHORT_NAME" length="31"/>
+      <property name="projectLongName" column="LONG_NAME" length="80"/>
+      <set name="datasetProjectSet" inverse="true" embed-xml="false">
+         <key column="PROJECT_ID" />
+         <one-to-many class="DatasetProject"/>
+      </set>
+   </class>
+   
+  
+
+  <!-- <class name="DatasetSpatial" table="DATASET_SPATIAL">
+      <id name="datasetElement" column="DE_ID">
+         <generator class="foreign">
+            <param name="property">datsetElement</param>
+         </generator>
+      </id>
+      <property name="spatialGeometry" type="org.hibernatespatial.GeometryUserType"
+                 column="SPATIAL_GEOMETRY"/>
+      <one-to-one name="dataset" class="Dataset" constrained="true"
+                  embed-xml="false" foreign-key="DATASET_SPATIAL_FK1"/>
+   </class> -->
+  <!--<class name="ElementDD" table="ELEMENT_DD">
+      <id name="elementId" column="ELEMENT_ID">
+         <generator class="sequence">
+            <param name="sequence">element_id_dataset_seq</param>
+         </generator>
+      </id>
+      <property name="shortName" column="SHORT_NAME" length="30"
+         unique="true" />
+      <property name="longName" column="LONG_NAME" length="80" />
+      <property name="type" length="20" />
+      <property name="dbTable" column="DB_TABLE" length="30" />
+      <property name="description" length="1024" />
+      <set name="DatasetElementSet" embed-xml="false">
+         <key column="ELEMENT_ID" />
+         <one-to-many class="DatasetElement" constrained="true" cascade="all" />
+      </set>
+   </class>
+-->
+	<class name="DatasetElement" table="DATASET_ELEMENT">
+      <id name="deId" column="DE_ID">
+         <generator class="sequence">
+            <param name="sequence">dataset_element_id_seq</param>
+         </generator>
+      </id>
+      <many-to-one  name="dataset" class="Dataset"
+            column="DATASET_ID" foreign-key="DATASET_ELEMENT_FK1" />
+      <many-to-one cascade="save-update" name="elementDD" class="ElementDD" lazy="false"
+            column="ELEMENT_ID" foreign-key="DATASET_ELEMENT_FK2" />
+      <property name="scope" column="SCOPE"
+         length="20" />
+      <property name="obligationFlag" column="OBLIGATION_FLAG"
+         length="1" />
+   </class>
+
+</hibernate-mapping> 

@@ -1,0 +1,25 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 2229 2008-11-03 09:03:45Z thuang $
+
+  ---
+  Operation
+  ---
+  Mike Gangl 
+  ---
+  
+Overview
+
+   Inventory WS is a middleware application implemented using the {{{http://grails.org}Grails}} web framework.  The purpose of this middleware application is to be the centralized service for query and access to the Oracle Database. This service includes: 
+   
+      * Sip Ingestion
+
+      * Dataset Metadata querying
+
+      * Granule MEtadat Querying
+
+      * Source/Sensor querying
+
+      * DMT Updates
+   

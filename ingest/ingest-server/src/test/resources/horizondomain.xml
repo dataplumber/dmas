@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<domain xmlns="http://podaac.jpl.nasa.gov">
+   <default>podaacDev</default>
+   <federation>
+      <name>podaacDev</name>
+      <url>http://lanina.jpl.nasa.gov:8080/ingest-grails-1.1.0/ingest</url>
+   </federation>
+</domain>

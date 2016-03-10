@@ -1,0 +1,13 @@
+<contact type="template"> 
+	<field name="contact_contactId" type="int" required="false"></field>
+	<field name="contact_role" type="char" required="true"></field>
+	<field name="contact_firstName" type="char" required="true"></field>
+	<field name="contact_middleName" type="char" required="false"></field>
+	<field name="contact_lastName" type="char" required="true"></field>
+	<field name="contact_email" type="char" required="true"></field>
+	<field name="contact_phone" type="char" required="false"></field>
+	<field name="contact_fax" type="char" required="false"></field>
+	<field name="contact_address" type="char" required="false"></field>
+	<field name="contact_providerId" type="int" required="false"></field>
+	<field name="contact_notifyType" type="char" required="false"></field>
+</contact>

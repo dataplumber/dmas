@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+     Hypersonic persistence deployment descriptor.
+     
+     DO NOT USE HYPERSONIC IN PRODUCTION or in a clustered environment- Hypersonic does not have transaction isolation
+
+     $Id: hsqldb-persistence-service.xml 3339 2007-11-16 20:48:08Z clebert.suconic@jboss.com $
+ -->
+
+<server>
+
+   <!-- Messaging JMS User Manager MBean config
+        ======================================= -->
+   
+   <mbean code="org.jboss.jms.server.plugin.JDBCJMSUserManagerService"
+      name="jboss.messaging:service=PODAACStateManager"
+      xmbean-dd="xmdesc/JMSUserManager-xmbean.xml">
+      
+      <depends>jboss.jca:service=DataSourceBinding,name=DefaultDS</depends>
+      
+      <depends optional-attribute-name="TransactionManager">jboss:service=TransactionManager</depends>
+      
+      <attribute name="DataSource">java:/DefaultDS</attribute>
+      
+      <attribute name="CreateTablesOnStartup">true</attribute>
+      
+      <attribute name="SqlProperties"><![CDATA[
+         POPULATE.TABLES.01 = INSERT INTO JBM_USER (USER_ID, PASSWD) VALUES ('ingest', 'podaacingest')
+         POPULATE.TABLES.02 = INSERT INTO JBM_USER (USER_ID, PASSWD) VALUES ('inventory', 'podaacinventory')
+         POPULATE.TABLES.03 = INSERT INTO JBM_USER (USER_ID, PASSWD) VALUES ('generate', 'podaacgenerate')
+         POPULATE.TABLES.04 = INSERT INTO JBM_USER (USER_ID, PASSWD) VALUES ('archive', 'podaacarchive')
+         POPULATE.TABLES.05 = INSERT INTO JBM_USER (USER_ID, PASSWD) VALUES ('distribution', 'podaacdistribution')
+         POPULATE.TABLES.06 = INSERT INTO JBM_USER (USER_ID, PASSWD) VALUES ('manager', 'podaacmanager')
+         POPULATE.TABLES.08 = INSERT INTO JBM_USER (USER_ID, PASSWD) VALUES ('thuang', 'password')
+         POPULATE.TABLES.09 = INSERT INTO JBM_USER (USER_ID, PASSWD) VALUES ('qchau', 'qchau388')
+         POPULATE.TABLES.11 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('subscriber', 'ingest')
+         POPULATE.TABLES.12 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('publisher', 'ingest')
+         POPULATE.TABLES.13 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('durpublisher', 'ingest')
+         POPULATE.TABLES.14 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('subscriber', 'inventory')
+         POPULATE.TABLES.15 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('publisher', 'inventory')
+         POPULATE.TABLES.16 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('durpublisher', 'inventory')
+         POPULATE.TABLES.17 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('subscriber', 'generate')
+         POPULATE.TABLES.18 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('publisher', 'generate')
+         POPULATE.TABLES.19 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('durpublisher', 'generate')
+         POPULATE.TABLES.20 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('subscriber', 'archive')
+         POPULATE.TABLES.21 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('publisher', 'archive')
+         POPULATE.TABLES.22 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('durpublisher', 'archive')
+         POPULATE.TABLES.20 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('subscriber', 'distribution')
+         POPULATE.TABLES.21 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('publisher', 'distribution')
+         POPULATE.TABLES.22 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('durpublisher', 'distribution')
+         POPULATE.TABLES.20 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('subscriber', 'manager')
+         POPULATE.TABLES.21 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('publisher', 'manager')
+         POPULATE.TABLES.22 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('durpublisher', 'manager')
+         POPULATE.TABLES.20 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('subscriber', 'thuang')
+         POPULATE.TABLES.21 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('publisher', 'thuang')
+         POPULATE.TABLES.22 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('durpublisher', 'thuang')
+         POPULATE.TABLES.23 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('subscriber', 'qchau')
+         POPULATE.TABLES.24 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('publisher', 'qchau')
+         POPULATE.TABLES.25 = INSERT INTO JBM_ROLE (ROLE_ID, USER_ID) VALUES ('durpublisher', 'qchau')
+      ]]></attribute>
+   </mbean>
+
+</server>

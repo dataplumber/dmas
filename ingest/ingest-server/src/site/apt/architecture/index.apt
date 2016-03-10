@@ -1,0 +1,21 @@
+~~ Copyright 2007, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 333 2007-10-12 00:27:57Z shardman $
+
+  ---
+  Architecture
+  ---
+  Thomas Huang
+  ---
+  
+Architecture
+
+  The core of the Horizon service consists of three managers, Service, File, and Metadata managers.  Each manager serves as the managment entry point to their internal service components.
+
+  Each service Session is an active object (i.e. executes within its own thread), which enables the Ingest sever to handle multiple batch submissions at the the same time.  The Session encapsulates pluggable data product transfer and validation logics, and metadata translation and coordination strategies.  The following diagram details the architecture of the Ingest server:
+
+[../images/horizon_server_scale.jpg] PO.DAAC Ingest Server Architecture
+
+  Click {{{../images/horizon_server.jpg}here}} for a full scale version of the diagram.
+

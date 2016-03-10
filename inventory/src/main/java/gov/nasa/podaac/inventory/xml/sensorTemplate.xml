@@ -1,0 +1,8 @@
+<sensor type="template"> 
+	<field name="sensor_sensorId" type="int" required="true"></field>
+	<field name="sensor_shortName" type="char" required="true"></field>
+	<field name="sensor_longName" type="char" required="true"></field>
+	<field name="sensor_swathWidth" type="int" required="true"></field>
+	<field name="sensor_sampleFrequency" type="float" required="false"></field>
+	<field name="sensor_description" type="char" required="true"></field>
+</sensor>

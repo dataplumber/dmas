@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+
+<!-- 
+   Copyright 2008, by the California Institute of Technology.
+   ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+   
+   $Id: archive.xml 8873 2011-12-06 16:50:35Z gangl $
+-->
+
+<assembly xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+   http://maven.apache.org/xsd/assembly-1.0.0.xsd">
+   <id>archive</id>
+   <formats>
+      <format>tar.gz</format>
+   </formats>
+   <fileSets>
+      <fileSet>
+         <directory>target</directory>
+         <outputDirectory>lib</outputDirectory>
+         <includes>
+            <include>*.jar</include>
+         </includes>
+      </fileSet>
+      <fileSet>
+         <directory>target/classes</directory>
+         <outputDirectory>config</outputDirectory>
+         <includes>
+            <include>archive.config</include>
+            <include>archive.log.properties</include>
+            <include>archivemonitor.log.properties</include>
+           <!-- <include>hibernate.cfg.xml</include>-->
+         </includes>
+         <lineEnding>unix</lineEnding>
+         <fileMode>644</fileMode>
+      </fileSet>
+      <fileSet>
+         <directory>src/main/resources/config</directory>
+         <outputDirectory>config</outputDirectory>
+         <includes>
+            <include>hibernate.cfg.xml</include>
+         </includes>
+	 <filtered>true</filtered>
+         <lineEnding>unix</lineEnding>
+         <fileMode>644</fileMode>
+      </fileSet>
+      <fileSet>
+         <directory>target/classes</directory>
+         <outputDirectory>bin</outputDirectory>
+         <includes>
+	    <include>archive_popularity.sh</include>
+            <include>archive_report_parser.csh</include>
+            <include>aipsubscribe.sh</include>
+            <include>archivemonitor.sh</include>
+            <include>daemon.sh</include>
+            <include>archive_tool.sh</include>
+            <include>archive_GHRSST_Reconciliation.sh</include>
+         </includes>
+         <fileMode>755</fileMode>
+         <lineEnding>unix</lineEnding>
+      </fileSet>
+      <fileSet>
+         <directory>src/main/resources/config/archive</directory>
+         <outputDirectory>config/archive</outputDirectory>
+         <includes>
+            <include>*</include>
+         </includes>
+         <lineEnding>unix</lineEnding>
+         <fileMode>755</fileMode>
+      </fileSet>
+   </fileSets>
+   <dependencySets>
+      <dependencySet>
+         <outputDirectory>lib</outputDirectory>
+         <unpack>false</unpack>
+         <scope>runtime</scope>
+      </dependencySet>
+   </dependencySets>
+</assembly>

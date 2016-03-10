@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+
+<!-- $Id: Collection.hbm.xml 13133 2014-03-26 00:03:20Z gangl $ -->
+
+<!DOCTYPE hibernate-mapping PUBLIC
+   "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="gov.nasa.podaac.inventory.model">
+   <class name="Collection" table="COLLECTION">
+      <id name="collectionId" column="COLLECTION_ID">
+         <generator class="sequence">
+            <param name="sequence">collection_id_seq</param>
+         </generator>
+      </id>
+      <property name="shortName" column="SHORT_NAME" length="80" />
+      <property name="longName" column="LONG_NAME" length="1024" />
+      <property name="type" length="20" />
+      <property name="description" length="4000" />
+      <property name="fullDescription" length="20" column="FULL_DESCRIPTION" />
+	  <property name="aggregate" length="1" />
+
+      <!-- one-to-many to entities that use COLLECTION_ID as their foreign key -->
+      <set name="collectionElementSet" table="COLLECTION_ELEMENT">
+         <key column="COLLECTION_ID"
+            foreign-key="COLLECTION_ELEMENT_FK1" />
+         <composite-element node="CollectionElement"
+            class="CollectionElement">
+            <many-to-one name="collectionElementDD"
+               class="CollectionElementDD" column="ELEMENT_ID"
+               foreign-key="COlLECTION_ELEMENT_FK2" />
+            <property name="characterValue" column="CHARACTER_VALUE" />
+            <property name="datetimeValueLong">
+               <column name="DATATIME_VALUE_LONG" sql-type="NUMBER" />
+            </property>
+            <property name="integerValue" column="INTEGER_VALUE" />
+            <property name="realValue">
+               <column name="REAL_VALUE" sql-type="NUMBER" />
+            </property>
+         </composite-element>
+      </set>
+	 <set name="collectionLegacyProductSet" table="COLLECTION_LEGACY_PRODUCT" fetch="select">
+         <key column="COLLECTION_ID"
+            foreign-key="COLLECTION_LEGACY_PRODUCT_FK1" />
+         <composite-element node="CollectionLegacyProduct"
+            class="CollectionLegacyProduct">
+            <property name="legacyProductId" column="LEGACY_PRODUCT_ID" />
+         </composite-element>
+      </set>
+       
+      <!-- classes with composite-id that hibernate does not have a way to exclude its key-many-to-one FK -->
+      <set name="collectionDatasetSet" inverse="true" embed-xml="false" fetch="select">
+         <key column="COLLECTION_ID" />
+         <one-to-many class="CollectionDataset" />
+      </set>
+      
+      <set name="collectionContactSet" inverse="true" fetch="select" embed-xml="false">
+         <key column="COLLECTION_ID"/>
+         <one-to-many class="CollectionContact" />
+      </set>
+  
+      <!-- one-to-zero-or-one -->          
+      <many-to-one name="collectionProduct" fetch="join" class="CollectionProduct"
+                column="COLLECTION_ID" foreign-key="COLLECTION_PRODUCT_FK1"
+                insert="false" update="false"
+                unique="true" cascade="all"/>      
+   </class>
+
+   <!-- Class Definitions for entities with many-to-one Collection -->
+   <class name="CollectionElementDD" table="COLLECTION_ELEMENT_DD">
+      <id name="elementId" column="ELEMENT_ID">
+         <generator class="sequence">
+            <param name="sequence">element_id_collection_seq</param>
+         </generator>
+      </id>
+      <property name="shortName" column="SHORT_NAME" length="30" />
+      <property name="longName" column="LONG_NAME" length="80" />
+      <property name="type" length="20" />
+      <property name="description" length="1024" />
+   </class>
+   <class name="CollectionDataset" table="COLLECTION_DATASET">
+      <composite-id name="collectionDatasetPK" class="CollectionDataset$CollectionDatasetPK">
+         <key-many-to-one name="collection" class="Collection" 
+                     column="COLLECTION_ID" foreign-key="COLLECTION_DATASET_FK1"/>
+         <key-many-to-one name="dataset" class="Dataset"
+                     column="DATASET_ID" foreign-key="COLLECTION_DATASET_FK2"/>
+      </composite-id>
+      <property name="granuleFlag" column="GRANULE_FLAG" length="1"/>
+      <property name="granuleRange360" column="GRANULE_RANGE_360" length="1"/>
+      <property name="startGranuleId">
+         <column name="START_GRANULE_ID" sql-type="NUMBER" />
+      </property>
+      <property name="stopGranuleId">
+         <column name="STOP_GRANULE_ID" sql-type="NUMBER" />
+      </property>
+   </class>
+   <class name="CollectionContact" table="COLLECTION_CONTACT">
+      <composite-id name="collectionContactPK" class="CollectionContact$CollectionContactPK">
+         <key-many-to-one name="collection" class="Collection" 
+                     column="COLLECTION_ID" foreign-key="COLLECTION_CONTACT_FK1"/>
+         <key-many-to-one name="contact" class="Contact" 
+                     column="CONTACT_ID" foreign-key="COLLECTION_CONTACT_FK2"/>
+      </composite-id>
+   </class>
+   <class name="CollectionProduct" table="COLLECTION_PRODUCT">
+      <id name="collectionId" column="COLLECTION_ID">
+         <generator class="foreign">
+            <param name="property">collection</param>
+         </generator>
+      </id>
+      <property name="productId" column="PRODUCT_ID" />
+      <property name="visibleFlag" column="VISIBLE_FLAG" length="1" />
+      <property name="echoSubmitDateLong" column="ECHO_SUBMIT_DATE_LONG" />
+      <property name="gcmdSubmitDateLong" column="GCMD_SUBMIT_DATE_LONG" />
+      <one-to-one name="collection" class="Collection" constrained="true" 
+                  embed-xml="false" foreign-key="COLLECTION_PRODUCT_FK1"/>
+   </class>
+</hibernate-mapping>

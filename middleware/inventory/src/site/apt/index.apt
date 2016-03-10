@@ -1,0 +1,14 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 2229 2008-11-03 09:03:45Z thuang $
+
+  ---
+  About Inventory WS 
+  ---
+  Mike Gangl
+  ---
+  
+About Inventory WS
+
+  The Inventory WS module contains web components for the RESTful interface to the PO.DAAC Inventory system.

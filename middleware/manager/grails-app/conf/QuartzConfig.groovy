@@ -1,0 +1,4 @@
+
+quartz {
+    autoStartup = false
+}

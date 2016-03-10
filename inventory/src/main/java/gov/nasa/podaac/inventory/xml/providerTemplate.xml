@@ -1,0 +1,7 @@
+<provider type="template"> 
+	<field name="provider_providerId" type="int" required="true"></field>
+	<field name="provider_shortName" type="char" required="true"></field>
+	<field name="provider_longName" type="char" required="true"></field>
+	<field name="provider_type" type="char" required="true"></field>
+	<field name="provider_path#" type="char" required="true"></field>
+</provider>

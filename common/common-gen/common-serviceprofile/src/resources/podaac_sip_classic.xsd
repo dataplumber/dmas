@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+   Copyright (c) 2008
+   Jet Propulsion Laboratory, California Institute of Technology
+   All rights reserved
+   
+   This XML schema defines the classic Submission Information Package (SIP)
+   translated from the classic SPM message that is used by the legacy PO.DAAC
+   ingestion service.  This message will be translated into a complete SIP when
+   the ingest service is done ingesting all referenced file and processed all
+   ingested LOD files.
+   
+   @see podaac_sip_complete.xsd
+   
+   @author T. Huang {Thomas.Huang@jpl.nasa.gov}
+   @version $Id: podaac_sip_classic.xsd 593 2008-02-12 23:34:46Z thuang $
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:podaac.nasa="http://podaac.jpl.nasa.gov"
+    targetNamespace="http://podaac.jpl.nasa.gov" elementFormDefault="qualified">
+    <xsd:include schemaLocation="podaac_common.xsd" />
+    <xsd:complexType name="ClassicSubmissionType">
+        <xsd:annotation>
+            <xsd:documentation> Defines the XML representation of the SPM
+                PACKAGE tag. </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="groups">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="group"
+                            type="podaac.nasa:SubmissionGroupType" minOccurs="1"
+                            maxOccurs="unbounded" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="SubmissionGroupType">
+        <xsd:annotation>
+            <xsd:documentation> In an SPM, a PACKAGE can contain any number of
+                files. However, all the files are registered under a single FTP
+                host. This implies there is only one URL per data file.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string" />
+            <xsd:element name="version" type="xsd:nonNegativeInteger">
+                <xsd:annotation>
+                    <xsd:documentation> The version of the package being
+                        ingested. </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="files">
+                <xsd:annotation>
+                    <xsd:documentation> List of ingestable files for the
+                        package. </xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="file"
+                            type="podaac.nasa:SubmissionFileType" minOccurs="1"
+                            maxOccurs="unbounded" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="SubmissionFileType">
+        <xsd:annotation>
+            <xsd:documentation> Defines a single file reference.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>Name of the file</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="source" type="podaac.nasa:FileType">
+                <xsd:annotation>
+                    <xsd:documentation> The source file inforamtion such as URI,
+                        checksum, etc. </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="type" type="podaac.nasa:FileClassType"
+                minOccurs="0" maxOccurs="1" default="DATA">
+                <xsd:annotation>
+                    <xsd:documentation> Description of the file type.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="format" type="podaac.nasa:DataFormatType"
+                minOccurs="0" maxOccurs="1" default="RAW">
+                <xsd:annotation>
+                    <xsd:documentation> The data format for the data granule
+                        file. </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="ingest" type="podaac.nasa:IngestDetailsType"
+                minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

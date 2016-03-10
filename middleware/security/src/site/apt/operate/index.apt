@@ -1,0 +1,247 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 2229 2008-11-03 09:03:45Z thuang $
+
+  ---
+  Operation
+  ---
+  Mike Gangl 
+  ---
+  
+Overview
+
+   The Security Service WS is a middleware application implemented using the {{{http://grails.org}Grails}} web framework.  The purpose of this middleware application is to be the centralized service for Authorization and Authentication.
+
+   * {{{Intro}Intro}}   
+   
+   * {{{Authentication_and_Authorization}Authentication and Authorization}}
+   
+   * {{{Realms}Realms}}
+   
+   * {{{Verifiers}Verifiers}}
+   
+   * {{{Roles}Roles}}
+   
+   * {{{Tokens}Tokens}}
+   
+   * {{{Front_Page}Front Page}}
+   
+   * {{{Use_Case}Use Cases}}
+   
+   * {{{External_API}External API}}   
+   
+{Intro}
+   
+   The Security service is created to remove disparate forms of Authentication and Authorization in 
+   DMAS services, and provide a single point of management for A&A. Using the security service allows 
+   for a variety of authentication and authorization mechanisms and token based authentication (no more 
+   passwords in the config file).
+   
+   The Security service, however, is not meant to be a user management area. Backwards compatability 
+   for creating and editing the Database users (The current users stored in Oracle) is supported, but 
+   creation of LDAP user or group entries is not.
+   
+   Because user names, passwords, and role information is transmitted to and from the security service and 
+   other services and tools, all traffic is done via SSL, and users must login to the service for any 
+   type of role or password management. The bootstrap should be modified as follows:
+   
++--
+   [name:"PODAAC-SECURITY",description:"Security realm", verifier:"LDAP", tokenExpire:0,
+				roles:[
+					[name:"ADMIN", group:"podaac.dev.security.admin"]
+				]
+			],
++--
+   
+   The 'group' entry should point at an operational LDAP group. Users that are in this LDAP group 
+   will be considered 'Administrators' of the security service. They can create, delete and edit realms, 
+   change passwords, and delete tokens. These operations are covered below.
+   
+   
+{Authentication and Authorization}   
+   
+   It's important to note what authentication and authorization really mean. Authentication simply means that
+   a user is who they say they are. This is commonly done by giving an identifier (user name) and some known 
+   secret (password). Once it has been decided that this is the correct secret, we can be reasonably sure that
+   the user is who they say they are. This lets us do a lot of cool things, like personalize content, save 
+   configuration states (user settings), and associate a user with other application actions (user X approved this Jason-1 cylce).
+   The Security service allows authentication via LDAP (jpl user name and password check) or through the existing database 
+   (PODAAC User/password for manager, dmt, etc).
+   
+   Authoirzation is a separate step that says User X can perform an action. One usually needs to authenticate 
+   that a user really is user X before it starts granting permissions, otherwise anyone can say they are X, and
+   become an admin. Some applicatinos won't even need authorization, because logging in is enough, but for those that do,
+   the Security Service can store and check information for applications on what roles exist and how to associate a user with a role.
+   
+   Authorization in the Security service does not say 'User X can do the following application actions', but rather, the service
+   says 'User X has the following roles: User, Admin, Guest, etc'. It is then up to the application to decide what actions to bin in
+   the USER, ADMIN, and GUEST states.
+   
+   
+{Realms}
+   
+   Realms are the fundamental building block of the security service. A realm can be thought of as 
+   the domain for which you are seeking security. Default realms include PODAAC-MANAGER, PODAAC-INVENTRY,
+   and PODAAC-J1SLX. These allow for different A&A schemese to be used for those realms. For example,
+   J1SLX uses LDAP for authentication, but has no authorization built in. Inventory uses the Database
+   for authentication, and Manager uses the Database for both authentication and authorization.
+   
+   Realms also supports the idea of roles. Roles are a mapping of a common name, like ADMIN or USER 
+   to some representation in LDAP or the Database. Roles are discussed further down in this documentation, 
+   but are unique to each realm. Different criteria for 'ADMIN' can be set for each realm. Roles cannot
+   be shared between realms, so you cannot reuse them, other than entering the same information twice.
+   
+   When creating a realm, the below information is what is seen:
+   
+[../images/fe_realm.png]   
+
+   Name is the name of the realm, Description is just a simple desciption of what the realm is for, 
+   the expiration is how many days a token can be used, And the verifier, described below, is how A&A will be handled.
+   
+   It's important to note that there are no concepts of 'users' when it comes to realms. You do not create or assign users to realms.
+   Roles are how users either belong or don't belong to a role associated with a realm. This is important to know,
+   because if you set up an application for authentication only, anyone with a JPL Username and password (in the case of LDAP) will have access
+   to use the application. Authentication simply lets the application know that the user is who they say they are. Likewise, 
+   any application setup for using the database information will immediately see and authenticate users as they are added to the database.
+   
+   
+{Verifiers}
+
+   Each realm chooses how it is to verify users for A&A. There are currently two verifiers available, 
+   LDAP and DATABASE. LDAP verifiers will authenticate users agains the JPL LDAP, and will match role 
+   information to LDAP groups. If a users is a memeber of an LDAP group specified in a role, they will 
+   have access to that role. Similarly, the Database verifier checks the Oracle database for user/password combinations
+   and fields and rows for role information.
+
+   Verifiers cannot be created during run time, rather they must be configured and tested before being
+   used in the system. This is a development task. Once a verifier is created, however, it can be used by any realm
+   and changed at any time, as long as the apropriate roles are setup.
+   
+   New verifiers can be created for different purposes, including user registration and an upcoming LDAP 
+   Authentication/Database Authorization hybrid which has been requested by Operations.
+
+{Roles}
+
+   Roles are useful only for authorization. If your domain does not have role based access, the authentcation 
+   may be enough. For example, the Inventory tool simply authenticates against the Database, and if that succeeds, it allows 
+   the operation to continue. It is up to the application to determine what roles may perform what functions,
+   the security service simply manages what user belongs to what role.
+   
+   * LDAP
+   
+     LDAP roles map a common name, ADMIN, to an LDAP group, like 'podaac.dev.j1slx'. If a user exists
+     in the LDAP group, they will be considered an admin user. Below is an example of the frontend mapping of a role in LDAP
+     
+[../images/fe_ldap_role.png]     
+     
+   * DATABASE
+   
+     Database roles are bit more tricky. There is a shorthand system used to determine how to check for role applicability.
+     
++--
+     [name:"ADMIN", group:"field:read_all"],
+	 [name:"READ_ALL", group:"field:read_all"],
+	 [name:"WRITE_ALL", group:"field:read_all"],
+	 [name:"DEV", group:"ar:devAddAndGet"],
+	 [name:"DE", group:"ar:deAddAndGet"]
++--
+
+	  The above maps to the following in the Security Service Front End:
+	  
+[../images/database_fields.png]	  
+
+	  You can see above, that the ADMIN roles is set to 'field:read_all' for a DATABASE entry. 
+	  'Field' refers to an entry in the IngSystemUser table in Oracle, of whice there are 3 
+	  posibilities: field:admin, field:read_all, and field:write_all. You can see the mapping below:
+	  
+[../images/database_user.png]
+
+	  The other entries, 'ar:devAddAndGet' map to the database access roles. Access roles are defined 
+	  and then a mapping with a user is created. Below is an example of the role in the database:
+
+[../images/database_ar.png]
+
+
+	  The above roles cna be added, edited, and deleted from the database by using the front end tools:
+	  
+[../images/fe_create_role.png]
+
+	  Name is the name of the role, while capabilities is an integer which means something more 
+	  application specific. Usually it is a bit mask to certain permission, so '7' would map to '1','1','1',
+	  and like in a unix operating system, could correspond to read/write/execute permissions.
+
+      Once a role is defined, they can be associated with users. Below is an image of how this is done:
+
+[../images/fe_roles.png]
+
+      Simply select the user you want to apply a role to, and then select the role to assign them. There is currently no bulk role management system in place. Roles must be defined one at a time.
+
+
+{Tokens}
+
+   Tokens are used to authenticate with domains without supplying an actual password. Users don't want 
+   LDAP usernames/passwords stored in config files or on the command line. These are genereated using the users user/pass combo,
+   and then a realm-specific token is created. This means a token created for INVENTORY cannot be used to authenticate with the MANAGER.
+   
+   Tokens, currently, can only be genereated, via the sapi tool in the common program set. Tokens also 
+   expire after a set amount of time. When creating a realm, a token expiration value is set, which 
+   is the number of days a token can last before being expired. A notification system for token expiration will be built into 
+   future releases.
+
+{Front Page}
+
+   There are different pages setup for admins of the system and users who log in. 
+
+  * user
+
+   Users, upon logging into the system have few options. They are allowed to change their password if
+   their LDAP username matches the username in the Database. If their name matches, their list of tokens 
+   will also appear at the bottom of the screen. 
+   
+   Users have the ability to change their password as long as their login user credential is the same 
+   as their user name in the database.
+   
+[../images/fe_change_pass.png]   
+
+  * admin
+  
+   Admins, upon login will get more options for the system.
+
+[../images/landing_page_admin.png]
+
+   These options will allow administrators to create, edit and delete realms, roles, and tokens if they so choose. 
+   It also allows them to create, edit and delete users in the database at this time. Admins also have 
+   the ability to reset user passwords when they are forgotten.
+
+{Use Case}
+
+   * Use ldap to authenicate a new domain:
+   
+     [[1]] Create a new realm with the information of your new domain. Set the verifier to LDAP.
+
+     [[2]] That's it! If all you're needing is authentication, the LDAP verifier will check a supplied username and pass
+     for authenticity with the JPL LDAP.
+
+   * Use ldap to authenicate a new domain, and have two groups for Admins and USers:
+   
+     [[1]] Create a new realm with the information of your new domain. Set the verifier to LDAP.
+
+     [[2]] After saving the realm, click 'edit' and then click 'Add Role'
+     
+     [[3]] Enter a role name in the 'role name' text box that says 'ADMIN'. Enter in the ldap group in 'role group' 
+     that will designate the admin users, i.e. 'podaac.ops.<domain>.admin'
+     
+     [[4]] Enter a role name in the 'role name' text box that says 'USER'. Enter in the ldap group in 'role group' 
+     that will designate the admin users, i.e. 'podaac.ops.<domain>.user'
+     
+     [[5]] That's it. When a client checks for authentication, it will check LDAP against the user 
+     name and password to authenticate the user. After authentication, the client should either
+     authorize against a particular role or ask for all roles the member has access to. IF the client asks 
+     if user JDOE is authorized as an ADMIN, the verifier will query LDAP to see if JDOE is a memeber of the ldap group
+     'podaac.ops.<domain>.admin' and returns true if they are, false if they are not.
+     
+
+{External API}
+
+   Coming soon.

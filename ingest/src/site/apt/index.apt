@@ -1,0 +1,14 @@
+~~ Copyright 2007, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 6369 2010-11-24 21:34:29Z thuang $
+
+  ---
+  About Ingest
+  ---
+  Sean Hardman
+  ---
+  
+About Ingest
+
+  The Ingest program set is part of the DMAS system, which retrieves and receives data from remove/local location into managed file store. The Ingest service is designed as a reusable webserivce.  The service is to be live close to the physical file store (e.g. staging or archive disk).  In DMAS there are collections of ingest instances to serve as ingestion to pre-archive location, ingestion to archive, and deletion of old data when replace is required.

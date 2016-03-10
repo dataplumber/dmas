@@ -1,0 +1,196 @@
+~~ Copyright 2007-2009, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 14481 2015-11-24 23:17:40Z gangl $
+
+  ---
+  Release Description
+  ---
+  Mike Gangl
+  ---
+  
+Release Description
+
+  The Release Description Documents (RDDs) detail the new and modified capabilities that comprise a particular Inventory Program Set release. These documents will also describe any impact that the new or modified capabilities will have on PO.DAAC operations, data providers and data consumers. The intended audience for these documents includes the PO.DAAC Test Engineer and Configuration Manager.
+
+* Release History
+
+  * Version: {{{./index-4.4.0.html}4.4.0}}
+
+    * Date: 2015-12-02
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-4.4.0.html}4.4.0}}) of the PO.DAAC System. This release is intended as an operational release.
+
+  * Version: {{{./index-4.3.2.html}4.3.2}}
+
+    * Date: 2015-02-02
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-4.3.2.html}4.3.2}}) of the PO.DAAC System. This release is intended as an operational release.
+
+  * Version: {{{./index-4.3.1.html}4.3.1}}
+
+    * Date: 2014-11-03
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-4.3.0.html}4.3.0}}) of the PO.DAAC System. This release is intended as an operational release.
+
+  * Version: {{{./index-4.3.0.html}4.3.0}}
+
+    * Date: 2014-04-25
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-4.3.0.html}4.3.0}}) of the PO.DAAC System. This release is intended as an operational release.
+
+  * Version: {{{./index-4.2.0.html}4.2.0}}
+
+    * Date: 2012-09-01
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-4.2.0.html}4.2.0}}) of the PO.DAAC System. This release is intended as an operational release.
+
+  * Version: {{{./index-4.1.0.html}4.1.0}}
+
+    * Date: 2012-06-08
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-4.1.0.html}4.1.0}}) of the PO.DAAC System. This release is intended as an operational release.
+
+  * Version: {{{./index-4.0.0.html}4.0.0}}
+
+    * Date: 2012-03-14
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-4.0.0.html}4.0.0}}) of the PO.DAAC System. This release is intended as an operational release.
+
+  * Version: {{{./index-3.2.1.html}3.2.1}}
+
+    * Date: 2011-09-30
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-3.2.1.html}3.2.1}}) of the PO.DAAC System. This release is intended as an operational release.
+
+  * Version: {{{./index-3.2.0.html}3.2.0}} 
+
+    * Date: 2011-08-19 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-3.2.0.html}3.2.0}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-3.1.0.html}3.1.0}} 
+
+    * Date: 2011-04-01 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-3.1.0.html}3.1.0}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-3.0.0.html}3.0.0}} 
+
+    * Date: 2011-01-27 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-3.0.0.html}3.0.0}}) of the PO.DAAC System. This release is intended as an operational release. 
+  
+  * Version: {{{./index-2.2.1.html}2.2.1}} 
+
+    * Date: 2010-11-15 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-2.2.1.html}2.2.1}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-2.2.0.html}2.2.0}} 
+
+    * Date: 2010-09-17 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-2.2.0.html}2.2.0}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-2.1.1.html}2.1.1}} 
+
+    * Date: 2010-07-12 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-2.1.1.html}2.1.1}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-2.1.0.html}2.1.0}} 
+
+    * Date: 2010-04-22 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-2.1.0.html}2.1.0}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-2.0.0.html}2.0.0}} 
+
+    * Date: 2010-01-28 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-2.0.0.html}2.0.0}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-1.4.2.html}1.4.2}} 
+
+    * Date: 2009-12-10 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-1.4.2.html}1.4.2}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-1.4.1.html}1.4.1}} 
+
+    * Date: 2009-10-12 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-1.4.1.html}1.4.1}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-1.4.0.html}1.4.0}} 
+
+    * Date: 2009-08-31 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-1.4.0.html}1.4.0}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-1.3.1.html}1.3.1}} 
+
+    * Date: 2009-06-12 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-1.3.1.html}1.3.1}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-1.3.0.html}1.3.0}} 
+
+    * Date: 2009-04-24 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-1.3.0.html}1.3.0}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-1.2.0.html}1.2.0}} 
+
+    * Date: 2009-01-30 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-1.2.0.html}1.2.0}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-1.1.1.html}1.1.1}} 
+
+    * Date: 2008-11-17 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-1.1.1.html}1.1.1}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-1.1.0.html}1.1.0}} 
+
+    * Date: 2008-11-03 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-1.1.0.html}1.1.0}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-1.0.0.html}1.0.0}} 
+
+    * Date: 2008-09-19 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-1.0.0.html}1.0.0}}) of the PO.DAAC System. This release is intended as an operational release. 
+
+  * Version: {{{./index-0.4.1.html}0.4.1}} 
+
+    * Date: 2008-07-30 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-0.4.1.html}0.4.1}}) of the PO.DAAC System. This release is intended as a test release and not an operational release. 
+
+  * Version: {{{./index-0.4.0.html}0.4.0}} 
+
+    * Date: 2008-06-03 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-0.4.0.html}0.4.0}}) of the PO.DAAC System. This release is intended as a test release and not an operational release. 
+
+  * Version: {{{./index-0.3.0.html}0.3.0}} 
+
+    * Date: 2008-04-28 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-0.3.0.html}0.3.0}}) of the PO.DAAC System. This release is intended as a test release and not an operational release. 
+
+  * Version: {{{./index-0.2.0.html}0.2.0}} 
+
+    * Date: 2008-03-03 
+
+    * Description: This release of the Inventory Program Set is a component of the integrated release ({{{./index-0.2.0.html}0.2.0}}) of the PO.DAAC System. This release is intended as a test release and not an operational release. 
+
+  * Version: {{{./index-0.1.0.html}0.1.0}} 
+
+    * Date: 2007-12-14 
+
+    * Description: This release of the Inventory Program Set is a component of the first integrated release ({{{./index-0.1.0.html}0.1.0}}) of the Next Generation PO.DAAC Data Management System. This release is intended as a test release and not an operational release. 

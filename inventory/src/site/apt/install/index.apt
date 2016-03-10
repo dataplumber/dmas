@@ -1,0 +1,577 @@
+~~ Copyright 2007-2009, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 8252 2011-08-19 21:59:35Z gangl $
+
+  ---
+  Installation
+  ---
+  Cynthia Wong, Sean Hardman
+  ---
+  
+Installation
+
+  This document describes how to install and configure the Inventory program set. Since this program set is deployed as an Application Program Interface (API) and not a service, the installation is limited to the database schema. Any installation and configuration of the API is covered in the Installation documents for the program sets that utilize the API. The following sections can be found in this document:
+
+   * {{{Distribution_Contents}Distribution Contents}}
+
+   * {{{Configuration}Configuration}}
+
+   * {{{DMAS2 patch}The 1.4.2 to 2.0.0 patch}}
+
+   * {{{Database_Schema_Creation}Database Schema Creation}}
+
+{Distribution Contents}
+
+  The program set is packaged in a self-contained TAR/GZIP file. The package can be extracted with the following command (where X.X.X is the current version):
+
++--
+% tar -xzvf inventory-X.X.X-inventory.tar.gz
++--
+
+  Below is an illustration of the distribution after it has been extracted:
+
+[../images/inventory_dist.jpg]
+
+  The contents of the package are as follows:
+
+  * <<<config>>> - Directory containing the configuration files.
+
+    * <<<hibernate.cfg.xml>>> - The {{{http://www.hibernate.org/}Hibernate}} configuration file used for database access and object/relational mapping.
+
+    * <<<inventory.log.properties>>> - The {{{http://logging.apache.org/log4j/}Apache log4j}} configuration file used for logging.
+
+    * <<<sql>>> - Directory containing the database schema setup files.
+
+      * <<<create_schema.sql>>> - An SQL script for creating the database objects (e.g., tables, sequences, etc.).
+
+      * <<<create_inventory_triggers.sql>>> - An SQL script for creating triggers on granule and dataset tables.
+       
+      * <<<create_spatial_index.sql>>> - An SQL script for creating the spatial indices and SDO geometry metadata entries.
+      
+      *<<<inentory.package>>> - An SQL script for installing the inventory stored procedures.
+ 
+       *<<<temp.inentory.package>>> - An SQL script for installing a subset of inventory stored procedures, useful for reloading and patching databases.
+ 
+      * <<<drop_schema.sql>>> - An SQL script for dropping the database objects.
+
+      * <<<drop_spatial_index.sql>>> - An SQL script for dropping the spatial indices and SDO geometry metadata entries.
+ 
+      * <<<inventory_schema.pl>>> - An executable Perl script for creating and/or dropping the database schema from a target database.
+
+      * <<<inventory_schema.sh>>> - An executable Bourne Shell script for creating and/or dropping the database schema from a target database. This script executes the <inventory_schema.xml> script.
+
+      * <<<inventory_schema.xml>>> - An Ant script for creating and/or dropping the database schema from a target database. This script is executed via the <inventory_schema.sh> script.
+
+      * <<<load_ghrsst_dsd_data_1.sql>>> - An SQL script for migrating the dataset contents of the GHRSST database into the PO.DAAC database.
+
+      * <<<load_ghrsst_dsd_data_2.sql>>> - An SQL script for migrating the dataset contents of the GHRSST database into the PO.DAAC database.
+
+      * <<<load_ghrsst_dsd_data_3.sql>>> - An SQL script for migrating the dataset contents of the GHRSST database into the PO.DAAC database.
+
+      * <<<load_ghrsst_dsd_data_4.sql>>> - An SQL script for migrating the dataset contents of the GHRSST database into the PO.DAAC database.
+
+      * <<<load_ghrsst_dsd_data_5.sql>>> - An SQL script for migrating the dataset contents of the GHRSST database into the PO.DAAC database.
+
+      * <<<load_ghrsst_fr_data_1.sql>>> - An SQL script for migrating the granule contents of the GHRSST database into the PO.DAAC database.
+
+      * <<<load_ghrsst_fr_data_2.sql>>> - An SQL script for migrating the granule contents of the GHRSST database into the PO.DAAC database.
+
+      * <<<load_ghrsst_fr_data_3.sql>>> - An SQL script for migrating the granule contents of the GHRSST database into the PO.DAAC database.
+
+      * <<<load_ghrsst_fr_data_4.sql>>> - An SQL script for migrating the granule contents of the GHRSST database into the PO.DAAC database.
+
+      * <<<load_ghrsst_policy.sql>>> - An SQL script that sets PO.DAAC specific policy for the GHRSST datasets.
+
+      * <<<load_ghrsst_policy_2.sql>>> - An SQL script that sets PO.DAAC specific policy for the new GHRSST datasets.
+	
+      * <<<load_jason_policy.sql>>> - An SQL script that sets PO.DAAC specific policy for the Jason-1 datasets.
+
+      * <<<load_quikscat_policy.sql>>> - An SQL script that sets PO.DAAC specific policy for the OCO datasets.
+
+      * <<<load_quikscat_policy.sql>>> - An SQL script that sets PO.DAAC specific policy for the QuikSCAT datasets.
+
+      * <<<load_schema.sql>>> - An SQL script for loading initial policy for the database.
+
+      * <<<load_spatial_date.sql>>> - An SQL script for loading the spatial objects for both dataset and granule spatial data.
+
+      * <<<patch_111-to-112_1.sql>>> - An SQL script for patching the 1.1.1 Inventory schema for the 1.1.2 release.
+
+      * <<<patch_111-to-112_2.sql>>> - An SQL script for patching the 1.1.1 Inventory schema for the 1.1.2 release.
+
+      * <<<patch_120-to-130.sql>>> - An SQL script for patching the 1.2.0 or 1.2.1 Inventory schema for the 1.3.0 release.
+
+      * <<<patch_130-to-131.sql>>> - An SQL script for patching the 1.3.0 or 1.3.1 Inventory schema for the 1.3.1 release.
+      
+      * <<<patch_131-to-140.sql>>> - An SQL script for patching the 1.3.1 Inventory schema for the 1.4.0 release.
+      
+      * <<<patch_140-to-141.sql>>> - An SQL script for patching the 1.4.0  Inventory schema for the 1.4.1 release.
+      
+      * <<<patch_141-to-142.sql>>> - An SQL script for patching the 1.4.1 Inventory schema for the 1.4.2 release.
+      
+      * <<<patch_142-to-200.sql>>> - An SQL script for patching the 1.4.2 Inventory schema for the 2.0.0 release.
+      
+      * <<<patch_142-to-200-2.sql>>> - An SQL script for patching the 1.4.2 Inventory schema for the 2.0.0 release FOR OPS/TEST ONLY.
+      
+      * <<<patch_200-to-210.sql>>> - An SQL script for patching the 2.0.0 Inventory schema for the 2.1.0 release.
+
+      * <<<patch_200-to-210-2.sql>>> - A secondary SQL script for patching the 2.0.0 Inventory schema for the 2.1.0 release.
+
+      * <<<patch_200-to-211.sql>>> - An SQL script for patching the 2.1.0 Inventory schema for the 2.1.1 release.
+
+      * <<<patch_211-to-220.sql>>> - An SQL script for patching the 2.1.1 Inventory schema for the 2.2.0 release.
+      
+      * <<<patch_220-to-300.sql>>> - An SQL script for patching the 2.1.1 Inventory schema for the 3.0.0 release.
+      
+      * <<<patch_300-to-310.sql>>> - An SQL script for patching the 2.1.1 Inventory schema for the 3.1.0 release.
+      
+      * <<<patch_310-to-311.sql>>> - An SQL script for patching the 2.1.1 Inventory schema for the 3.1.1 release.
+      
+      * <<<patch_311-to-320.sql>>> - An SQL script for patching the 2.1.1 Inventory schema for the 3.2.0 release.
+
+      * <<<start.sql>>> - An SQL script that initiates a database operation via <sqlplus>.
+
+      * <<<stop.sql>>> - An SQL script that completes a database operation via <sqlplus>.
+
+{Configuration}
+
+  For the current release, the Inventory program set does not consist of any applications that require the configuration detailed in this section. But, if you are using this installation in your own environment or separate from a PO.DAAC System installation, then you should modify the configuration files for your environment. This can also be accomplished by performing the setup detailed in the {{{../compile/index.html#Setup}Setup}} section of the {{{../compile/index.html}Compilation}} document.
+
+* Hibernate Configuration
+
+  Inventory uses Hibernate as its interface with the database. In order to execute any software that utilizes the Inventory API, the user will need to modify the <hibernate.cfg.xml> configuration file to provide the environment-specific database URL, user name, and password to access the database. Edit the following entries in the file:
+
++--
+  <property name="connection.url">${database.url}</property>
+  <property name="connection.username">${database.username}</property>
+  <property name="connection.password">${database.password}</property>
++--
+
+  To look something like the following:
+
++--
+  <property name="connection.url">jdbc:oracle:thin:@{node}:{port}:{sid}</property>
+  <property name="connection.username">{username}</property>
+  <property name="connection.password">{password}</property>
++--
+
+  The configuration file should be referenced as follows:
+
++--
+% java -Dinventory.hibernate.config.file=${HOME}/inventory-X.X.X/config/hibernate.cfg.xml ...
++--
+
+* Apache log4j Configuration
+
+  Inventory also uses Apache's log4j for generating messages and log files. The <inventory.log.properties> configuration file supplied in the distribution package, does not need to be modified unless the user would like to tailor the logging capabilities.
+
+  The configuration file should be referenced as follows:
+
++--
+% java -Dlog4j.configuration=file://${HOME}/inventory-X.X.X/config/inventory.log.properties ...
++--
+
+{The 1.4.2 to 2.0.0 patch}
+
+	Due to the enormous amount of changes in the 2.0 datamodel, certain steps must be taken to apply the 1.4.2 to 2.0.0 patch.
+	+--
+     [dhcp-78-59-244:main/resources/sql] gangl% sh inventory_schema.sh temp.inventory.package
+	 Buildfile: inventory_schema.xml
+     [echo] The connection properties are set as follows:
+     [echo] driver:  oracle.jdbc.driver.OracleDriver
+     [echo] url:     jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV
+     [echo] jar:     /Users/gangl/.m2/repository/com/oracle/ojdbc14/10.2.0.3.0/ojdbc14-10.2.0.3.0.jar
+
+	 temp.inventory.package:
+      [sql] Executing resource: /Users/gangl/dev/podaac/trunk/inventory/src/main/resources/sql/create_inventory_package_tmp.sql
+      [sql] 2 of 2 SQL statements executed successfully
+
+	 BUILD SUCCESSFUL
+	 Total time: 1 second
+	 [dhcp-78-59-244:main/resources/sql] gangl% sh inventory_schema.sh patch_142-to-200
+	 Buildfile: inventory_schema.xml
+     [echo] The connection properties are set as follows:
+     [echo] driver:  oracle.jdbc.driver.OracleDriver
+     [echo] url:     jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV
+     [echo] jar:     /Users/gangl/.m2/repository/com/oracle/ojdbc14/10.2.0.3.0/ojdbc14-10.2.0.3.0.jar
+
+ 	 patch_142-to-200:
+      [sql] Executing resource: /Users/gangl/dev/podaac/trunk/inventory/src/main/resources/sql/patch_142-to-200.sql
+      [sql] 170 of 170 SQL statements executed successfully
+
+	 BUILD SUCCESSFUL
+	 Total time: 50 minutes 34 seconds
+	 
+	 [dhcp-78-59-244:main/resources/sql] gangl% sh inventory_schema.sh patch_142-to-200-2
+	 Buildfile: inventory_schema.xml
+     [echo] The connection properties are set as follows:
+     [echo] driver:  oracle.jdbc.driver.OracleDriver
+     [echo] url:     jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV
+     [echo] jar:     /Users/gangl/.m2/repository/com/oracle/ojdbc14/10.2.0.3.0/ojdbc14-10.2.0.3.0.jar
+
+ 	 patch_142-to-200-2:
+      [sql] Executing resource: /Users/gangl/dev/podaac/trunk/inventory/src/main/resources/sql/patch_142-to-200-2.sql
+      [sql] 35 of 35 SQL statements executed successfully
+
+	 BUILD SUCCESSFUL
+	 Total time: 0 minutes 34 seconds
+	 [dhcp-78-59-244:main/resources/sql] gangl% sh inventory_schema.sh inventory.package
+	 Buildfile: inventory_schema.xml
+     [echo] The connection properties are set as follows:
+     [echo] driver:  oracle.jdbc.driver.OracleDriver
+     [echo] url:     jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV
+     [echo] jar:     /Users/gangl/.m2/repository/com/oracle/ojdbc14/10.2.0.3.0/ojdbc14-10.2.0.3.0.jar
+
+	 inventory.package:
+      [sql] Executing resource: /Users/gangl/dev/podaac/trunk/inventory/src/main/resources/sql/create_inventory_package.sql
+      [sql] 2 of 2 SQL statements executed successfully
+
+	 BUILD SUCCESSFUL
+	 Total time: 1 second
+	 [dhcp-78-59-244:main/resources/sql] gangl
+	+--
+
+{The 2.0.0 to 2.1.0 patch}
+
+	This patch can be run after the 1.4.2 -> 2.0.0 patches have been successfully run. It reorganizes some table data and adds several new columns to the tables. It also creates a new table called "metadata_manifest."
+	
+	+--
+	 [dhcp-78-59-244:main/resources/sql] gangl% sh inventory_schema.sh temp.inventory.package patch_200-to-210 patch_200-to-210-2 inventory.package
+	+--
+	
+	The temp.inventory.package removes a few procedures from the normal package which cause dependency issues when dropping/adding tables and fields.
+
+{The 2.1.1 to 2.2.0 patch}
+
+        This patch can be run after the 2.1.1 patches have been successfully run. It adds some new columns, removes some old ones, and creates a new table (dataset_region). It also adds triggers to dataset and granule tables. 
+
+        +--
+         [dhcp-78-59-244:main/resources/sql] gangl% sh inventory_schema.sh patch_211-to-220
+        +--
+
+
+{Database Schema Creation}
+
+  The database schema for the Inventory Program Set can be created or patched by executing the database schema scripts provided in the release distribution, as specified above. If you have not been given an Oracle Database account for this installation, please contact the database administrator for a user name and password.
+
+  As of release <1.1.2> the database schema can be patched for the current release as opposed to being dropped, created and reloaded. This can be accomplished by specifying the associated <patch_XXX-to-XXX> target for the Bourne shell script or by executing the associated patch scripts via the <exec> option for the Perl script.
+
+  <<Note:>> When loading the dataset policy for each project separately, the GHRSST dataset policy must be loaded first.
+
+* {Inventory Schema (Bourne Shell Script)}
+
+  The Bourne Shell script <inventory_schema.sh> is actually a wrapper for the Ant script <inventory_schema.xml>. The advantage this script has over the Perl script below is that it does not require the Oracle Client to be installed and accessible from the user's machine. Instead it relies on Ant, which is part of the PO.DAAC standard development environment, and the Oracle JDBC driver, which can be installed locally by the user if it is not already available.
+
+  The only configuration required is to install and/or have the Oracle JDBC driver available in the user's environment. The easiest way to accomplish this is to compile the Inventory program set in the target environment. This will automatically download the associated JAR file for the driver and install it in the preferred location (the user's local Maven repository). That location is as follows:
+
++--
+${HOME}/.m2/repository/com/oracle/ojdbc14/10.2.0.3.0/ojdbc14-10.2.0.3.0.jar
++--
+
+  If the JAR file is not located in the above location and the user does not have the ability to compile the Inventory program set, the JAR file can be retrieved from the PO.DAAC Maven reppository as follows:
+
++--
+https://podaac-cm/maven2/com/oracle/ojdbc14/10.2.0.3.0/ojdbc14-10.2.0.3.0.jar
++--
+
+  The script is configured to access the JAR file from the user's local Maven repository as specified above, but the JAR can be located anywhere locally. So, if the JAR file is downloaded manually, it could be located in a directory locally (i.e., ${HOME}/lib). If this is the case, the new location can be specified with the <jar> variable either on the command-line or in a configuration file. Along with the <jar> variable the following variables are supported:
+
+  * Variable: driver
+
+    * Description: The class name for the driver contained in the JAR file. The default value is "oracle.jdbc.driver.OracleDriver". 
+
+  * Variable: url
+
+    * Description:  The URL specifying the Oracle database to access. The default value is "jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV", which corresponds with the PO.DAAC development database instance.
+
+  * Variable: jar
+
+    * Description:  The path specification for the Oracle JAR file. The default value is "${HOME}/.m2/repository/com/oracle/ojdbc14/10.2.0.3.0/ojdbc14-10.2.0.3.0.jar". 
+
+  * Variable: username
+
+    * Description: The Oracle user account name that identifies the owner of the database objects to be created, dropped or manipulated as a resulting of executing the script. There is no default value. 
+
+  * Variable: password
+
+    * Description: The password that corresponds with the Oracle user account name. If entering the password on the command-line and the password contains special characters, each special character should be preceded by a <\\> character and the whole password should be single quoted. There is no default value. 
+
+  All of the variables above can be specified in a configuration file. The configuration file must be named <.ant.properties> and must be located in the user's home directory. In the following example, the <jar> is specified (assuming it is located in a local <lib> directory), along with the <username> and <password> so that they don't need to be supplied on the command-line:
+
++--
+jar=${HOME}/lib/ojdbc14-10.2.0.3.0.jar
+username=<username>
+password=<password>
++--
+
+  The variables can also be specified on the command-line. The <inventory_schema.sh> script must be executed from a directory where the SQL scripts and the <inventory_schema.xml> script reside. Executing the script with no arguments will produce the following usage statement displayed to the terminal:
+
++--
+% ./inventory_schema.sh
+
+Buildfile: inventory_schema.xml
+     [echo] The connection properties are set as follows:
+     [echo] driver:  oracle.jdbc.driver.OracleDriver
+     [echo] url:     jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV
+     [echo] jar:     /home/<user>/.m2/repository/com/oracle/ojdbc14/10.2.0.3.0/\
+                     ojdbc14-10.2.0.3.0.jar
+
+usage:
+     [echo] This script allows the user to create, drop and load the Inventory database schema.
+
+     [echo] List all of the available targets as follows:
+     [echo] inventory_schema.sh [-p | -projecthelp]
+
+     [echo] Execute one or more of the targets as follows:
+     [echo] inventory_schema.sh [<target> [<target> [...]]]
+
+     [echo] Execute a target with user name and password as follows:
+     [echo] inventory_schema.sh <target> -Dusername=<username> -Dpassword=<password>
+
+BUILD SUCCESSFUL
+Total time: 0 seconds
++--
+
+  The following targets are available for execution:
+
+  * Target: create
+
+    * Description: This target creates the database objects for the Inventory schema. 
+
+  * Target: drop
+
+    * Description: This target drops all database objects associated with the Inventory schema.
+
+  * Target: ghrsst
+
+    * Description: This target will execute the <ghrsst.dataset> and <ghrsst.granule> targets.
+
+  * Target: ghrsst2
+
+    * Description: This target will execute the <ghrsst2.dataset> target.
+
+  * Target: ghrsst.dataset
+
+    * Description: This target migrates the dataset-related metadata from a snapshot of the GHRSST operational database. The snapshot is contained in the table space associated with the <ghrsst_migration> account on the DAACDEV instance of Oracle. The account, identified by the <username> argument, must also be on the DAACDEV instance for this execution to complete successfully. Additionally, that account must have SELECT privileges on the tables owned by the <ghrsst_migration> account. This can be verified by the Oracle database administrator.
+
+  * Target: ghrsst.granule
+
+    * Description: This target migrates the granule-related metadata from a snapshot of the GHRSST operational database. The same constraints that pertain to the <ghrsst.dataset> target, pertain to this target. This target will load metadata for roughly a million granules and takes at least 10 minutes to complete depending on your platform.
+
+  * Target: inventory.package
+
+    * Description: This target loads the inventory package consisting of 6 stored procedures.
+
+  * Target: temp.inventory.package
+
+    * Description: This target loads a subset of the ivnentory packaged for reloading and patching the database.
+
+  * Target: jason
+
+    * Description: This target loads the Jason-1 dataset policy for the Inventory schema.
+
+  * Target: oco
+
+    * Description: This target loads the OCO dataset policy for the Inventory schema.
+
+  * Target: patch_111-to-112
+  
+    * Description: This target patches the 1.1.1 Inventory schema for release 1.1.2.
+
+  * Target: patch_120-to-130
+  
+    * Description: This target patches the 1.2.0 or 1.2.1 Inventory schema for release 1.3.0.
+
+  * Target: patch_130-to-131
+  
+    * Description: This target patches the 1.3.0 or 1.3.1 Inventory schema for release 1.3.1.
+
+  * Target: patch_131-to-140
+  
+    * Description: This target patches the 1.3.1 Inventory schema for release 1.4.0.
+
+  * Target: patch_140-to-141
+  
+    * Description: This target patches the 1.4.0 Inventory schema for release 1.4.1.
+
+  * Target: patch_141-to-142
+  
+    * Description: This target patches the 1.4.1 Inventory schema for release 1.4.2.
+
+  * Target: patch_142-to-200
+  
+    * Description: This target patches the 1.4.2 Inventory schema for release 2.0.0.
+
+  * Target: patch_142-to-200-2
+  
+    * Description: This target patches the 1.4.2 Inventory schema for release 2.0.0. OPS/TEST ONLY
+
+  * Target: quikscat
+  
+    * Description: This target loads the QuikSCAT dataset policy for the Inventory schema
+
+  * Target: reload
+  
+    * Description: This target will execute the <drop>, <create>, <ghrsst> and <quikscat> targets.
+
+  * Target: spatial
+  
+    * Description: This target will execute the <spatial.drop>, <spatial.load> and <spatial_create> targets.
+
+  * Target: spatial.create
+  
+    * Description: This target will populate the <mdsys.user_sdo_geom_metadata> table and create the associated spatial indices.
+
+  * Target: spatial.drop
+  
+    * Description: This target will delete rows from the <mdsys.user_sdo_geom_metadata> table and drop the associated spatial indices.
+
+  * Target: spatial.load
+  
+    * Description: This target will populate the {{{../data_model/dataset.html#dataset_spatial}dataset_spatial}} and {{{../data_model/granule.html#granule_spatial}granule_spatial}} tables based on corresponding lat/lon values. This target addresses about 500,000 granules and takes hours to complete depending on your platform.
+
+
+  Although the <reload> target is very convenient, the test environment may not want the million or so granule records cluttering up the database prior to testing. So, for a test environment installation, the following command is suggested:
+
++--
+% ./inventory_schema.sh drop create ghrsst.dataset jason oco quikscat ascat ghrsst2.dataset
++--
+
+  In order to simply patch the previous release of the Inventory schema, perform the command with the appropriate patch target as follows:
+
++--
+% ./inventory_schema.sh patch_XXX-to-XXX
++--
+
+  The above commands assume the <username> and <password> have been specified in the configuration file. This script does not generate a log file so it does not require write privilege in the directory that it is executed. All status output is displayed to the terminal.
+
+  Assuming the script completes successfully, the database schema is ready for {{{Schema_Verification}verification}}.
+
+* {Inventory Schema (Perl Script)}
+
+  The Perl script <inventory_schema.pl> does have one advantage over the Bourne Shell script above, and that is the full and complete log file that it produces. This log file is very useful for debugging purposes.
+
+  The only configuration required is to setup the user's environment in order to execute the database schema scripts via the <inventory_schema.pl> Perl script. This script requires the Oracle Client to be installed and accessible from the user's machine. The environment variables should be set as follows:
+
++--
+ORACLE_BASE = /home/oracle
+ORACLE_HOME = /home/oracle/product/10gR2
+PATH = /home/oracle/product/10gR2/bin
+LD_LIBRARY_PATH = /home/oracle/product/10gR2/lib
++--
+
+  In the case of the <PATH> and <LD_LIBRARY_PATH> variables, the above path values may be one of many paths defined for those variables. If the above variables are not set appropriately, the user can set their environment with the following command:
+
++--
+% source /etc/local.login
++--
+
+  The <inventory_schema.pl> script must be executed from a directory where the user has write privileges because the script will generate a combined SQL script and a log file in the current working directory. One way to accomplish this is to create a working directory in the user's local area where the scripts can be copied to and executed from. For the purposes of the example below, it is assumed that the working directory is named <inv_schema> and is located in the user's home directory. It is also assumed that the SQL scripts and the one Perl script provided in the distribution have been copied into this directory.
+
+  The <inventory_schema.pl> script, will prompt the user for four or five options depending on the action specified. The options are as follows:
+
+  * Option: Action
+  
+    * Description: The action to be performed by the script. The valid values are <create>, <drop>, <reload> and <exec> with the default value being <reload>. The <create> action will create the database objects that make up the schema and load the data dictionary elements. The <drop> action will remove the database objects created by the <create> action. The <reload> action will drop, create and load all of the policy that make up the schema. The <exec> action allows the user to execute a specified SQL script. Specification of the <exec> action will prompt the user for the file specification of the SQL script to execute.
+
+  * Option: SQL Script
+  
+    * Description: The file specification for the SQL script to be executed when the <exec> action is specified.
+
+  * Option: Oracle SID
+  
+    * Description: This is the Oracle System Identifier (SID) which identifies the Oracle database instance with which to connect. PO.DAAC currently has three instances identified by <DAACDEV>, <DAACTEST> and <DAACOPS>. The value is not case sensitive.
+
+  * Option: Username 
+  
+    * Description: The Oracle user account name that identifies the owner of the database objects to be created, dropped or manipulated by the specified action.
+
+  * Option: Password 
+  
+    * Description: The password that corresponds with the Oracle user account name. If the password contains special characters, each special character should be preceded by a <\\> character when entering the password. The password is not echoed to the terminal.
+
+  Execute the <inventory_schema.pl> script as shown in the example below by specifying the <reload> action and providing a user account name and password for the target user account. If the schema doesn't already exist, the resulting log file will contain errors relating to attempting to drop database objects that don't exist.
+
+  <<Note:>> When executing the <drop> action for the first time for a given release, some errors may appear in the log file pertaining to tables that do not exist. This is due to new tables that were added for the current release that did not exist in the last release.
+
+  The following example details the execution of the <reload> action:
+
++--
+% cd inv_schema
+% ./inventory_schema.pl
+
+Executing script inventory_schema.pl.
+
+Action Selections
+  create - Create the Inventory schema.
+  drop   - Drop the Inventory schema.
+  exec   - Execute a SQL script.
+
+Action [create | drop | reload | exec] {reload}: reload
+
+Oracle SID: DAACDEV
+
+Username: <username>
+
+Password: 
+
+Are these the correct parameters?
+--------------------------------------------------------
+Action:           reload
+Oracle SID:       DAACDEV
+Username:         <username>
+--------------------------------------------------------
+
+Accept Parameters [y|n] {y}: y
+
+Including: ./start.sql
+Including: ./create_schema.sql
+Including: ./load_schema.sql
+Including: ./load_ghrsst_dsd_data_1.sql
+...
+Including: ./stop.sql
+
+Performing the inventory schema operation.
+
+The operation appears to have completed successfully.
+
+View the log file, ./inv_schema/inventory_schema_071213133742.log, 
+for more information.
+
+The inventory_schema.pl script has completed.
+
+% 
++--
+
+  In the example above, the operation completed successfully. If there were errors or warnings that occurred during the operation, the message will state that fact. In either case the user may want to view the log file, which will be named with a timestamp as in the example above. Most of the actions should complete in seconds except for the <reload> action. The <reload> action will take about 10 minutes to complete. If the other executions do not complete in seconds, type \<Control\>-\<C\> to end the execution and then view the log file with the latest timestamp to determine the problem.
+
+  Assuming the script completes successfully, the database schema is ready for {{{Schema_Verification}verification}}.
+
+* {Schema Verification}
+
+  Verifying the Inventory schema installation is a somewhat difficult process, especially if migration from another database (e.g., GHRSST) is performed at the same time. This is because the current dump of the database to migrate is unrelated to the current software release. That said, from release <1.1.2> on (where necessary) a patch script has been provided for patching the previous release's schema. For a given release, the script would be named <patch_XXX-to-YYY.sql> where <XXX> is a previous release and <YYY> is the current release.
+
+  The suggested method for verification is to review the SQL statements in the identified patch script for the current release and query the affected tables in the schema to verify if those changes have been applied. Changes might include:
+
+  * Updates to an existing row or rows in a table.
+
+  * Insertion of new rows in a table.
+
+  * Modifications to the schema including adding columns to a table or adding a new table.
+
+[]
+
+  Assuming the verification is successful, the database schema is ready for testing.
+
+* {Common Installation Error}
+
+  When installing the Inventory schema from scratch (i.e., using the <reload> target) it is often common to encounter the situation where the account specified for installation does not have sufficient privileges for accessing the <ghrsst_migration> account where the GHRSST metadata resides. A separate <ghrsst_migration> account exists for each of the PO.DAAC Oracle instances (DAACDEV, DAACTEST, and DAACOPS). If this error occurs, contact the database administrator and request <SELECT> privilege on the <ghrsst_migration> account's tables for your account.
+
+  When the above error occurs, a table named <provider_temp> is not properly dropped from the specified account. Please drop this table manually by executing the following SQL statement in your favorite database interface application (e.g., DbVisualizer, SQL Developer, SQLPlus, etc.):
+
++--
+DROP TABLE provider_temp CASCADE CONSTRAINTS PURGE;
++--
+
+  It is now safe to reattempt the Inventory schema installation.
+

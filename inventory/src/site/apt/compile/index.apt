@@ -1,0 +1,171 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 6269 2010-11-13 07:34:18Z gangl $
+
+  ---
+  Compilation
+  ---
+  Cynthia Wong, Sean Hardman
+  ---
+  
+Compilation
+
+  This document describes how to setup, test and build the Inventory program set. The following sections can be found in this document:
+
+  * {{{Setup}Setup}}
+
+  * {{{Test}Test}}
+
+  * {{{Build}Build}}
+
+[]
+
+  This document assumes that the Inventory program set source tree has already been checked out to the local environment. See the {{{../../cm/subversion/}Using Subversion}} document for details regarding the use of Subversion in PO.DAAC.
+
+{Setup}
+
+  This section contains the instructions for setting properties for the runtime and test environments.
+
+* Runtime Setup
+
+  From the top-level of the Inventory program set source directory, perform the following command to view the current settings in the properties file:
+
++--
+% more src/main/filters/inventory.filters.properties
+
+database.url=jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV
+database.username=dbusername
+database.password=dbpassword
+inventory.log=/tmp/inventory.log
++--
+
+  Using your favorite editor, modify the properties in the <inventory.filters.properties> file for the target environment referencing the following table where necessary:
+
+  * System Property: database.url
+
+    * Description: Database URL
+
+    * Default Value: jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV
+
+  * System Property: database.username
+
+    * Description: Database uername
+
+    * Default Value: dbusername
+
+  * System Property: database.password
+
+    * Description: Database password
+
+    * Default Value: dbpasssword
+
+  * System Property: inventory.log
+
+    * Description Inventory Log Filename
+
+    * Default Value: /tmp/inventory.log
+
+  Now that the properties are configured for the target environment, the unit test cases picks up these properties from the target configuration files such as hibernate.cfg.xml and inventory.log.properties.
+
+* Test Setup
+
+  This section contains the instructions for setting up the user's environment in order to execute the units tests for the Inventory program set. First of all, this program set requires Maven 2 to build and test the software. See the {{{../../cm/maven/}Using Maven}} document for details regarding the use of Maven in PO.DAAC.
+
+  In order to execute the unit tests, access to a target database must be configured in the Maven settings file located at <${HOME}/.m2/settings.xml>. Add the following elements to the file, making updates for the target database:
+
++--
+<settings>
+  ...
+  <profiles>
+    <profile>
+      <id>development</id>
+      <properties>
+        <database.url>jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV</database.url>
+        <database.username>{username}</database.username>
+        <database.password>{password}</database.password>
+      </properties>
+    </profile>
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>development</activeProfile>
+  </activeProfiles>
+
+  <pluginGroups>
+    <pluginGroup>org.codehaus.mojo</pluginGroup>
+  </pluginGroups>
+  ...
+</settings>
++--
+
+{Test}
+
+  The Inventory program set includes a test suite and a number of scripts to be used for testing the software in this program set.
+
+* Test Suite
+
+  The program set includes a test suite, InventoryTestSuite, which is included in the Maven build. It does not drop and create the database tables as the scripts in <util> directory. It requires the database schema created perhaps by the <inventory_schema.sh> (see the {{{../install/index.html#Database_Schema_Creation}Database Schema Creation}}) section of the {{{../install/index.html}Installation}} document or the following command:
+  
++--
+%  mvn sql:execute
++--
+  
+  This Maven command drops and creates the database schema. It also inserts the data dictionary elements into the database ready for the test suite to run.
+  
+  The test suite processes the test cases in the order setup by the program. It will clean up the test data that it creates once it is completed.
+
+  Any of the following Maven commands will trigger the test suite to execute:
+ 
++--
+%  mvn install
+%  mvn package
+%  mvn site
++-- 
+  
+  To skip this test suite, the following example command with the skip option can be used:
+  
++--
+%  mvn install -Dmaven.test.skip=true
++-- 
+  
+* Test Scripts
+
+  The program set also includes a number of scripts for testing the software. From the top-level of the source directory, change directories to the <util> directory where the scripts are located.
+
+** Unit Test Script
+
+  This script cleans, compiles, loads the database schema and executes the unit tests. Execute the script as follows:
+
++--
+% mvn-unit-test.sh
++--
+
+** Install Script
+
+  This script cleans, compiles, loads the database schema and installs the Inventory software in the user's local Maven repository. This is not really a test script, but is useful for setting up the database for the load test script. Execute the script as follows:
+
++--
+% mvn-install.sh
++--
+
+** Load Test Script
+
+  This script will execute the <GranuleMetadataTest>, the number of times specified, in the background. The database schema must be installed prior to executing this script, which can be accomplished by executing the <mvn-install.sh> script. The database schema can also be installed by executing <mvn sql-execute> from the top-level of the source directory. This script also accepts a single command-line parameter indicating how many times to execute the test. Execute the script as follows:
+
++--
+% mvn-load-test.sh 10
++--
+
+  The example above will execute the test 10 times. If no argument is provided, the test will be executed one time. Each execution of the test results in row(s) being inserted in the <granule>, <granule_archive>, <granule_character> and <granule_real> tables associated with a single granule.
+
+{Build}
+
+  From the top-level of the Inventory program set source directory, perform the following commands to clean up any artifacts and then build the Inventory distribution package.
+
++--
+% mvn clean
+% mvn package
++--
+
+  After a successful build, the distribution package can be found in the <target> directory named <inventory-X.X.X-inventory.tar.gz> where <X.X.X> is the current version. See the {{{../install/index.html#Distribution_Contents}Distribution Contents}} section of the {{{../install/index.html}Installation}} document for a description of the distribution package contents.

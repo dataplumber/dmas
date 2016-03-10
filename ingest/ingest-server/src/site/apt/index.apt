@@ -1,0 +1,17 @@
+~~ Copyright 2007, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 2229 2008-11-03 09:03:45Z thuang $
+
+  ---
+  About Ingest Engine
+  ---
+  Thomas Huang
+  ---
+  
+About Ingest Engine
+
+  The Ingest Engine module contains the core ingest engine implementation.  It is a lightweight server process that is controlled by the Ingest Grails middleware.
+
+  The Ingest Engine is the next generation high-performance data ingestion service for PO.DAAC.  It is designed from ground up as a lightweight RESTful service.  The multithreaded engine serves two main purposes - add and delete.  The add operation is to retrieve files from remote provides.  The delete operation is to remove files from its staging area.
+

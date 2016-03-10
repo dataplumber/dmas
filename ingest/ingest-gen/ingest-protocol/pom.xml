@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- 
+   Copyright 2008, by the California Institute of Technology.
+   ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+   
+   JAXB build file for generating ingest protocol classes.
+   
+   @author Thomas Huang {Thomas.Huang@jpl.nasa.gov}
+   @version $Id:$
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+   http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>gov.nasa.podaac</groupId>
+      <artifactId>ingest-gen</artifactId>
+      <version>4.4.0</version>
+      <relativePath>../pom.xml</relativePath>
+   </parent>
+   <artifactId>ingest-protocol</artifactId>
+   <name>Ingest Wire Protocol Structure</name>
+   <description>The Ingest wire protocol structure. </description>
+   <url>http://podaac-cm.jpl.nasa.gov/docs/ingest/ingest-gen/ingest-protocol/</url>
+
+   <dependencies>
+      <dependency>
+         <groupId>javax.xml.bind</groupId>
+         <artifactId>jaxb-api</artifactId>
+         <version>2.2.1</version>
+         <scope>compile</scope>
+         <exclusions>
+            <exclusion>
+               <artifactId>xerces</artifactId>
+               <groupId>xerces</groupId>
+            </exclusion>
+            <exclusion>
+               <artifactId>xerces</artifactId>
+               <groupId>xercesImpl</groupId>
+            </exclusion>
+            <exclusion>
+               <artifactId>xml-apis</artifactId>
+               <groupId>xml-apis</groupId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.jvnet.jaxb2_commons </groupId>
+         <artifactId>runtime</artifactId>
+         <version>0.4.1.5</version>
+         <scope>compile</scope>
+         <exclusions>
+            <exclusion>
+               <artifactId>xerces</artifactId>
+               <groupId>xerces</groupId>
+            </exclusion>
+            <exclusion>
+               <artifactId>xerces</artifactId>
+               <groupId>xercesImpl</groupId>
+            </exclusion>
+            <exclusion>
+               <artifactId>xml-apis</artifactId>
+               <groupId>xml-apis</groupId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.jvnet.jaxb2_commons </groupId>
+         <artifactId>testing </artifactId>
+         <version>0.4.1.5</version>
+         <scope>test</scope>
+         <exclusions>
+            <exclusion>
+               <artifactId>xerces</artifactId>
+               <groupId>xerces</groupId>
+            </exclusion>
+            <exclusion>
+               <artifactId>xerces</artifactId>
+               <groupId>xercesImpl</groupId>
+            </exclusion>
+            <exclusion>
+               <artifactId>xml-apis</artifactId>
+               <groupId>xml-apis</groupId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>xerces</groupId>
+         <artifactId>xercesImpl</artifactId>
+         <version>2.9.1</version>
+      </dependency>
+      <dependency>
+         <groupId>docflex-xml-kit</groupId>
+         <artifactId>docflex-xml-kit</artifactId>
+         <version>1.6.8</version>
+      </dependency>
+   </dependencies>
+
+   <build>
+      <resources>
+         <resource>
+            <directory>${basedir}/src/resources</directory>
+            <targetPath>META-INF/schemas</targetPath>
+            <filtering>true</filtering>
+            <includes>
+               <include>**/podaac_ingest_protocol.xsd</include>
+            </includes>
+         </resource>
+      </resources>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>2.1.1</version>
+            <dependencies>
+               <dependency>
+                  <groupId>commons-httpclient</groupId>
+                  <artifactId>commons-httpclient</artifactId>
+                  <version>3.1</version>
+                  <exclusions>
+                     <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                     </exclusion>
+                  </exclusions>
+               </dependency>
+            </dependencies>
+         </plugin>
+         <plugin>
+            <groupId>org.jvnet.jaxb2.maven2</groupId>
+            <artifactId>maven-jaxb2-plugin</artifactId>
+            <version>0.5</version>
+            <dependencies>
+               <dependency>
+                  <groupId>org.jvnet.jaxb2_commons</groupId>
+                  <artifactId>basic</artifactId>
+                  <version>0.4.1.5</version>
+               </dependency>
+            </dependencies>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>generate</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <configuration>
+               <generatePackage>gov.nasa.jpl.horizon.api.jaxb.protocol</generatePackage>
+               <schemaDirectory>${basedir}/src/resources</schemaDirectory>
+               <includeSchemas>
+                  <includeSchema> podaac_ingest_protocol.xsd </includeSchema>
+               </includeSchemas>
+               <strict>true</strict>
+               <verbose>true</verbose>
+               <args>
+                  <arg>-Xequals</arg>
+                  <arg>-XhashCode</arg>
+                  <arg>-XtoString</arg>
+                  <arg>-Xsync-methods</arg>
+               </args>
+            </configuration>
+         </plugin>
+         <plugin>
+            <inherited>true</inherited>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.3.1</version>
+            <configuration>
+               <source>1.6</source>
+               <target>1.6</target>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>site</id>
+                  <phase>site</phase>
+                  <configuration>
+                     <tasks>
+                        <echo>Running the XSDDoc task</echo>
+                        <taskdef name="xsddoc"
+                           classname="net.sf.xframe.xsddoc.Task"/>
+                        <mkdir dir="${basedir}/target/site/xsddoc"/>
+                        <xsddoc
+                           file="${basedir}/src/resources/podaac_ingest_protocol.xsd"
+                           out="${basedir}/target/site/xsddoc"
+                           doctitle="Horizon Wire Protocol Schema Reference"
+                           header="Horizon Wire Protocol Schema Reference"
+                           bottom="Copyright &#169; 2008, by the California Institute of Technology. ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged."
+                           verbose="true"/>
+                        <!--
+                        css="${basedir}/../resources/stylesheet.css"
+                        -->
+                     </tasks>
+                  </configuration>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <dependencies>
+               <dependency>
+                  <groupId>xsddoc</groupId>
+                  <artifactId>maven-xsddoc-plugin</artifactId>
+                  <version>1.0</version>
+               </dependency>
+            </dependencies>
+         </plugin>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>site</id>
+                  <phase>site</phase>
+                  <goals>
+                     <goal>exec</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <configuration>
+               <workingDirectory>${basedir}/target/site</workingDirectory>
+               <executable>java</executable>
+               <arguments>
+                  <argument>-Xmx512m</argument>
+                  <argument>-Djava.awt.headless=true</argument>
+                  <argument>-cp</argument>
+                  <classpath/>
+                  <argument>com.docflex.xml.Generator</argument>
+                  <argument>-template</argument>
+                  <argument>${basedir}/../src/resources/docflex-xml/PlainDoc.tpl</argument>
+                  <argument>-format</argument>
+                  <argument>RTF</argument>
+                  <argument>-d</argument>
+                  <argument>${basedir}/target/site</argument>
+                  <argument>-nodialog</argument>
+                  <argument>-launchviewer=false</argument>
+                  <argument>-p:docTitle=PO.DAAC Ingest Wire Protocol
+                     Specification</argument>
+                  <argument>-f</argument>
+                  <argument>podaac_message.rtf</argument>
+                  <argument>${basedir}/src/resources/podaac_ingest_protocol.xsd</argument>
+               </arguments>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+
+   <reporting>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <reportSets>
+               <reportSet>
+                  <reports>
+                     <report>dependencies</report>
+                     <report>summary</report>
+                  </reports>
+               </reportSet>
+            </reportSets>
+         </plugin>
+         <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+         </plugin>
+      </plugins>
+   </reporting>
+</project>

@@ -1,0 +1,146 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 2229 2008-11-03 09:03:45Z thuang $
+
+  ---
+  Operation
+  ---
+  Thomas Huang, Atsuya Takagi
+  ---
+  
+Overview
+
+   Manager is a middleware application implemented using the {{{http://grails.org}Grails}} web framework.  The purpose of this middleware application is to be the centralized management service for the PO.DAAC data ingestion and archival federation.  Some of the capabilities of the Manager include
+   
+      * User management
+
+      * Service management
+
+      * Storage management
+
+      * Load-Balanced job assignment
+
+      * Automatic retry
+
+      * Service monitoring
+
+   The following sections can be found in this document:
+
+   * {{{Service_Architecture}Service Architecture}}
+
+   * {{{State_Machine}State Machine}}
+
+   * {{{Web_Monitoring_Interface}Web Monitoring Interface}}
+
+   * {{{Reassign_Product_Type}Reassign Product Type}}
+
+   * {{{Shut_Down_Manager}Shut Down Manager}}
+
+   * {{{Storage_and_Priority_Queue_Management}Storage and Priority Queue Management}}
+
+   
+{Service Architecture}
+
+   The illustration below is the higher level architectural diagram of a system using the Manager.  Both the Ingest and Archive services can be deployed dynamically without rebooting the Manager.
+   
+[../images/manager_arch.jpg] Service Architecture
+
+[]
+
+{State Machine}
+
+   The illustration below identifies the states for handling a product from initial ingestion request to archived.  When a product has been successfully archived, Manager automatically triggers cleanup on the ingest's staging area.
+   
+[../images/manager_states.jpg] State Machines
+
+[]
+
+{Web Monitoring Interface}
+
+  Web monitoring interface for Manager is intergrated into {{{../../../administer/operator/operate/index.html}DMAS Operator Tool}}.
+
+
+[]
+
+{Reassign Product Type}
+
+  To reassign a product type, e.g. <<QSCAT_LEVEL_2B_OWV_COMP_12>>, to a different Manager, first, ensure that no data handlers are submitting <<QSCAT_LEVEL_2B_OWV_COMP_12>> granules and any <<QSCAT_LEVEL_2B_OWV_COMP_12>> granules that are still in the ing_product table are in <TRASH> lock and <ARCHIVED> state.
+
+  You now have two options.
+
+  1. If you are starting up a new Manager, e.g. <<podaacQscat>>, to handle <<QSCAT_LEVEL_2B_OWV_COMP_12>>, then configure the Bootstrap.groovy file accordingly as described in {{{../install/index.html#Build_Instructions}Installation - Bootstrap Configuration}}.
+
+  2. If you want another running Manager to handle <<QSCAT_LEVEL_2B_OWV_COMP_12>>, then you will need to execute a database query to associate the product type with the desired federation.  The following is a sample query:
+
++--
+UPDATE ing_product_type SET FEDERATION_ID  = (SELECT id FROM ing_federation WHERE name='podaacQscat') WHERE name='QSCAT_LEVEL_2B_OWV_COMP_12';
++--
+
+[]
+
+{Shut Down Manager}
+
+  To shut down Manager, first, ensure that no data handlers are submitting granules to Manager and any granules that are still in the ing_product table are in <TRASH> lock and <ARCHIVED> state. Then, identify the active java process on the host machine and use the <kill> command to stop this process as in the example that follows:
+
++--
+% ps -ef | grep nchung
+
+nchung    23372     1 16 Mar21 ?        05:16:46 /usr/depot/redhatel5/jdk/1.6.0_27/bin/java ... -Dserver.port=8090 -Dserver.host=seasand run-app
+
+% kill 23372
++--
+
+{Storage and Priority Queue Management}
+
+  Each storage is associated with a location, which defines the physical storage path.  One or more storage can be associated with the same location.  Each location has an <active> field, and when <active> is set to false, no new jobs will be assigned to the storages associated with the location.  Jobs that have already been assigned to the storage will get processed as usual.
+
+  Each storage has a job queue, and ingest or archive engines registered with the storage will process jobs from the storage's queue.
+
+  There are 3 possible configurations for storages.
+  
+  The first configuration is to assign a priority to every storage.  A HIGH priority storage can only receive HIGH priority jobs.
+  
+  Example:
+  
+*-----------------------------+--------------*--------------*
+| <<INGEST STORAGE 1 (HIGH)>> | Job 2 (HIGH) | Job 3 (HIGH) |
+*-----------------------------+--------------*--------------*
+| <<INGEST STORAGE 2 (NORMAL)>> | Job 1 (NORMAL) |  |
+*-----------------------------+--------------*--------------*
+| <<INGEST STORAGE 3 (LOW)>> | Job 4 (LOW) | Job 5 (LOW) |
+*-----------------------------+--------------*--------------*
+| <<ARCHIVE STORAGE 1 (HIGH)>> | Job 7 (HIGH) |  |
+*-----------------------------+--------------*--------------*
+| <<ARCHIVE STORAGE 2 (NORMAL)>> | Job 6 (NORMAL) | Job 8 (NORMAL) |
+*-----------------------------+--------------*--------------*
+| <<ARCHIVE STORAGE 3 (LOW)>> |   |   |
+*-----------------------------+--------------*--------------*
+
+  The second configuration is for every storage to manage its own priority queue.  Each storage can receive any job regardless of priority.  Jobs with highest priority will be processed first.
+
+  Example:
+
+*-----------------------------+--------------*--------------*--------------*
+| <<INGEST STORAGE 1>> | Job 2 (HIGH) | Job 1 (NORMAL) | Job 4 (LOW) |
+*-----------------------------+--------------*--------------*--------------*
+| <<INGEST STORAGE 2>> | Job 3 (HIGH) | Job 5 (LOW) | |
+*-----------------------------+--------------*--------------*--------------*
+| <<ARCHIVE STORAGE 1>> | Job 7 (HIGH)  | Job 6 (NORMAL) | Job 8 (NORMAL) |
+*-----------------------------+--------------*--------------*--------------*
+
+  The third configuration is a hybrid of the first two.  Some storages have an assigned priority, while other storages don't have an essigned priority.
+
+  Example:
+
+*-----------------------------+--------------*--------------*--------------*--------------*
+| <<INGEST STORAGE 1 (HIGH)>> | Job 2 (HIGH) |              |              |              |
+*-----------------------------+--------------*--------------*--------------*--------------*
+| <<INGEST STORAGE 2>>        | Job 3 (HIGH) | Job 1 (NORMAL) | Job 4 (LOW) | Job 5 (LOW) |
+*-----------------------------+--------------*--------------*--------------*--------------*
+| <<ARCHIVE STORAGE 1 (HIGH)>>| Job 7 (HIGH) |              |              |              |
+*-----------------------------+--------------*--------------*--------------*--------------*
+| <<ARCHIVE STORAGE 2 (NORMAL)>> | Job 6 (NORMAL) | Job 8 (NORMAL) |       |              |
+*-----------------------------+--------------*--------------*--------------*--------------*
+| <<ARCHIVE STORAGE 3 (LOW)>> |              |              |              |              |
+*-----------------------------+--------------*--------------*--------------*--------------*

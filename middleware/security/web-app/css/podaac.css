@@ -1,0 +1,1519 @@
+/* $Id: zen.css,v 1.14.2.6 2009/11/05 11:03:32 johnalbin Exp $ */
+
+/*
+ * ZEN STYLES
+ *
+ * This is an example stylesheet. Sub-themes should NOT include the zen/zen.css
+ * file, but instead copy this CSS to their own stylesheets.
+ *
+ * In this stylesheet, we have included all of the classes and IDs from this
+ * theme's tpl.php files. We have also included many of the useful Drupal core
+ * styles to make it easier for theme developers to see them.
+ *
+ * Many of these styles are over-riding Drupal's core stylesheets, so if you
+ * remove a declaration from here, the styles may still not be what you want
+ * since Drupal's core stylesheets are still styling the element. See the
+ * drupal6-reference.css file for a list of all Drupal 5.x core styles.
+ *
+ * In addition to the style declarations in this file, other Drupal styles that
+ * you might want to override or augment are those for:
+ *
+ *   Book Navigation  See line 74  of Zen's drupal6-reference.css file
+ *   Forum            See line 197 of Zen's drupal6-reference.css file
+ *   Menus            See line 667 of Zen's drupal6-reference.css file
+ *   News Aggregator  See line 20  of Zen's drupal6-reference.css file
+ *   Polls            See line 287 of Zen's drupal6-reference.css file
+ *   Search           See line 320 of Zen's drupal6-reference.css file
+ *   User Profiles    See line 945 of Zen's drupal6-reference.css file
+ */
+
+
+/** body **/
+  body
+  {
+    margin: 0;
+    padding: 0px;
+    background: url("../images/background.jpg") top center no-repeat #394f7c;
+  }
+
+  #page
+  {
+  }
+
+  #page-inner
+  {
+  }
+
+/** header **/
+  #header
+  {
+  }
+
+  #header-inner
+  {
+  }
+
+  #logo-title /* Wrapper for logo, website name, and slogan */
+  {
+  }
+
+  #logo /* Wrapper for logo */
+  {
+    margin: 0 10px 0 0;
+    padding: 0;
+  }
+
+  #logo-image /* The actual logo image */
+  {
+  }
+
+  h1#site-name, div#site-name /* The name of the website */
+  {
+    margin: 0;
+    font-size: 2em;
+    line-height: 1.3em;
+  }
+
+  #site-name a:link,
+  #site-name a:visited
+  {
+    color: #000;
+    text-decoration: none;
+  }
+
+  #site-name a:hover
+  {
+    text-decoration: underline;
+  }
+
+  #site-slogan /* The slogan (or tagline) of a website */
+  {
+  }
+
+  #header-blocks /* Wrapper for any blocks placed in the header region */
+  {
+  }
+
+/** banner (stylings for jpl/podaac banners) **/
+  #banner
+  {
+  }
+
+  #jpl-banner
+  {
+  }
+  
+  #podaac-banner
+  {
+    height:98px;
+    color: #fff;
+    overflow:hidden;
+    position:relative;
+  }
+  
+  /*quicklink styling */
+  #podaac-banner-quicklinks
+  {
+    float:right;
+    padding-top:60px;
+  }
+
+  #podaac-banner-quicklinks li
+  {
+    list-style: none;
+    float:left;
+    font-size:0.8em;
+    margin-top:3px; /* to center up with search text */
+    margin-left:13px;
+    padding-left:13px;
+    text-transform:none;
+    border-left: 1px #fff solid;
+  }
+
+  #podaac-banner-quicklinks li.first
+  {
+    border:none;
+    /*margin-top:0;*/
+  }
+
+  #podaac-banner-quicklinks li#search-box
+  {
+    margin-top:0;
+  }
+
+  #podaac-banner-quicklinks a
+  {
+    text-decoration:none;
+    color:#fff;
+  }
+
+  #podaac-banner-quicklinks a:hover
+  {
+    color:#648FAF;
+  }
+
+  #podaac-banner-logo
+  {
+    padding-top: 11px;
+    float:left;
+  }
+
+  #podaac-banner-text
+  {
+    padding-top: 30px;
+    padding-left: 5px;
+    width: 200px;
+    float:left;
+    color:#fff;
+    text-decoration:none;
+  }
+ 
+  #podaac-banner a:visited, #podaac-banner a
+  {
+    text-decoration:none;
+    color:#fff;
+  }
+
+  #podaac-banner h2, #podaac-banner h3, #podaac-banner h4
+  {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    line-height:1em;
+    font-weight:bold;
+    text-shadow: 2px 2px 9px #111111;
+    text-decoration:none;
+    color:#fff;
+  }
+
+  #podaac-banner h2
+  {
+    font-size: 2.5em;
+  }
+
+  #podaac-banner h3
+  {
+    font-size: 0.83em;
+  }
+
+  #podaac-banner h4
+  {
+    font-weight:normal;
+    font-size: 0.7em;
+    margin-top: 3px;
+  }
+
+  #podaac-banner .disclaimer
+  {
+    position: absolute;
+    top: 4px;
+    right:0;
+    width: 470px;
+    padding:5px;
+    color:#cb1313;
+    font-size:0.9em;
+    font-weight:bold;
+    background: #000;
+    background: rgba(2,2,2,0.7);
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+  }
+
+  #podaac-banner .disclaimer a
+  {
+    /*color:#648FAF;*/
+    color:#ddd;
+  }
+  
+/** main (container for everything else) **/
+  #main
+  {
+  }
+
+  #main-inner
+  {
+  }
+
+/** content **/
+  #content
+  {
+  }
+
+  #content-inner
+  {
+    background: #648FAF;
+    padding-top: 6px;
+
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+
+    box-shadow: rgba(0,0,0, 0.6) 0px 5px 5px;
+    -moz-box-shadow: rgba(0,0,0, 0.6) 0px 5px 5px;
+    -webkit-box-shadow: rgba(0,0,0, 0.6) 0px 5px 5px;
+  }
+
+  #mission /* The mission statement of the site (displayed on homepage) */
+  {
+  }
+
+  #content-header /* Wrapper for breadcrumb, title, messages, tabs, and help */
+  {
+    background:#FFF;
+    color:#000;
+    padding:5px 16px;
+    font-size: 0.8em;
+  }
+
+  .breadcrumb /* The path to the current page in the form of a list of links */
+  {
+    padding-bottom: 0; /* Undo system.css */
+  }
+
+  #content-inner h1.title, /* The title of the page */
+  #content-inner h2.title, /* Block title or the title of a piece of content when it is given in a list of content */
+  #content-inner h3.title /* Comment title */
+  {
+    color:#37698f;
+    padding:5px 2px;
+    font-size: 1.5em;
+    text-transform: uppercase;
+    font-weight:bold;
+    margin:0;
+  }
+
+  #content-area /* Wrapper for the actual page content */
+  {
+    background: #FFF;
+    color:#000;
+    padding:1px 16px 16px 16px;
+    font-size: 0.8em;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+  }
+  
+  #content-inner a
+  {
+    text-decoration:none;
+    color:#648FAF;
+  }
+
+  ul.links /* List of links */
+  {
+    margin: 1em 0;
+    padding: 0;
+  }
+
+  ul.links.inline
+  {
+    margin: 0;
+    display: inline;
+  }
+
+  ul.links li
+  {
+    display: inline;
+    list-style-type: none;
+    padding: 0 0.5em;
+  }
+
+  .pager /* A list of page numbers when more than 1 page of content is available */
+  {
+    clear: both;
+    margin: 1em 0;
+    text-align: center;
+  }
+
+  .pager a, .pager strong.pager-current
+  {
+    padding: 0.5em;
+  }
+
+  .feed-icons /* The links to the RSS or Atom feeds for the current list of content */
+  {
+    margin: 1em 0;
+  }
+
+/** navbar **/
+  #navbar
+  {
+    background: #648faf;
+    /*height: 30px;*/
+    /*font-family: Arial;*/
+  }
+
+  #navbar-inner
+  {
+  }
+
+  #navbar li {
+    list-style: none;
+    float:left;
+    text-transform:uppercase;
+
+  }
+ 
+  #navbar li:first-child a{
+    /*padding-left:45px;*/
+  }
+
+  #navbar a {
+    color:#fff;
+    text-decoration: none;
+    padding: 4px 16px;
+    display:block;
+    font-size: 0.8em;
+  }
+
+  #navbar ul li:hover, #navbar ul li:hover a{
+    /*background-color: #fd6e00;
+    color:#fff;*/
+  }
+
+  #navbar li ul {    /* Container for sub menu */
+    position: absolute;
+    left:0;
+    top: 26px;
+    display:none;
+    z-index:1;
+    background:  #fd6e00;
+    width:990px;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+    box-shadow: rgba(0,0,0, 0.6) 0px 5px 5px;
+    -moz-box-shadow: rgba(0,0,0, 0.6) 0px 5px 5px;
+    -webkit-box-shadow: rgba(0,0,0, 0.6) 0px 5px 5px;
+  }
+
+  #navbar li ul li {
+    padding:5px 0 10px 0;
+    margin-top:5px;
+    position:relative;
+  }
+
+  #navbar li ul.from-module li {
+    position:static;
+  }
+
+  #navbar li ul li a {
+    padding: 0;
+    border-left: solid 1px #fff;
+    line-height: 0.9em;
+    margin-right:13px;
+    padding-left: 13px;
+    text-transform:none;
+    font-size: 0.9em;
+    cursor: pointer;    
+  }
+
+  #navbar li ul li a:hover {
+    /*color:#000;*/
+  }
+
+   #navbar li ul li:hover a{
+    color:#000;
+  }
+
+/* 3rd level submenu */
+  #navbar li ul li.hovered-withsub {
+    /*background:#fff !important;*/
+    color:#000;
+  }
+
+  #navbar li ul li.hovered-withsub ul li a{
+    color:#fff;
+    /*background:#fff !important;*/
+  }
+
+  #navbar ul li ul li ul {
+    display:none;
+    position:absolute;
+    top:26px;
+    left:-1px;
+    padding:5px 0;
+    background:#1e2c46 ;
+    background:rgba(30, 40, 70, 0.9) ;
+    width:200px;
+    min-width:150px;
+    /*border:0;
+    border-bottom: solid 1px #648FAF;
+    border-left: solid 1px #648FAF;
+    border-right: solid 1px #648FAF;*/
+  }
+
+  #navbar ul li ul li ul li {
+    float:none;
+    padding:0;
+    margin:0;
+  }
+
+  #navbar ul li ul li ul li a{
+    border-left:0;
+    color:#648FAF;
+    margin-left:0;
+    padding:5px 10px;
+  }
+  
+  #navbar ul li ul li ul li:hover a, #navbar ul li ul li ul li a:hover{
+    color:#648FAF;
+  }
+
+
+  #navbar .content ul li ul  li.first  a {
+    margin-left:0px;
+    padding-left:15px;
+    border: none;
+  }
+  #navbar .content ul li ul  li:first-child  a {
+    margin-left:0px;
+    padding-left:15px;
+    border: none;
+  }
+
+/* Change color for selected states */
+  #navbar li.active-trail > a, 
+  #navbar ul li.active-trail,
+  #navbar li.active-trail:hover > a, 
+  #navbar ul li.active-trail:hover,
+  #navbar li.active-trail ul,
+  #navbar li.active-trail ul li a
+  {
+    background-color:#384b6d;
+  } 
+ 
+  #navbar li.active-trail ul li.active-trail a, #navbar li.active-trail ul li.active-trail
+  {
+    color:#648FAF;
+  }
+  
+  #navbar div.facet-dropdown{
+    display:none;
+    /*border-left:1px solid #fd6e00;
+    border-bottom:1px solid #fd6e00;
+    border-right:1px solid #fd6e00;*/
+    background:#1e2c46 ;
+    background:rgba(30, 40, 70, 0.9);
+    top:30px;
+    left:0;
+    position:absolute;
+    width:990px;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+    box-shadow: rgba(0,0,0, 0.6) 0px 5px 5px;
+    -moz-box-shadow: rgba(0,0,0, 0.6) 0px 5px 5px;
+    -webkit-box-shadow: rgba(0,0,0, 0.6) 0px 5px 5px;
+  }
+
+  #navbar div.facet-dropdown ul{
+    display:block;
+    float:left;
+    width:244px;
+    position:static;
+    top:auto;
+    left:auto;
+    background:none !important;
+    border:none;
+    list-style:none;
+    padding:10px 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0 ;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+  }
+
+  #navbar div.facet-dropdown ul li{
+    float:none;
+    padding:0;
+   list-style:none;
+  }
+
+  #navbar div.facet-dropdown ul li a{
+    background:none !important;
+    color:#fff;
+    border:none;
+    min-width:220px;
+    width:220px;
+    padding:5px;
+    padding-left:13px;
+  }
+
+  /*#navbar li.active-trail div.facet-dropdown ul li a{
+    background:none;
+  }*/
+
+  /* css for select menu item (class active-trail) */
+
+
+  /* IE support (javascript added classes)*/
+  #navbar .hovered 
+  {
+    background-color: #fd6e00;
+  }
+  
+  #navbar .selected
+  {
+    background-color: #384b6d; /*#637FAF;*/
+  }
+  
+  #navbar .firstInList
+  { 
+    border:none;
+  }
+
+  /* end IE support  */
+
+
+
+  #search-box /* Wrapper for the search form */
+  {
+    
+  }
+
+  #edit-search-theme-form-1-wrapper label /* Label that says "Search this site:" */
+  {
+    display: none;
+  }
+
+  #primary /* Primary links */
+  {
+  }
+
+  #secondary /* Secondary links */
+  {
+  }
+
+/** sidebar-left **/
+  #sidebar-left
+  {
+  }
+
+  #sidebar-left-inner
+  {
+  }
+
+/** sidebar-right **/
+  #sidebar-right
+  {
+  }
+
+  #sidebar-right-inner
+  {
+  }
+
+/** footer **/
+  #footer
+  {
+  }
+
+  #footer-inner
+  {
+  }
+
+  #footer-message /* Wrapper for the footer message from Drupal's "Site information"
+                     and for any blocks placed in the footer region */
+  {
+  }
+  
+  #jpl-footer
+  {
+    margin-top:10px;
+  }
+
+/** closure **/
+  #closure-blocks /* Wrapper for any blocks placed in the closure region */
+  {
+  }
+
+/** Drupal nodes **/
+  .node /* Node wrapper */
+  {
+  }
+
+  .node-inner /* Additional wrapper for node */
+  {
+  }
+
+  .node-unpublished div.unpublished, /* The word "Unpublished" displayed beneath the content. */
+  .comment-unpublished div.unpublished
+  {
+    height: 0;
+    overflow: visible;
+    color: #d8d8d8;
+    font-size: 75px;
+    line-height: 1;
+    font-family: Impact, "Arial Narrow", Helvetica, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    word-wrap: break-word; /* A very nice CSS3 property */
+  }
+
+  /* All nodes are given a node-type-FOO class that describes the type of
+   * content that it is. If you create a new content type called
+   * "my-custom-type", it will receive a "node-type-my-custom-type" class.
+   */
+  .node .field-field-image
+  {
+    float:left;
+    padding: 0 8px 8px 0;
+  }
+
+  .node .field-field-item-date
+  {
+    font-weight:bold;
+    font-size: 1.1em;
+  }
+
+  #content-area .views-row
+  {
+    padding: 10px 0;
+  }
+
+  .node h2.title /* Node title */
+  {
+  }
+
+  .marker /* "New" or "Updated" marker for content that is new or updated for the current user */
+  {
+    color: #c00;
+  }
+
+  .node.node-unpublished .picture,
+  .comment.comment-unpublished .picture
+  {
+    position: relative; /* Otherwise floated pictures will appear below the "Unpublished" text. */
+  }
+
+  .preview .node /* Preview of the content before submitting new or updated content */
+  {
+    /* background-color: #ffffea; */ /* Drupal core uses a #ffffea background */
+  }
+
+  .comment ul.links /* Comment links. See also the ul.links declaration above. */
+  {
+    margin: 1em 0;
+  }
+
+  .indented /* Nested comments are indented */
+  {
+    /* margin-left: 25px; */ /* Drupal core uses a 25px left margin */
+  }
+
+  .preview .comment /* Preview of the comment before submitting new or updated comment */
+  {
+    /* background-color: #ffffea; */ /* Drupal core uses a #ffffea background */
+  }
+
+/** Drupal blocks **/
+  .block /* Block wrapper */
+  {
+    background:#648FAF;
+    padding-top:6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    box-shadow: rgba(0,0,0, 0.8) 2px 2px 7px;
+	  -moz-box-shadow: rgba(0,0,0, 0.8) 2px 2px 7px;
+	  -webkit-box-shadow: rgba(0,0,0, 0.8) 2px 2px 7px;
+  }
+
+  .block-inner /* Additional wrapper for block */
+  {
+    background:#ebeced;
+    height:auto;
+    -moz-border-radius: 0 0 6px 6px;
+    -webkit-border-bottom-right-radius:6px;
+    -webkit-border-bottom-left-radius:6px;
+  }
+
+  .block .block-image
+  { 
+    height:54px;
+    width: 100%;
+  }
+
+
+  .block h2.title /* Block title */
+  {
+    color:#37698f;
+    padding:5px 8px;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    font-weight:bold;
+    margin:0;
+  }
+
+  .block .content /* Block's content wrapper */
+  {
+    color:#000;
+    padding:1px 8px;
+    font-size: 0.8em;
+  }
+
+  .block a
+  {
+    text-decoration:none;
+    color:#648FAF;
+  }
+
+  
+
+
+/** Stylings for front page specific boxes **/
+
+  #navbar .block 
+  {
+    margin:0;
+    padding:0;
+  }  
+
+  #navbar .block-inner
+  {
+    background: #648faf;
+    margin:0;
+    padding:0;
+  }
+
+  #navbar .content
+  {
+    padding:0;
+    font-size: 1.0em;
+  }  
+    
+  #content-bottom .block, #content-top .block, #sidebar-left .block, #sidebar-right .block  /* all main area blocks */
+  {
+    
+  }
+
+  #content-bottom .block-inner, #content-top .block-inner, #sidebar-left .block-inner, #sidebar-right .block-inner /* all main area block-inners */
+  {
+  }
+
+  #content-bottom .block 
+  {
+    height: 248px;
+    width:213px;
+    overflow:hidden;
+    float:left;
+    margin:10px 10px 0 0;
+  }
+  
+  #content-bottom .region-count-3 /* IF ADDING MORE BLOCKS TO CONTENT BOTTOM, change this to the number of columns in that bottom region. This should point to the very last block in that cloumn arrangement */
+  {
+    margin-right:0;
+  }
+
+  #content-bottom .region-count-4 /* Fourth block in content-bottom, expanded to fit full width */
+  {
+    width:100%;
+    height:165px;
+    position:relative
+  } 
+
+  #content-bottom .region-count-4 .content
+  {
+    padding-left:7px;
+    height:141px !important;
+  }
+
+  #content-bottom .region-count-4 h2
+  {
+    padding-bottom:0;
+  }
+
+  /* 4th block (long one) view styling */
+  #content-bottom .region-count-4 .views-field-field-image-fid
+  {
+    float:left;
+    padding-right:0px;
+    height:136px;
+    width: 150px;
+  } 
+	
+  #content-bottom .region-count-4 .views-field-field-image-fid img
+  {
+    width:100%;
+    height:100%;
+  }
+
+  #content-bottom .region-count-4 .views-row
+  {
+    padding:0;
+  }
+
+  #content-bottom .region-count-4 .views-field-view-node
+  {
+    font-size:1.2em;
+    position:absolute;
+    right:20px;
+    top:150px;
+  }
+
+  #content-bottom .region-count-4 .views-field-view-node a
+  {
+    color:#FD6E00;
+  }
+
+  #content-bottom .block-inner {
+  }
+
+  #content-bottom .block h2.title {
+
+  }
+
+  #content-bottom .block .content {
+    height:165px;
+  }
+
+  #content-bottom .no-block-image .content
+  {
+    height:136px;
+  }
+
+  /* Views hardcoding of footer */
+  #block-views-announcement-block_1
+  {
+    position:relative;
+  }
+
+  #block-views-announcement-block_1 .view-footer
+  {
+    position:absolute;
+    top:227px;
+  }  
+
+  #block-views-announcement-block_1 .view-footer a
+  {
+    color:#fff;
+    padding:0 5px;
+    font-weight:bold;
+    font-size:1em;
+    display:block;
+    width:76px;
+    height:20px;
+    background: url("../images/orange_button.png") top left no-repeat;
+    cursor:pointer;
+  }  
+
+  /* Subscription block styling */
+  #block-simplenews-5
+  {
+    position:absolute;
+    top: 508px;
+    left:320px;
+    background: #fff;
+    border: 1px solid orange;
+    height: auto !important;
+    width: 316px !important;
+    display:none;
+  }
+ 
+  #block-simplenews-5 .block-inner
+  {
+    padding:0;
+    margin:0;
+    background:#fff;
+  }
+  
+  #content-bottom #block-simplenews-5.block .content
+  {
+    height:auto;
+  }
+
+  .subscription-close
+  {
+    background: url("../images/close.png") top left no-repeat;
+    display:block;
+    position: absolute;
+    cursor:pointer;
+    height: 14px;
+    width: 10px;
+    top: 0;
+    right: 6px;
+  }
+  
+
+/** sidebar right custom styling **/
+
+  #sidebar-right .block
+  {
+    margin-bottom: 10px;
+  }
+  
+  #sidebar-right .block .block-image
+  {
+    float:left;
+    padding:10px;
+    width:112px;
+    height:88px;
+  }
+
+  #sidebar-right .region-count-6 { /* if last (assumed to be the 6th block), then make no margin for next item */
+    margin:0;
+  }
+
+/*first item*/
+
+  #sidebar-right .region-count-1
+  {
+    padding-top:0;
+    
+  }
+  
+   #sidebar-right .region-count-1 .block-inner
+  {
+    height:134px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    background: #000;
+    padding-bottom:6px;
+  }
+
+  
+  #sidebar-right .region-count-1 .title, #sidebar-right .region-count-1 .content
+  {
+    color:#fff;
+    
+  }
+  
+  #sidebar-right .region-count-1 a
+  {
+    color:#FD6E00;
+  }
+
+/*second */
+
+  #sidebar-right .region-count-2
+  {
+    padding-top:0;
+    
+  }
+
+  #sidebar-right .region-count-2 .block-inner
+  {
+    background: #376092;
+    height: 115px;
+  }
+  
+  #sidebar-right .region-count-2 .title, #sidebar-right .region-count-2 .content
+  {
+    color:#fff;
+    
+  }
+  
+  #sidebar-right .region-count-2 a
+  {
+    color:#86aed2;
+  }
+
+/*third*/
+  #sidebar-right .region-count-3
+  {
+    padding:0;
+  }
+
+  #sidebar-right .region-count-2 .block-inner, #sidebar-right .region-count-3 .block-inner
+  {
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+  }
+
+  #sidebar-right .region-count-3 .block-inner
+  {
+    height:75px;
+    background:#000 url('../images/google_earth.jpg') bottom left no-repeat;
+    background-position: 53px 15px;
+    color:#fff;
+    overflow:hidden;
+  }
+
+  #sidebar-right .region-count-3 .block-inner .content
+  {
+    padding-right:0;
+  }
+
+  #sidebar-right .region-count-3 .block-inner p
+  {
+    /*float:right;
+    background:#fd6e00;
+    width:200px;
+    height: 59px;
+    margin-top:104px;
+    padding:5px;*/
+    overflow:hidden;
+  
+    /*-moz-border-radius: 14px 0 6px 0;
+    -webkit-border-radius: 14px 0 6px 0;*/
+  }
+
+  #sidebar-right .region-count-3 .block-inner p a
+  {
+    color:#a3b4c8;
+  }
+  
+  #sidebar-right .region-count-3 h2, #sidebar-right .region-count-3 .content
+  {
+    color:#fff;
+  }
+
+  #sidebar-right .region-count-4, #sidebar-right .region-count-5,
+  #sidebar-right .region-count-6, #sidebar-right .region-count-7
+  {
+    margin-bottom:0;
+    padding:0;
+  }
+
+  #sidebar-right .region-count-4 h2.title, #sidebar-right .region-count-5 h2.title,
+  #sidebar-right .region-count-6 h2.title, #sidebar-right .region-count-7 h2.title
+  {
+    color:#000;
+  }
+
+  #sidebar-right .region-count-4 p, #sidebar-right .region-count-5 p,
+  #sidebar-right .region-count-6 p, #sidebar-right .region-count-7 p
+  {
+    padding: 0;
+    line-height:1.3em;
+  }
+
+  #sidebar-right p {
+    padding:0;
+    margin:0;
+  }
+
+  #sidebar-right .region-count-4 .block-inner, #sidebar-right .region-count-5 .block-inner, 
+  #sidebar-right .region-count-6 .block-inner, #sidebar-right .region-count-7 .block-inner
+  {
+    height:108px;
+    background: #fff;
+    color:#000;
+    border-bottom:solid 1px #DDD;
+    overflow:hidden;
+    -moz-border-radius:0;
+    -webkit-border-radius:0;
+  }
+
+  /* First of foursome */
+  #sidebar-right .region-count-4 .block-inner
+  {
+    -moz-border-radius:6px 6px 0 0;
+    -webkit-border-radius:6px 6px 0 0;
+  }
+
+  /* Third of foursome */  
+  #sidebar-right .region-count-5 .block-inner
+  {
+  }  
+
+  /* Last of foursome */
+  #sidebar-right .region-count-7 .block-inner
+  {
+    -moz-border-radius:0 0 6px 6px;
+    -webkit-border-radius:0 0 6px 6px;
+    border-bottom:0;
+  }  
+
+/** Message popup style **/
+  #message-dialog 
+  {
+    margin-top: 5px;
+  }
+
+  #message-dialog .messages {
+    margin:0;
+  }
+  
+
+/** View block styling **/
+
+  .block .view-content
+  {
+    height:142px;
+    overflow:auto;
+  }
+  
+  .block.no-block-image .view-content
+  {
+    height:196px;
+    overflow:auto;
+  }
+
+  .block .views-row
+  {
+    padding-bottom: 6px;
+    clear:both;
+    line-height: 1.2em;
+  }
+
+  .block .view .views-field-title
+  {
+    color:#111; /*#8e8f92;*/
+  }
+
+  .block .view .views-field-body
+  {
+    color:#777; /*#b0b1b4;*/
+  }
+
+  .block .view .views-field-body p
+  {
+    font-size: 1em;
+    padding:0;
+    line-height: 1.2em;
+  }
+
+  .block .view .views-field-field-date-range-value
+  {
+    float:left;
+    padding-right: 5px;
+  }
+
+  .block .view .views-field-field-location-value
+  {
+
+  }
+
+  .block .view .more-link
+  {
+    padding: 0px 0;
+  }
+
+  .block .view .more-link a
+  {
+    color:#fd6e00;
+    font-size:1.2em;
+  }
+
+  #sidebar-right .view-content
+  {
+    height:auto;
+    overflow:auto;
+  }
+
+/** View page stylings **/
+
+  table
+  {
+    width:100%;
+  }
+
+  .views-table
+  {
+    width:100%;
+  }
+
+  .views-table td, .views-table th
+  {
+    padding:0 5px;
+  }
+
+  #content .views-table .views-field-field-image-fid img
+  {
+    height:56px;
+    width:42px;
+  }
+
+  #content .views-table .views-field-field-image-fid
+  {
+    float:none;
+    margin:0;
+    height:auto;
+    width:auto;
+  }
+
+  .views-table .even, .views-table .even .active
+  {
+    background:#fff;
+  }
+
+  .views-table .odd, .views-table .odd .active
+  {
+    background:#dfdfdf;
+  }
+
+  /*announcement view */
+  .view-announcement .views-table .views-field-field-item-date-value
+  {
+    width:72px;
+    padding-left:8px
+  }
+
+  .view-announcement .views-table .views-field-body
+  {
+    padding-left:8px;
+  }
+
+  /* highlight view */
+
+  #content .views-field-field-image-fid
+  {
+    height:85px;
+    width:85px;
+    float:left;
+    margin-right:10px;
+  }
+
+  #content .view-highlight img
+  {
+    width:100%;
+    height:100%;
+  }
+
+/** Drupal boxes **/
+  /* Wrapper for Comment form, Comment viewing options, Menu admin, and
+   * Search results.
+   */
+  .box /* Wrapper for box */
+  {
+  }
+
+  .box-inner /* Additional wrapper for box */
+  {
+  }
+
+  .box h2.title /* Box title */
+  {
+  }
+
+  .box .content /* Box's content wrapper */
+  {
+  }
+
+/** Miscellaneous Drupal styles **/
+
+  .more-link /* Aggregator, blog, and forum more link */
+  {
+    text-align: right;
+  }
+
+  #user-login-form /* Drupal's default login form */
+  {
+    text-align: left;
+  }
+
+/** Drupal forms **/
+  .form-item, /* Wrapper for a form element (or group of form elements) and its label */
+  .form-checkboxes,
+  .form-radios
+  {
+    margin: 1em 0;
+  }
+
+  .form-item input.error, /* Highlight the form elements that caused a form submission error */
+  .form-item textarea.error,
+  .form-item select.error
+  {
+    border: 2px solid #c00;
+  }
+
+  .form-item label /* The label for a form element */
+  {
+    display: block;
+    font-weight: bold;
+  }
+
+  .form-item label.option /* The label for a radio button or checkbox */
+  {
+    display: inline;
+    font-weight: normal;
+  }
+
+  .form-required /* The part of the label that indicates a required field */
+  {
+    color: #c00;
+  }
+
+  .form-item .description /* The descriptive help text (separate from the label) */
+  {
+    font-size: 0.85em;
+  }
+
+  .form-checkboxes .form-item, /* Pack groups of checkboxes and radio buttons closer together */
+  .form-radios .form-item
+  {
+    margin: 0.4em 0;
+  }
+
+  .form-submit /* The submit button */
+  {
+  }
+
+  .container-inline div, .container-inline label /* Inline labels and form divs */
+  {
+    display: inline;
+  }
+
+  .tips /* Tips for Drupal's input formats */
+  {
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+  }
+
+/** OpenID **/
+  /* The default styling for the OpenID login link seems to assume Garland's
+   * styling of list items.
+   */
+  #user-login-form ul /* OpenID creates a new ul above the login form's links. */
+  {
+    margin-bottom: 0; /* Position OpenID's ul next to the rest of the links. */
+  }
+
+  #user-login-form li.openid-link /* The "Log in using OpenID" links. */
+  {
+    margin-top: 1em;
+    margin-left: -20px; /* Un-do some of the padding on the ul list. */
+  }
+
+  #user-login-form li.user-link /* The "Cancel OpenID login" links. */
+  {
+    margin-top: 1em;
+  }
+
+  #user-login ul
+  {
+    margin: 1em 0;
+  }
+
+  #user-login li.openid-link, /* The OpenID links on the /user form. */
+  #user-login li.user-link
+  {
+    margin-left: -2em; /* Un-do all of the padding on the ul list. */
+  }
+
+/** Drupal admin tables **/
+  /* We overrode these styles in html-elements.css, but restore them for the
+   * forms on the site.
+   */
+  form tbody
+  {
+    border-top: 1px solid #ccc;
+  }
+
+  form th
+  {
+    text-align: left;
+    padding-right: 1em;
+    border-bottom: 3px solid #ccc;
+  }
+
+  form tbody th
+  {
+    border-bottom: 1px solid #ccc;
+  }
+
+  form thead th
+  {
+    text-align: left;
+    padding-right: 1em;
+    border-bottom: 3px solid #ccc;
+  }
+
+/** Legacy product table stylings **/
+
+  .podaac-productTable {
+    width:100%;
+   	table-layout:fixed;
+  }
+
+  .podaac-productTable th {
+    text-align: center;
+    border: 1px solid #000;
+  }
+
+  .podaac-productTable th.podaac-tableCol-1 {
+    width: 68px;
+  }
+  
+  .podaac-productTable th.podaac-tableCol-2 {
+    width: 70px;
+  }
+  
+  .podaac-productTable th.podaac-tableCol-3 {
+    width: 82px;
+  }
+
+  .podaac-productTable td {
+    border: 1px solid #000;
+    padding:3px;
+  }
+
+  .podaac-legacyRetiredProducts-1 th{b
+    background: #CCCCCC;
+  }
+
+  .podaac-legacyOpenProducts-1 th {
+    background: #FFFF99;
+  }
+
+   .podaac-legacyOpenProducts-2 th {
+    background: #99CCCC;
+  } 
+
+/* Module Overwrites */
+
+  #block-podaacdataset-front-nav
+  {
+    background:none;
+  }
+
+  #block-podaacdataset-front-nav .block-inner
+  {
+    /*background: rgba(35,48,76,0.6);*/
+    background: url('../images/satellite-image-new.jpg');
+    position:relative;
+  }
+
+  #block-podaacdataset-front-nav .help-message
+  {
+    width:214px;
+    top:208px;
+    left:383px;
+    padding:3px;
+    background:none;
+    color:#FD6E00;
+    font-size:1.2em;
+    text-align:center
+  }
+  
+  .page-right-sidebar{
+  	float:right;
+  	width: 320px;
+  }
+  .page-main-content{ 
+  	clear:both;
+  }
+  .page-main-content-withbar{
+  	margin-right:340px;
+  	clear:none;
+  }
+  
+  
+  .page-block{
+  	border-radius:5px;
+  	background: url("../images/ui-bg_inset-hard_100_fcfdfd_1x100.png") repeat-x scroll 50% bottom #FCFDFD;
+    border: 1px solid #A6C9E2;
+    color: #222222;
+    margin-bottom: 10px;
+  }
+  
+  .page-block-header{
+    background: url("images/ui-bg_gsloss-wave_55_5c9ccc_500x100.png") repeat-x scroll 50% 50% #5C9CCC;
+    border: 1px solid #4297D7;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 5px;
+    font-size: 1.3em;
+  }
+  .page-block-content{
+  	padding: 5px;
+  }
+
+  .podaac-table{
+
+  }
+  
+  .podaac-table td{
+  	  	padding:0;
+  	  	border:1px solid #bbb;
+  }
+  
+

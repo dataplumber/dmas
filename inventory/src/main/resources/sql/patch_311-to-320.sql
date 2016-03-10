@@ -1,0 +1,11 @@
+ALTER TABLE METADATA_MANIFEST
+        ADD ("DIFF" CLOB)
+;
+create or replace TRIGGER GR_UP_TRIG
+AFTER UPDATE ON GRANULE
+FOR EACH ROW
+BEGIN
+ update granule_meta_history set LAST_REVISION_DATE_LONG=INVENTORY.PSTTimeStampToLong(CURRENT_DATE) where granule_id=:new.granule_id;
+END GR_UP_TRIG;
+/
+COMMIT;

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright (c) 2007
+    Jet Propulsion Laboratory, California Institute of Technology
+    All rights reserved
+
+    PO.DAAC Java Messaging Service state service.  This file contains message user login
+    and access control information.
+
+    This file should be installed under ${JBOSS_HOME}/server/${JBOSS_INSTANCE}/deploy/jms
+
+    @author T. Huang {Thomas.Huang@jpl.nasa.gov}
+    @version $Id: podaac-oracledb-jdbc-state-service.xml 1203 2008-05-27 23:13:00Z thuang $
+-->
+
+<server>
+   <mbean code="org.jboss.mq.sm.jdbc.JDBCStateManager"
+          name="jboss.mq:service=PODAACStateManager">
+      <depends optional-attribute-name="ConnectionManager">jboss.jca:service=DataSourceBinding,name=DefaultDS</depends>
+      <depends>jboss.mq:service=StateManager</depends>
+      <attribute name="SqlProperties">
+         POPULATE.TABLES.01 = INSERT INTO JMS_USERS (USERID, PASSWD) VALUES ('ingest', 'podaacingest')
+         POPULATE.TABLES.02 = INSERT INTO JMS_USERS (USERID, PASSWD) VALUES ('inventory', 'podaacinventory')
+         POPULATE.TABLES.03 = INSERT INTO JMS_USERS (USERID, PASSWD) VALUES ('generate', 'podaacgenerate')
+         POPULATE.TABLES.04 = INSERT INTO JMS_USERS (USERID, PASSWD) VALUES ('archive', 'podaacarchive')
+         POPULATE.TABLES.05 = INSERT INTO JMS_USERS (USERID, PASSWD) VALUES ('distribution', 'podaacdistribution')
+         POPULATE.TABLES.06 = INSERT INTO JMS_USERS (USERID, PASSWD) VALUES ('manager', 'podaacmanager')
+         POPULATE.TABLES.08 = INSERT INTO JMS_USERS (USERID, PASSWD) VALUES ('thuang', 'password')
+         POPULATE.TABLES.09 = INSERT INTO JMS_USERS (USERID, PASSWD) VALUES ('qchau', 'qchau388')
+         <!-- @TODO add more users here -->
+
+
+         POPULATE.TABLES.11 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('subscriber', 'ingest')
+         POPULATE.TABLES.12 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('publisher', 'ingest')
+         POPULATE.TABLES.13 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('durpublisher', 'ingest')
+
+         POPULATE.TABLES.14 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('subscriber', 'inventory')
+         POPULATE.TABLES.15 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('publisher', 'inventory')
+         POPULATE.TABLES.16 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('durpublisher', 'inventory')
+
+         POPULATE.TABLES.17 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('subscriber', 'generate')
+         POPULATE.TABLES.18 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('publisher', 'generate')
+         POPULATE.TABLES.19 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('durpublisher', 'generate')
+
+         POPULATE.TABLES.20 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('subscriber', 'archive')
+         POPULATE.TABLES.21 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('publisher', 'archive')
+         POPULATE.TABLES.22 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('durpublisher', 'archive')
+
+         POPULATE.TABLES.20 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('subscriber', 'distribution')
+         POPULATE.TABLES.21 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('publisher', 'distribution')
+         POPULATE.TABLES.22 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('durpublisher', 'distribution')
+
+         POPULATE.TABLES.20 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('subscriber', 'manager')
+         POPULATE.TABLES.21 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('publisher', 'manager')
+         POPULATE.TABLES.22 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('durpublisher', 'manager')
+
+         POPULATE.TABLES.20 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('subscriber', 'thuang')
+         POPULATE.TABLES.21 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('publisher', 'thuang')
+         POPULATE.TABLES.22 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('durpublisher', 'thuang')
+
+         POPULATE.TABLES.23 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('subscriber', 'qchau')
+         POPULATE.TABLES.24 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('publisher', 'qchau')
+         POPULATE.TABLES.25 = INSERT INTO JMS_ROLES (ROLEID, USERID) VALUES ('durpublisher', 'qchau')
+
+         <!-- @TODO add more user roles here -->
+
+      </attribute>
+   </mbean>
+</server>

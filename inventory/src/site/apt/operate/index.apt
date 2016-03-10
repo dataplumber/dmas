@@ -1,0 +1,137 @@
+~~ Copyright 2007, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 8252 2011-08-19 21:59:35Z gangl $
+
+  ---
+  Operation
+  ---
+  Cynthia Wong, Sean Hardman
+  ---
+  
+Operation
+
+  This document describes how to use the Inventory applications and other utilities. The applications detailed in this document allow the user to query the PO.DAAC data model. Execution of these applications does require some knowledge of the PO.DAAC data model as well as some knowledge of the Structured Query Language (SQL). For information on the former, see the {{{../data_model/index.html}Data Model}} document for details regarding the tables that make up the PO.DAAC database schema. For the latter, take a class or stumble along with the examples provided in this document.
+
+  Each section corresponds with an available application. The following sections can be found in this document:
+
+   * {{{SigEvent}SigEvent Setup}}
+
+   * {{{Oracle_iSQLPlus}Oracle iSQLPlus}}
+
+   * {{{Oracle_SQLPlus}Oracle SQLPlus}}
+
+
+{SigEvent Setup}
+
+  Because the DMT dataset update diff command now publishes to sigevent, an inventory configuration file with a single entry is needed. This entry should take the form "sig.event.url=<URL TO SIGEVENT>" and can be named anywhere. Because Inventory is not a stand alone program set (is called by either manager or the Inventory WS). When the calling program is executed, for example the start_inventory_service.csh (in middleware/inventory/) script is called, a system proerty should be added to it to point to the inventory.confg file. this can be done by using the -Dinventory.config.file=/PATH/TO/FILE environment variable. If this is not done, the program will continue to execute, but no sig events will be created upon DMT updates. The sig event is only created for Dataset level updates.
+
+{Oracle iSQLPlus}
+
+  The Oracle iSQLPlus application is a browser-based interface provided by Oracle for accessing the Oracle Database server. This application enables the user to execute SQL statements interactively or in batch mode against an Oracle schema.
+
+* Environment Setup
+
+  The only setup required is for the user to have their web browser of choice (e.g. Firefox, Safari, Internet Explorer, etc.) installed and open on their machine.
+
+* Execution
+
+  Depending on the environment (Development, I&T or Operations), the corrosponding instance of the iSQLPlus application can be accessed with a specific URL. In order to execute the iSQLPlus application in the Development and I&T environments, enter the following URL in your browser or just click the link:
+
+  * {{{http://seadb.jpl.nasa.gov:5600/isqlplus/}http://seadb.jpl.nasa.gov:5600/isqlplus/}}
+
+  []
+
+  In order to execute the iSQLPlus application in the Operations environment, enter the following URL in your browser or just click the link:
+
+  * {{{http://bashful.jpl.nasa.gov:5600/isqlplus/}http://bashful.jpl.nasa.gov:5600/isqlplus/}}
+
+  []
+  
+  Both of the URLs above are only accessible from within the JPL computing domain. Visiting either of the URLs above will result in the following login page being displayed in the browser:
+
+[../images/isqlplus_login.gif] iSQLPlus Login Page
+
+  The above page provides fields for entering the required options for logging into the Oracle database instance. The options are as follows:
+
+  * Option: Username
+  
+    * Description: The Oracle user account name that identifies the owner of the database objects to be accessed during this session.
+
+  * Option: Password
+  
+    * Description: The password that corresponds with the Oracle user account name. |
+
+  * Option: Connect Identifier
+  
+    * Description: The connect identifier is the same as the Oracle System Identifier (SID) which identifies the Oracle database instance with which to connect. PO.DAAC currently has two instances identified by <DAACDEV> and <DAACOPS>. The value is not case sensitive.
+
+
+  Once the user has entered the above options and selected the <Login> button, the following page will be displayed in the browser:
+
+[../images/isqlplus_command.gif] iSQLPlus Command Page
+
+  The above page provides an interface for executing SQL statements and displaying the results of those executions.
+
+{Oracle SQLPlus}
+
+   The Oracle SQLPlus application is a command-line interface provided by Oracle for accessing the Oracle Database server. The Oracle Client software should be installed or accessible from every PO.DAAC machine in the Development, I&T and Operations environments. This application enables the user to execute SQL statements interactively or in batch mode against an Oracle schema.
+
+* Environment Setup
+
+  In order to execute the SQLPlus application, certain environment variables must be set. The environment variables should be set as follows:
+
++--
+ORACLE_BASE = /home/oracle
+ORACLE_HOME = /home/oracle/product/10gR2
+PATH = /home/oracle/product/10gR2/bin
+LD_LIBRARY_PATH = /home/oracle/product/10gR2/lib
++--
+
+  In the case of the <PATH> and <LD_LIBRARY_PATH> variables, the above path values may be one of many paths defined for those variables. In the PO.DAAC environment, the above variables should be set by default. To verify this, perform the following command:
+
++--
+% printenv
++--
+
+  Scan the resulting list of variables for the variables specified above. If the variables are not set as specified above, the user can set their environment with the following command:
+
++--
+% source /etc/local.login
++--
+
+* Execution
+
+  The application can be executed with or without arguments. The following example details execution of the application while specifying the username, password and connect identifier on the command-line:
+
++--
+% sqlplus -l <username>@<connect_identifier>/<password>
+
+SQL*Plus: Release 10.2.0.3.0 - Production on Wed Jan 9 09:27:55 2008
+
+Copyright (c) 1982, 2006, Oracle.  All Rights Reserved.
+
+Connected to:
+Oracle Database 10g Enterprise Edition Release 10.2.0.3.0 - 64bit Production
+With the Partitioning, OLAP and Data Mining options
+
+SQL>
++--
+
+  If the options are not specified on the command-line, the application will prompt the user to enter them. Either way, the options are as follows:
+
+  * Option: Username
+  
+    * Description: The Oracle user account name that identifies the owner of the database objects to be accessed during this session.
+
+  * Option: Password
+  
+    * Description: The password that corresponds with the Oracle user account name. If the password contains special characters, each special character should be preceded by a <\\> character when entering the password.
+
+  * Option: Connect Identifier
+  
+    * Description: The connect identifier is the same as the  Oracle System Identifier (SID) which identifies the Oracle database instance with which to connect. PO.DAAC currently has two instances identified by <DAACDEV> and <DAACOPS>. The value is not case sensitive. The value must be appended to either the username or the password value preceded by the <@> symbol.
+
+
+  Whether the user provides the options on the command-line or not, the end result should be a prompt for the user to enter a SQL statement. A SQL statement should be followed by a semi-colon on the same line or the following line. The SQL statement is executed by entering <\<return\>>. The results of the execution will be displayed in the terminal.
+

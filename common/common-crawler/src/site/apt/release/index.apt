@@ -1,0 +1,24 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 1036 2008-04-28 03:11:50Z shardman $
+
+   ---
+  Release Description
+  ---
+  Mike Gangl
+  ---
+  
+Release Description
+
+  The Release Description Documents (RDDs) detail the new and modified capabilities that comprise a particular Common-Crawler Program Set release. These documents will also describe any impact that the new or modified capabilities will have on PO.DAAC operations, data providers and data consumers. The intended audience for these documents includes the PO.DAAC Test Engineer and Configuration Manager.
+
+* Release History
+
+*__           +          +                 +
+| <<Version>> | <<Date>> | <<Description>> |
+*--
+| {{{index-1.3.0.html}1.3.0}} | 2009-03-23 | Initial release of the common-crawler program set including the GenericCrawler. |
+*--
+
+

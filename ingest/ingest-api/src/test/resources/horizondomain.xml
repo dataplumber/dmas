@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain xmlns="http://podaac.jpl.nasa.gov">
+   <default>podaacDev</default>
+   <federation>
+     <name>podaacDev</name>
+     <url>http://localhost:8090/manager/ingest</url>
+  </federation>
+  <sigevent>http://localhost:8090/sigevent</url>
+</domain>

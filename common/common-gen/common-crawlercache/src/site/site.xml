@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+Copyright 2008, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+
+$Id: site.xml 5885 2010-09-17 20:23:10Z thuang $
+-->
+
+<project name="Common Crawler Cache Binding">
+  <bannerLeft>
+    <src>images/podaac_logo.jpg</src>
+    <href>http://podaac-cm.jpl.nasa.gov/</href>
+  </bannerLeft>
+
+  <bannerRight>
+    <name>Common Crawler Cache Binding&nbsp;&nbsp;</name>
+  </bannerRight>
+
+  <body>
+    <links>
+      <item name="Common Crawler Cache Binding" href="http://podaac-cm.jpl.nasa.gov/docs/common/common-gen/common-crawlercache/index.html" />
+    </links>
+
+    <menu name="Software Documentation">
+      <item name="About Common Crawler Cache Binding" href="index.html"/>
+      <item name="XSD Docs" href="xsddoc/index.html"/>
+      <item name="RTF Doc" href="podaac_crawlercache.rtf"/>
+      <item name="JavaDoc" href="apidocs/index.html"/>
+    </menu>
+
+    <menu ref="reports"/>
+  </body>
+</project>

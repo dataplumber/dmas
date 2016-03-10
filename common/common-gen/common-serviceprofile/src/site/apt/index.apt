@@ -1,0 +1,14 @@
+~~ Copyright 2007-2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 262 2007-10-04 21:14:38Z shardman $
+
+  ---
+  About Common Service Profile Binding
+  ---
+  Sean Hardman
+  ---
+  
+About Common Service Profile Binding
+
+  The Common Service Profile Binding sub-module uses JAXB to generate Java classes for handling the PO.DAAC Message.

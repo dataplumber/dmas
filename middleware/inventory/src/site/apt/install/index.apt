@@ -1,0 +1,203 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 2577 2009-02-03 18:03:50Z thuang $
+
+  ---
+  Installation
+  ---
+  Mike Gangl
+  ---
+
+{Installation}
+
+   This document describes how to install and configure the Manager web application. The following sections can be found in this document:
+
+   * {{{Build_Instructions}Build Instructions}}
+
+   * {{{Data_Model}Data Model}}
+   
+
+{Build Instructions}
+
+   Inventory WS is a web application that is designed and built with the {{{http://groovy.codehaus.org/}Groovy}} programming language and the {{{http://grails.org/}Grails}} web application framework.  While both these technologies are fully developed on top of {{{http://java.sun.com}Java}} platform, its support from {{{http://maven.apache.org}Maven}} is still a little behind.  The prerequisite for building the Inventory web application is the Grails web framework must be installed.  Below is the source tree of Manager distribution
+
+   ** Inventory Configuration
+   
+   The inventory has several general purpose configurations, deliniated as follows 
+   
++--
+//Security Service
+gov.nasa.podaac.security.host="https://localhost"
+gov.nasa.podaac.security.port=9197
+gov.nasa.podaac.security.realm="PODAAC-INVENTORY"
+//no role information needed. Authentication is enough.
++--
+   
+   Host and port entries above are used to reference the security service. The realm is the set of roles and verifiers used to perform A&A.
+   
++--
+//cache user logins for faster access. Recomended to keep this as true, 
+//other wise every request needing auth will query the security service.
+gov.nasa.podaac.auth.cache.useCache = true;
+//hours to cache a user 
+//(once successfully cached, requests won't ping the security server until the time limit is up). 0 = infinite cache.
+gov.nasa.podaac.auth.cache.timeLimit = 2
++--
+
+   To increase performance, the responses of authentication are cached. Set 'useCache' to false. The timeLimit is in minutes and shall be an integer value.
+
+   ** Inventory Database Connection Configuration
+   
+   The Data Source configuration information is located in the "grails-app/conf/DataSource.groovy" file.  The configuration is necessary for the Inventory web application to connect to its data catalog, which is the operation registry for this web application.
+   
++--
+environments {
+   development {
+      dataSource {
+         pooled = true
+         driverClassName = "oracle.jdbc.driver.OracleDriver"
+         url = "jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV"
+         dialect = "org.hibernate.dialect.Oracle10gDialect"
+         username = '${db username}'
+         password = '${db password}'
+
+      }
+   }
+
+   test {
+      dataSource {
+         pooled = true
+         driverClassName = "oracle.jdbc.driver.OracleDriver"
+         url = "jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV"
+         dialect = "org.hibernate.dialect.Oracle10gDialect"
+         username = '${db_username}'
+         password = '${db_password}'
+      }
+   }
+   
+   ...
+}
++--
+  
+   ** Log Configuration
+
+   In $INVENTORY-WS-HOME/grails-app/conf/Config.groovy there is a section for the log4j configuration that looks like the following:
+
++--
+// log4j configuration
+log4j = {
+    // Example of changing the log pattern for the default console
+    // appender:
+    //
+    appenders {
+        rollingFile name:'catalinaOut', maxFileSize:102400, fileName:"<FILE PATH>", file:"<FILE PATH>"
+        file name: 'stacktrace', file: "<FILE PATH>", layout: pattern(conversionPattern: '%c{2} %m%n')
+    }
+    root {
+        error 'catalinaOut'
+        additivity = true
+    }
+    //appenders {
+    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+    //}
+
+
+    debug  'grails.app.service.InventoryService',
+           'grails.app.service.AuthenticationService',
+           'grails.app.controller.DatasetController',
+           'grails.app.controller.SipController',
+           'grails.app.controller.GranuleController',
+           'grails.app.controller.ManifestController',
+           'gov.nasa.podaac.inventory.core.InventoryImpl',
+           'gov.nasa.podaac.inventory.core.DatasetMetadataImpl'
+    error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
+           'org.codehaus.groovy.grails.web.pages', //  GSP
+           'org.codehaus.groovy.grails.web.sitemesh', //  layouts
+           'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
+           'org.codehaus.groovy.grails.web.mapping', // URL mapping
+           'org.codehaus.groovy.grails.commons', // core / classloading
+           'org.codehaus.groovy.grails.plugins', // plugins
+           'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
+           'org.springframework',
+           'org.hibernate',
+           'net.sf.ehcache.hibernate'
+
+    warn   'org.mortbay.log'
+}
++--
+
+   The appenders must be changed to log to a more suitable location for dev, test and ops. 
+
+   ** Memory Configuration
+   
+   The default JavaVM memory allocation by JBoss may not be sufficient.  It is recommended to increase the PermGen memory space.  This memory space is used for dynamically loading of Java classes.
+   
++--
+% setenv JAVA_OPTS "-Xms128m -Xmx512m -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -XX:PermSize=256m -XX:MaxPermSize=512m"
++--
+   
+   * Create and Deploy the Web Application
+   
+   After modifying and loading the target environment information, building the Manager web application should be followed.
+   
+   ** Grails Environment
+
+   Before begin the Maven build, the GRAILS_HOME environment variable must be set.
+
++--
+% setenv GRAILS_HOME /usr/local/grails
++--
+   
+   ** Copy the Dependencies
+   
+   Since a WAR (Web ARchive) is a self-contained component, it must be bundled with its own collection of dependencies.
+   
++--
+% mvn dependency:copy-dependencies
++--
+   
+   The command above will download the required JARs to the '<target/dependency>' directory
+
++--
+% cp target/dependency/* lib
++--      
+
+   Grails expects all of its dependencies in the '<lib>' directory.  The copy command above will satisfy this requirement.
+
+   ** Run as Grails application
+   
+   Below is the command to start the Manager Grails application.
+
++--
+% grails -Dgrails.env=<GRAILS_ENV> -Dserver.port=<SERVER_PORT> -Dserver.host=<SERVER_HOST> -Drun-app
++--
+
+   Here is an example to start the Manager for Development
+
++--
+% grails -Dgrails.env=development -Dserver.port=8090 -Dserver.host=lanina.jpl.nasa.gov -Dinventory.config.file=./inventory.config run-app -https
++--
+
+   The command above will run the Inventory WS as Grails application. GRAILS_ENV should be replaced with "test" for testing, and "production" for ops. SERVER_PORT should be replaced with a port number that sigevent should listen to. SERVER_HOST should be replaced with a hostname that sigevent should bind to. Note that it is necessary to open SERVER_HOST:SERVER_PORT to outside in order to allow all clients to access to manager.  
+   
+   The -Dinventory.config.file points to a file continaing inventory configuration. Currently only the sig event url is in this file, and should be changed for testing and ops deployment. 
+
+   When grails app starts up, it automatically installs the plugins needed. If grails does not ask to install them, following commands can be executed to install he plugins.
+
++--
+% grails install-plugin http://cloud.github.com/downloads/nebolsin/grails-quartz/grails-quartz-0.4.2.zip
++--
+      
+   ** Assemble the Web Archive <<NOT SUPPORTED FOR CURRENT RELEASE>>
+
++--
+% mvn -Dgrails.env=development compile
++--
+   
+   The command above will produce a WAR file that is specific to the development environment.  If the '-Dgrails.env' argument is missing, the WAR produced would be for the production environment.  For the test environment, the '-Dgrails.env=test' should be used.
+   
+   ** Deploy to JBoss <<NOT SUPPORTED FOR CURRENT RELEASE>>
+   
+   All web component to be serve by JBoss must be installed under '<$JBOSS_HOME/server/<instance>/deploy>' directory.
+      

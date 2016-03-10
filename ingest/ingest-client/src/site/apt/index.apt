@@ -1,0 +1,14 @@
+~~ Copyright 2007, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 2908 2009-05-03 07:34:34Z thuang $
+
+  ---
+  About Ingest Client
+  ---
+  Thomas Huang
+  ---
+  
+About Ingest Client
+
+  The Ingest Client module contains general-purpose client application programs for interfacing with the PO.DAAC middleware services.

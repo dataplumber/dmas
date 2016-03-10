@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+Copyright 2008, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+
+$Id: site.xml 789 2008-03-09 19:43:24Z shardman $
+-->
+
+<project name="Common MMR Binding">
+  <bannerLeft>
+    <src>images/podaac_logo.jpg</src>
+    <href>http://podaac-cm.jpl.nasa.gov/</href>
+  </bannerLeft>
+
+  <bannerRight>
+    <name>Common MMR Binding&nbsp;&nbsp;</name>
+  </bannerRight>
+
+  <body>
+    <links>
+      <item name="Common MMR Binding" href="http://podaac-cm.jpl.nasa.gov/docs/common/common-gen/common-mmr/index.html" />
+    </links>
+
+    <menu name="Software Documentation">
+      <item name="About Common MMR Binding" href="index.html"/>
+      <item name="XSD Docs" href="xsddoc/index.html"/>
+      <item name="RTF Doc" href="mmr_fr.rtf"/>
+      <item name="JavaDoc" href="apidocs/index.html"/>
+    </menu>
+
+    <menu ref="reports"/>
+  </body>
+</project>

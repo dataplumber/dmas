@@ -1,0 +1,280 @@
+~~ Copyright 2010, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: $
+
+  ---
+  Release Description 3.3.0
+  ---
+  Thomas Huang
+  ---
+  
+Release Description 3.3.0
+
+  This release of the Ingest Program Set is a component of the integrated release ({{{../../cm/release/index-3.3.0.html}3.3.0}}) of the PO.DAAC System. This release is intended as an operational release.
+
+  Building on capabilities delivered in the last release, this release focuses on improving the overall reliability of the Ingest System.  Details on this release can be found in the following sections of this document:
+
+  * {{{Capabilities}Capabilities}}
+
+  * {{{Liens}Liens}}
+
+  * {{{System_Requirements}System Requirements}}
+
+  * {{{Installation}Installation}}
+
+  * {{{Operation}Operation}}
+
+  * {{{Appendix_A_-_Requirements_Support}Appendix A - Requirements Support}}
+
+  * {{{Appendix_B_-_Test_Status}Appendix B - Test Status}}
+
+{Capabilities}
+
+  This section details the new, modified and corrected capabilities that comprise this release of the Ingest Program Set. In lieu of listing the capabilities by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix_A_-_Requirements_Support}Appendix A}}.
+
+* New Capabilities
+
+  N/A
+
+* Modified Capabilities
+
+  N/A
+
+[]
+
+* Corrected Capabilities
+
+  N/A
+
+[]
+  
+{Liens}
+
+  This section details the liens against the capabilities that have yet to be implemented or are partially implemented. In lieu of listing the liens by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix A - Requirements Support}Appendix A}}.
+
+  * Electronic Data Retrieval
+
+  Support for direct push and pull via FTP without being triggered by an SPM or SIP has not been implemented yet. These capabilities are all lumped under <L3.158>.
+
+  * Data Verification
+
+  Neither of the verification capabilities specified by <L3.167> nor <L3.168> have been implemented.
+
+  * Metadata Extraction
+
+  Neither of the metadata extraction capabilities specified by <L3.174> nor <L3.175> have been implemented.
+
+  * Agreed/Standard Interfaces
+
+  Need to determine how to satisfy <L3.258>, but implementation of <L3.259> is well on the way.
+
+  * Secondary Failover
+
+  Running more than one instance of Ingest, as specified in <L3.270> has not been tested yet.
+
+  * Request Transmission/Retransmission
+
+  Neither of the capabilities specified by <L3.293> nor <L3.294> have been implemented.
+
+  * L3.170
+
+  Two of the elements listed in this requirement have been interpreted differently from the original intention. They are:
+
+    * e. Status of granule push (optional)
+
+      Instead of having a separate status value for each granule, a status value has been assigned for each ingested package which may contain one or more granules. If one granule fails, the whole package will be rejected. Suggest removing this element from the requirement.
+
+    * f. Transfer time of granule to external destination host (optional)
+
+      Instead of tracking the time to transfer to the destination host, this element will track the time to transfer from the source host. Suggest rewording this element.
+
+  A request will be made to the System Engineer to reword this requirement.
+
+{System Requirements}
+
+  The software contained in this program set was developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The software was specifically developed under Sun Java version 1.5 and has only been tested with this version.
+
+  * PO.DAAC Standard Computing Environment
+
+  This will eventually be documented on the Wiki and linked to in future releases. For now, the following software and tools should be available in the current environment:
+
+    * Apache Ant 1.7.X
+
+    * Apache Maven 2.2.1
+    
+    * SFTP/FTP Client/Server
+
+    * Groovy 1.7.8
+
+    * Perl 5.X
+
+    * Subversion Client 1.4.X
+
+    * Sun Java Standard Edition (J2SE) 1.6.X
+    
+    []
+
+    See the system-level {{{../../cm/release/index-3.3.0.html}release}} document for specific version numbers.
+
+{Installation}
+
+  This section details the procedures for installing and configuring the software in this program set.
+
+* Ingest-Server Installation
+
+  The Ingest Server module consists of the core implementation for the program set (everything happens here). The installation of this module is covered in the {{{../ingest-server/install/index.html}Ingest Server Installation}} document.
+
+* Ingest-Client Installation
+
+  The Ingest Client module consists of command-line applications for interfacing with the Ingest Grails RESTful interface. The installation of this module is covered in the {{{../ingest-client/install/index.html}Ingest Client Installation}} document.
+
+{Operation}
+
+  This section details any necessary setup and the commands for running the software in this program set.
+
+* Ingest-Server Operation
+
+  The operation of this module is covered in the {{{../ingest-server/operate/index.html}Ingest Server Operation}} document.
+
+* Ingest-Client Operation
+
+  The operation of this module is covered in the {{{../ingest-client/operate/index.html}Ingest Client Operation}} document.
+
+{Appendix A - Requirements Support}
+
+  The capabilities in this release are detailed in the table below based on the requirements specified in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Document-279402/PO.DAAC_Reqs_20070726.xls}PO.DAAC User and System Requirements}} document. The allocation of the Level 3 system requirements to the program sets is captured in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Version-548802/podaac_req_alloc_20080427.xls}Level 3 Requirements Allocation}} document. The values for the Support column are defined as follows:
+
+  * <<Full>> - The capability specified by the associated requirement has been implemented and tested at the program set level.
+
+  * <<Partial>> - The capability has been partially implemented. The content of the Description column should provide more details.
+
+  * <<No>> - The capability has not yet been implemented.
+
+[]
+
+	* Requirement: L3.158 The PO.DAAC shall acquire data electronically.
+
+	  * Support: Partial
+
+	  * Description: Supports retrieval of data via FTP when triggered by the receipt of a Submission Package Message (SPM).
+
+	* Requirement: L3.160 The PO.DAAC shall provide remote event handling (i.e. handshaking) to initiate data transfer from the data provider.
+
+	  * Support: Partial
+
+	  * Description: SPMs and SIPs are accepted via TCP/IP or Java Message Service (JMS).
+
+	* Requirement: L3.161 The PO.DAAC shall acknowledge receipt of data (e.g. receipt confirmation notification (RCN), as directed by provider.
+
+	  * Support: Partial
+
+	  * Description: An e-mail is sent to the specified sender of the SPM or SIP acknowledging receipt as well as completion of ingestion.
+
+	* Requirement: L3.164 The PO.DAAC shall log/capture all transmission anomalies.
+
+	  * Support: Partial
+
+	  * Description: All messages generated during an ingestion are captured in a log file. The severity level is configurable.
+
+	* Requirement: L3.166 The PO.DAAC shall verify data for readability.
+
+	  * Support: No
+
+	  * Description: Verification beyond checksum generation has not been addressed yet.
+
+	* Requirement: L3.167 The PO.DAAC shall verify granule data with appropriate checksum information.
+
+	  * Support: Partial
+
+	  * Description: A checksum value is generated for each file ingested.
+
+	* Requirement: L3.168 The PO.DAAC shall capture all verification results.
+
+	  * Support: No
+
+	  * Description: Not been addressed yet.
+
+	* Requirement: L3.170 The PO.DAAC shall register and maintain the following information for every acquired granule:
+	  a. Granule Name.
+	  b. Granule size (Mbytes)
+	  c. Receipt time.
+	  d. Data stream name
+	  e. Status of granule push (optional)
+	  f. Transfer time of granule to external destination host (optional)
+	  g. Checksum value.
+
+	  * Support: Partial
+
+	  * Description: All of the attributes are captured in the SIP.
+
+	* Requirement: L3.174 The PO.DAAC shall extract metadata information from data granules when necessary.
+
+	  * Support: No
+
+	  * Description: Extracting metadata from granule data files has not been addressed yet.
+
+	* Requirement: L3.175 The PO.DAAC shall extract content-based information from data granules (e.g. quality, statistical analysis, etc.)
+
+	  * Support: No
+
+	  * Description: Extracting metadata from granule data files has not been addressed yet.
+
+	* Requirement: L3.258 The PO.DAAC shall acquire data via an agreed upon interface described in the Interface Control Document (ICD) or Memorandum Of Understanding (MOU) in cooperation with external entities (i.e., projects, foreign data centers and principal investigators), when and where appropriate.
+
+	  * Support: Partial
+
+	  * Description: I believe this requirement specifies that an ICD or MOU must be in place before data is acquired. If that is the case, then it is not much of a software requirement.
+
+	* Requirement: L3.259 The PO.DAAC shall have a set of standard interfaces to select from to initiate negotiation with data provider.
+
+	  * Support: Partial
+
+	  * Description: The SIP provides the structure of the metadata along with the TCP/IP and JMS communication mechanisms lay the groundwork for meeting this requirement.
+
+	* Requirement: L3.270 The PO.DAAC shall provide secondary fail-over systems in support of the acquisition and receipt of data.
+
+	  * Support: No
+
+	  * Description: Fail-over and scalability have not directly been addressed yet.
+
+	* Requirement: L3.181 The PO.DAAC shall produce metadata satisfying minimum quality standards.
+
+	  * Support: Partial
+
+	  * Description: Not sure how we will ever prove complete satisfaction of this requirement but the information captured in the SIP is a good start.
+
+	* Requirement: L3.293 The PO.DAAC shall report verification results and request retransmission in the event of an anomaly. 
+
+	  * Support: No
+
+	  * Description: Not been addressed yet.
+
+	* Requirement: L3.294 The PO.DAAC shall request transmission or retransmission in the event of an anomaly.
+
+	  * Support: No
+
+	  * Description: Not been addressed yet.
+
+	* Requirement: L3.324 The PO.DAAC shall manage the processing history and source of data products.
+
+	  * Support: No
+
+	  * Description: For Ingest, this will be addressed in the SIP structure.
+
+
+{Appendix B - Test Status}
+
+* Unit Tests
+
+  The results of unit testing prior to deployment can be found in the Maven Surefire Report for the associated module. Descriptions of the unit tests for the associated module can be found in the Test JavaDocs. The following module(s) have associated units tests:
+
+** Ingest API Module
+
+  * {{{../ingest-api/surefire-report.html}Maven Surefire Report}}
+
+  * {{{../ingest-api/testapidocs/index.html}Test JavaDocs}}
+
+* Program Set Tests
+
+  The following test scenarios were performed prior to deployment using various test data inputs.

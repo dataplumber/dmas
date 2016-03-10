@@ -1,0 +1,130 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index-0.3.1.apt 6217 2010-11-11 22:38:18Z thuang $
+
+  ---
+  Release Description 0.3.1
+  ---
+  Sean Hardman
+  ---
+  
+Release Description 0.3.1
+
+  This release of the Common Program Set is a component of the integrated release ({{{../../cm/release/index-0.4.1.html}0.4.1}}) of the PO.DAAC System. This release is intended as a test release and not an operational release. The following sections can be found in this document:
+
+  * {{{Capabilities}Capabilities}}
+
+  * {{{Liens}Liens}}
+
+  * {{{System_Requirements}System Requirements}}
+
+  * {{{Installation}Installation}}
+
+  * {{{Operation}Operation}}
+
+  * {{{Appendix_A_-_Requirements_Support}Appendix A - Requirements Support}}
+
+  * {{{Appendix_B_-_Test_Status}Appendix B - Test Status}}
+
+{Capabilities}
+
+  This section details the new, modified and corrected capabilities that comprise this release of the Common Program Set. In lieu of listing the capabilities by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix_A_-_Requirements_Support}Appendix A}}.
+
+* New Capabilities
+
+  There were no new capabilities in this release.
+
+* Modified Capabilities
+
+  The following capabilities have been modified for this release:
+
+  * Directory Crawler
+
+    The Directory Crawler application was modified to use the latest version of the Apache Commons Virtual File System (VFS) to resolve performance issues when crawling FTP sites. 
+
+  * Service Profile
+
+    The PO.DAAC message structure was modified to support the following spatial representations:
+
+      * Bounding polygons with holes
+
+      * Lines
+
+* Corrected Capabilities
+
+  The following capabilities have been corrected for this release:
+  
+  * Directory Crawler
+  
+    Corrected several instances where resources were not released which caused memory allocation issues.
+
+{Liens}
+
+  This section details the liens against the capabilities that have yet to be implemented or are partially implemented. In lieu of listing the liens by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix_A_-_Requirements_Support}Appendix A}}.
+
+  There are no liens for this release.
+
+{System Requirements}
+
+  The software contained in this program set was developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The software was specifically developed under Sun Java version 1.5 and has only been tested with this version.
+
+  * PO.DAAC Standard Computing Environment
+
+  This will eventually be documented on the Wiki and linked to in future releases. For now, the following software and tools should be available in the current environment:
+
+    * Sun Java Standard Edition (J2SE) 1.5.X
+
+    * Subversion Client 1.3.X
+
+    * Maven 2.0.X
+
+{Installation}
+
+  The Common Program Set consists solely of Application Program Interfaces (APIs) and applications that are included in the distributions of other program sets that are dependent on them. Because of this, installation of this software is covered in the Installation documents associated with those dependent program sets.
+
+{Operation}
+
+  The Common Program Set consists solely of Application Program Interfaces (APIs) and applications that are included in the distributions of other program sets that are dependent on them. Because of this, operation of this software is covered in the Operation documents associated with those dependent program sets.
+
+{Appendix A - Requirements Support}
+
+  The capabilities in this release are detailed in the table below based on the requirements specified in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Document-279402/PO.DAAC_Reqs_20070726.xls}PO.DAAC User and System Requirements}} document. The allocation of the Level 3 system requirements to the program sets is captured in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Version-548802/podaac_req_alloc_20080427.xls}Level 3 Requirements Allocation}} document. The values for the Support column are defined as follows:
+
+  * <<Full>> - The capability specified by the associated requirement has been implemented and tested at the program set level.
+
+  * <<Partial>> - The capability has been partially implemented. The content of the Description column should provide more details.
+
+  * <<No>> - The capability has not yet been implemented.
+
+[]
+
+* Requirement: L3.302 The PO.DAAC shall automatically begin processing when inputs are available.
+
+  * Support: Full
+
+  * Description: A portion of this requirement is satisfied by the directory crawler application. The responsibility for satisfying the rest of the functionality for this requirement is with the Generate program set.
+
+{Appendix B - Test Status}
+
+  This appendix details tests and test procedures for unit and program set level testing performed prior to integration and test by the development staff.
+
+* Unit Tests
+
+  The results of unit testing prior to deployment can be found in the Maven Surefire Report for the associated module. Descriptions of the unit tests for the associated module can be found in the Test JavaDocs. The following modules have associated units tests:
+
+** Common API Module
+
+  * {{{../common-api/surefire-report.html}Maven Surefire Report}}
+
+  * {{{../common-api/testapidocs/index.html}Test JavaDocs}}
+
+** Common Crawler Module
+
+  * {{{../common-crawler/surefire-report.html}Maven Surefire Report}}
+
+  * {{{../common-crawler/testapidocs/index.html}Test JavaDocs}}
+
+* Program Set Tests
+
+  TBD

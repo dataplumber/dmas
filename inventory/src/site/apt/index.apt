@@ -1,0 +1,14 @@
+~~ Copyright 2007, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 2 2007-06-25 05:17:14Z shardman $
+
+  ---
+  About Inventory
+  ---
+  S. Hardman
+  ---
+  
+About Inventory
+
+  The Inventory program set provides the services and functions for populating, maintaining, and accessing both descriptive information, which identifies and documents archive holdings, and administrative data used to manage the archive. These functions include administering the archive database functions (maintaining schema and view definitions, and referential integrity), performing database updates (loading new descriptive information or archive administrative data), performing queries on the data management data to generate result sets, and producing reports from these result sets. It also provides functions to inventory, report on, and migrate/update the contents of the archive. It is also responsible for the storage and access of policies in the database.

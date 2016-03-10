@@ -1,0 +1,538 @@
+~~ Copyright 2007-2010, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: dataset.apt 6269 2010-11-13 07:34:18Z gangl $
+
+  ---
+  Dataset
+  ---
+  S. Hardman
+  ---
+  
+Dataset
+
+  A Dataset is a logical grouping of related data, which corresponds to the level at which ingested data is defined. A Dataset consists of one or more related granules.
+
+  The Dataset schema will capture policy information and high-level query criteria for data within PO.DAAC. Much of the information in these tables will be provided via the Product Rollout program set. The source of this information are the Data Management Plans (DMPs) and Interface Control Documents (ICDs) that are negotiated with the Data Provider. The cognizant Data Engineer will also supply their domain knowledge.
+
+
+* Dataset Schema (1 of 3)
+
+  The following diagram details a portion of the Dataset schema:
+
+[../images/dataset1_2.1.0.gif] Dataset Schema Diagram (1 of 3)
+
+  The following sub-sections provide detailed descriptions for each of the tables.
+
+** {dataset}
+
+  The main table containing identifying attributes for a dataset.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | | An automatically generated identifier for the dataset which is unique. This identifier is generated using a sequence. This column is the primary key for the table.|
+*--++++
+| provider_id | NUMBER | |  The identifier for the provider. This column is a foreign key to the <{{{provider.html#provider}provider}}> table. |
+*--++++
+| short_name | VARCHAR2(160) | | A short descriptive and unique name for the dataset. |
+*--++++
+| long_name | VARCHAR2(255) | | A long descriptive name for the dataset. |
+*--++++
+| original_provider | VARCHAR2(160) | | The name of the original Data Provider (may be identical to Provider Short/Long Name). |
+*--++++
+| provider_dataset_name | VARCHAR2(160) | | The name of the dataset as specified by the Data Provider. In the case where we are combining multiple provider datasets into one, this value will contain a comma-separated list of dataset names. |
+*--++++
+| processing_level | VARCHAR2(10) | | The level of processing. |
+*--++++
+| region | VARCHAR2(80) | | The geographic area for the data. Removed in 2.2.0. |
+*--++++
+| region_detail | VARCHAR2(80) | | More specific information on the location. Removed in 2.2.0. |
+*--++++
+| latitude_resolution | NUMBER | | The resolution for the North and South latitudes. |
+*--++++
+| longitude_resolution | NUMBER | | The resolution for the West and East longitudes. |
+*--++++
+| across_track_resolution | NUMBER | | The resolution of swath-based dataset in the across track direction. |
+*--++++
+| along_track_resolution | NUMBER | | The resolution of swath-based dataset in the along track direction. |
+*--++++
+| horizontal_resolution_range | VARCHAR2(80) | | The range of resolutions for the latitude/longitude values. |
+*--++++
+| altitude_resolution | VARCHAR2(80) | | The resolution for the altitude values. |
+*--++++
+| depth_resolution | VARCHAR2(80) | | The resolution for the depth values. |
+*--++++
+| temporal_resolution | VARCHAR2(1024) | | The frequency that the data is sampled. |
+*--++++
+| temporal_resolution_range | VARCHAR2(80) | | The range of frequencies within which the data is sampled. |
+*--++++
+| ellipsoid_type | VARCHAR2(160) | | The type of ellipsoid. |
+*--++++
+| projection_type | VARCHAR2(160) | | The type of projection. |
+*--++++
+| projection_detail | VARCHAR2(1024) | | Description of projection details. |
+*--++++
+| reference | VARCHAR2(1024) | | Bibliographic references for the dataset. |
+*--++++
+| remote_dataset | VARCHAR2(1) | | Dataset location (R)emote, (L)ocal, or (C)olocated |
+*--++++
+| description | CLOB | | A lengthy description for the dataset. |
+*--++++
+
+** {dataset_citation}
+
+  This table contains citation information for a dataset. A dataset may have one or more citations. 
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | |  The identifier for the dataset. This column is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| title | VARCHAR2(255) | | The title of the dataset associated with the dataset. |
+*--++++
+| creator | VARCHAR2(255) | | The entity responsible for development of the dataset. |
+*--++++
+| version | VARCHAR2(80) | | The version of the dataset specified by the provider. |
+*--++++
+| publisher | VARCHAR2(100) | | The entity responsible for release of the dataset. |
+*--++++
+| series_name | VARCHAR2(160) | | The name of the series or aggregate dataset of which the dataset is a part. |
+*--++++
+| release_date_long | NUMBER | | The release date (represented in milliseconds since the EPIC time January 1, 1970) for the dataset. |
+*--++++
+| release_place | VARCHAR2(100) | | The place (city, state, etc.) where the datset was made available for release. |
+*--++++
+| citation_detail | VARCHAR2(255) | | Details related to the citation. |
+*--++++
+| online_resource | VARCHAR2(255) | | The URL of an online resource for the dataset. |
+*--++++
+
+** {dataset_coverage}
+
+  This table contains spatial and temporal coverage information for a dataset, which will be updated over time as new granules are ingested for the respective datasets. Each dataset will have one entry in this table.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | | The identifier for the dataset. This column is the primary key for this table and is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| start_time_long | NUMBER | | The start time (represented in milliseconds since the EPIC time January 1, 1970) for data within this dataset. |
+*--++++
+| stop_time_long | NUMBER | | The stop time (represented in milliseconds since the EPIC time January 1, 1970) for data within this dataset. |
+*--++++
+| north_lat | NUMBER | | The northern latitude for data within this dataset. |
+*--++++
+| south_lat | NUMBER | | The southern latitude for data within this dataset. |
+*--++++
+| east_lon | NUMBER | | The eastern longitude for data within this dataset. |
+*--++++
+| west_lon | NUMBER | | The western longitude for data within this dataset. |
+*--++++
+| min_altitude | NUMBER | | The altitude level which represents the lower limit of data coverage, as measured from mean sea level. | 
+*--++++
+| max_altitude | NUMBER | | The altitude level which represents the upper limit of data coverage, as measured from mean sea level. | 
+*--++++
+| min_depth | NUMBER | | The depth level which represents the lower-most depth of data coverage, as measured from mean sea level. | 
+*--++++
+| max_depth | NUMBER | | The depth level which represents the lower-most depth of data coverage, as measured from mean sea level. | 
+*--++++
+
+** {dataset_location_policy}
+
+  This table contains policy information for the location of granules associated with a dataset. This information is utilized by the Archive program set for determining the granule <path> values in the <{{{granule.html#granule_archive}granule_archive}}> and <{{{granule.html#granule_reference}granule_reference}}> tables. A dataset may have multiple locations depending upon the number of access mechanisms that are supported in the PO.DAAC system (e.g., FTP, OPeNDAP, etc.). A dataset may also have zero locations if the dataset is being brokered (i.e., accessed from another data system).
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | | The identifier for the dataset. This column is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| type | VARCHAR2(20) | | The type of location or access mechanism. |
+*--++++
+| base_path | VARCHAR2(255) | | The root directory in the form of a Uniform Resource Identifier (URI) where granules for the associated dataset are stored or accessed. |
+*--++++
+
+** {dataset_location_policy}
+
+  This tables contains the regions for each dataset.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | | The identifier for the dataset. This column is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| region | VARCHAR2(128) | | Region for this dataset. Examples include "Global" or "North Atlantic". |
+*--++++
+| region_detail | VARCHAR2(1024) | |  More detailed information for a region. This could include bounding box information or particular items of interestin within the region. |
+*--++++
+
+
+** {dataset_policy}
+
+  This table contains policy information for a dataset. Each dataset will have one entry in this table.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | | The identifier for the dataset. This column is the primary key for this table and is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| data_class | VARCHAR2(20) | | The class of the data used to determine how the data is archived and accessed. |
+*--++++
+| data_frequency | NUMBER | | The period of time, in hours, when PO.DAAC should expect a delivery of data from the data provider. |
+*--++++
+| data_volume | NUMBER | | The number of files to be received in a data delivery corresponding to the period of time specified by the Data Frequency. |
+*--++++
+| data_duration | NUMBER | | The period of time, in days, that a granule for a dataset is kept in PO.DAAC storage. |
+*--++++
+| data_latency | NUMBER | | The period of time between the stop time of last observation and the archive time of current observation. |
+*--++++
+| access_type | VARCHAR2(20) | | The default access type for all granules related to this dataset. |
+*--++++
+| base_path_append_type | VARCHAR2(20) | | The type of subdirectory appended to the base path where the granules for the associated dataset are stored or accessed. For YEAR and YEAR-DOY, these values are determined from the granule start time. Other values are based on dataset-specific metadata values. |
+*--++++
+| data_format | VARCHAR2(20) | | The data format for the data granule files associated with this dataset. |
+*--++++
+| compress_type | VARCHAR2(20) | | The type of compression used for compressing granule data files for this dataset. |
+*--++++
+| checksum_type | VARCHAR2(20) | | The type of checksum used to verify the integrity of the granule data file. |
+*--++++
+| spatial_type | VARCHAR2(20) | | The type of spatial query that can be performed for granules associated with this dataset. |
+*--++++
+| access_constraint | VARCHAR2(1024) | | Restrictions or limitation for accessing the dataset. |
+*--++++
+| use_constraint | VARCHAR2(1024) | | Restrictions or limitation for using the dataset. |
+*--++++
+| VIEW_ONLINE | VARCHAR2(1) | | Flag for indexing the dataset in SOLR. 'Y' means it should be displayed online. |
+*--++++
+
+** {dataset_resource}
+
+  This table contains information on related URLs or online documents for datasets. A dataset may have zero or more resources.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | datasetId |  The identifier for the dataset. This column is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| name | VARCHAR2(80) | resourceName | The name of the resource. This could be the title of the web page or a document pointed to by the URL. |
+*--++++
+| type | VARCHAR2(31) | resourceType | The type of URL being referenced as a resource for the dataset. |
+*--++++
+| path | VARCHAR2(255) | resourcePath | A web address to a web site or other web-accessible resource in the form of a Uniform Resource Identifier (URI). |
+*--++++
+| description | VARCHAR2(1024) | resourceDescription | A description of the URL being referenced as a resource for the dataset. |
+*--++++
+
+** {dataset_software}
+
+  This table contains information for software related to datasets. A dataset may have zero or more related software applications.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | datasetId | The identifier for the dataset. This column is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| name | VARCHAR2(80) | softwareName | The name of the software resource. |
+*--++++
+| type | VARCHAR2(31) | softwareType | The type of software resource. |
+*--++++
+| path | VARCHAR2(255) | softwarePath | A web accessible address to the software package in the form of a Uniform Resource Identifier (URI). |
+*--++++
+| release_date_long | NUMBER | softwareDate | The date (represented in milliseconds since the EPIC time January 1, 1970) the software resource was released. |
+*--++++
+| version | VARCHAR2(20) | softwareVersion | The version of the software resource. |
+*--++++
+| language | VARCHAR2(20) | softwareLanguage | The programming language in which the software was authored. |
+*--++++
+| platform | VARCHAR2(20) | softwarePlatform | The operating system platform for which the software resource has been tested and functions. |
+*--++++
+| description | VARCHAR2(1024) | softwareDescription | A description of the software resource. |
+*--++++
+
+** {dataset_spatial}
+
+  This table contains spatial information for a dataset. Each dataset will have one entry in this table if the lat/lon information is available from the <{{{dataset_coverage}dataset_coverage}}> table.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | | The identifier for the dataset. This column is the primary key for this table and is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| spatial_geometry | SDO_GEOMETRY | | The Oracle representation of the spatial geometry detailed in the corresponding lat/lon values. |
+*--++++
+
+* Dataset Schema (2 of 3)
+
+  The following diagram details a portion of the Dataset schema:
+
+[../images/dataset2_2.1.0.gif] Dataset Schema Diagram (2 of 3)
+
+  The following sub-sections provide detailed descriptions for each of the tables.
+
+** {dataset_contact}
+
+  This table relates contact information to the dataset. This table enables a direct mapping of a contact to a dataset where the mapping of a contact via the Data Provider is an indirect mapping. Not all contacts are associated with the data provider. A dataset may have more than one associated contact.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | datasetId | The identifier for the dataset. This column is part of the primary key for this table and is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| contact_id | NUMBER | contactId | The identifier for the contact. This column is part of the primary key for this table and is a foreign key to the <{{{provider.html#contact}contact}}> table. |
+*--++++
+
+** {dataset_meta_history}
+
+  This table tracks the modifications to the dataset metadata record. GHRSST policy was to delete duplicate records based on the dataset identifier. Because of this only the latest record exists for GHRSST-related datasets.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | | The identifier for the dataset. This column is part of the primary key for this table and is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| version_id | NUMBER | | A generated identifier which is unique within a Dataset and represents the version of the metadata record. This column is part of the primary key for this table. |
+*--++++
+| creation_date_long | NUMBER | | The date (represented in milliseconds since the EPIC time January 1, 1970) the original metadata record was created. |
+*--++++
+| last_revision_date_long | NUMBER | | The date (represented in milliseconds since the EPIC time January 1, 1970) the current metadata record was revised. |
+*--++++
+| revision_history | VARCHAR2(1024) | | A description of the changes made to the metadata record. |
+*--++++
+
+** {dataset_parameter}
+
+  This table details the search parameters related to a dataset. The contents of this table are closely tied to the {{{http://gcmd.gsfc.nasa.gov/Resources/valids/archives/GCMD_Science_Keywords.pdf}GCMD Science Keywords}}. A dataset may have zero or more search parameters.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | |  The identifier for the dataset. This column is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| category | VARCHAR2(80) | | The category for the GCMD science keyword hierarchy. |
+*--++++
+| topic | VARCHAR2(80) | | The first level in the GCMD science keyword hierarchy. |
+*--++++
+| term | VARCHAR2(80) | | The second level in the GCMD science keyword hierarchy. |
+*--++++
+| variable | VARCHAR2(80) | | The third level in the GCMD science keyword hierarchy. |
+*--++++
+| variable_detail | VARCHAR2(160) | | The fourth level and beyond in the GCMD science keyword hierarchy. This field will contain variables from VARIABLE_LEVEL_2 and beyond. |
+*--++++
+
+** {dataset_projecct}
+
+  This table relates project information to the dataset. A dataset may have zero or more project relationships.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | datasetId | The identifier for the dataset. This column is part of the primary key for this table and is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| project_id | NUMBER | projectId | The identifier for the project. This column is part of the primary key for this table and is a foreign key to the <{{{project}project}}> table. |
+*--++++
+
+** {dataset_source}
+
+  This table relates source and sensor information to the dataset. A dataset may have zero or more source/sensor relationships.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | datasetId | The identifier for the dataset. This column is part of the primary key for this table and is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| source_id | NUMBER | sourceId | The identifier for the source. This column is part of the primary key for this table and is a foreign key to the <{{{source}source}}> table. |
+*--++++
+| sensor_id | NUMBER | sensorId | The identifier for the sensor. This column is part of the primary key for this table and is a foreign key to the <{{{sensor}sensor}}> table. |
+*--++++
+
+** {dataset_version}
+
+  This table tracks the version of the dataset. The current version of the dataset is represented by the row with the latest <version_date> value. A dataset may have one or more versions.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | | The identifier for the dataset. This column is part of the primary key for this table and is a foreign key to the <{{{dataset}dataset}}> table. |
+*--++++
+| version_id | NUMBER | | A generated identifier which is unique within a Dataset and represents the internal version of the dataset. This column is part of the primary key for this table. |
+*--++++
+| version | VARCHAR2(80) | | The version of the dataset as specified by the Data Provider. |
+*--++++
+| version_date_long | NUMBER | | A date/time (represented in milliseconds since the EPIC time January 1, 1970) value associated with a dataset version. |
+*--++++
+| description | VARCHAR2(1024) | | A description of the version. For example, this could include information on an upgraded algorithm. |
+*--++++
+
+** {project}
+
+  This table details the projects related to a dataset. The contents of this table are closely tied to the {{{http://gcmd.gsfc.nasa.gov/Resources/valids/archives/GCMD_Project_Keywords.pdf}GCMD Projects}}.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| project_id | NUMBER | projectId | An automatically generated identifier for the project which is unique. This identifier is generated using a sequence. This column is the primary key for this table. |
+*--++++
+| short_name | VARCHAR2(31) | projectShortName | The abbreviated name for the project associated with the dataset. |
+*--++++
+| long_name | VARCHAR2(80) | projectLongName | The full name for the project associated with the dataset. |
+*--++++
+
+** {sensor}
+
+  This table details the sensors (e.g., instrument) related to a dataset and source. The contents of this table are closely tied to the {{{http://gcmd.gsfc.nasa.gov/Resources/valids/archives/GCMD_Instrument_Keywords.pdf}GCMD Instruments}}.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| sensor_id | NUMBER | sensorId | An automatically generated identifier for the sensor which is unique. This identifier is generated using a sequence. This column is the primary key for this table. |
+*--++++
+| short_name | VARCHAR2(31) | sensorShortName | The abbreviated name for the sensor (e.g., instrument) used to acquire the data. |
+*--++++
+| long_name | VARCHAR2(80) | sensorLongName | The full name for the sensor (e.g., instrument) used to acquire the data. |
+*--++++
+| swath_width | NUMBER | swathWidth | The width of the swath in kilometers. |
+*--++++
+| description | VARCHAR2(1024) | sensorDescription | A description of the sensor. |
+*--++++
+
+** {source}
+
+  This table details the sources (e.g., mission, etc.) related to a dataset. The contents of this table are closely tied to the {{{http://gcmd.gsfc.nasa.gov/Resources/valids/archives/GCMD_Platform_Keywords.pdf}GCMD Platforms}}.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| source_id | NUMBER | sourceId | An automatically generated identifier for the source which is unique. This identifier is generated using a sequence. This column is the primary key for this table. |
+*--++++
+| short_name | VARCHAR2(31) | sourceShortName | The abbreviated name for the source (e.g., platform, satellite) used to acquire the data. |
+*--++++
+| long_name | VARCHAR2(80) | sourceLongName | The full name for the source (e.g., platform, satellite) used to acquire the data. |
+*--++++
+| type | VARCHAR2(80) | sourceType | The type of source. |
+*--++++
+| orbit_period | NUMBER | orbitPeriod | Orbital period in decimal minutes. |
+*--++++
+| incl_angle | NUMBER | inclinationAngle | Orbit inclination angle for determining path of pass files. |
+*--++++
+| description | VARCHAR2(1024) | sourceDescription | A description of the source. |
+*--++++
+
+* Dataset Schema (3 of 3)
+
+  The following diagram details a portion of the Dataset schema to describe the data dictionary for Dataset:
+
+[../images/dataset3_2.1.0.gif] Dataset Schema Diagram (3 of 3)
+
+  The following sub-sections provide detailed descriptions for each of the tables.
+
+** {element_dd}
+
+  This table tracks all attributes that can be associated with artifacts stored in the database.  There are several types of artifacts (collection, product, dataset, granule, ... etc).  This table serves as the central dictionary.  Relationship between the attributes and the artifacts are defined in other tables (e.g. #{dataset_element}).
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| element_id | NUMBER | elemenId | The identifier for the dictionary element. |
+*--++++
+| short_name | VARCHAR2(30) | shortName | The element short name. |
+*--++++
+| long_name | VARCHAR2(80) | longName | The element long name. |
+*--++++
+| type      | VARCHAR2(20) | type | The data type of the element. |
+*--++++
+| description | VARCHAR(1024) | description | The description of the element. |
+*--++++
+| max_length | NUMBER | maxLength | This only applies to character-based element.  It tracks the max number of character for the element. |
+*--++++
+| scope | VARCHAR(20) | scope | The scope of this element DATASET, GRANULE, or BOTH. |
+*--++++
+
+** {dataset_element}
+
+  This table relates the keywords defined in the #{element_dd} table with #{dataset}.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| de_id | NUMBER | deId | The unique dataset element identifier. |
+*--++++
+| dataset_id | NUMBER | datasetId | The dataset the element is associated with. |
+*--++++
+| element_id | NUMBER | elementId | The element the dataset is associated with. |
+*--++++
+| obligation_flag | CHAR(1) | obligationFlag | The flag to indicate if a value must be specified for the element when defining a dataset. |
+*--++++
+| scope | VARCHAR2(20) | scope | The scope of this element DATASET, GRANULE, or BOTH. |
+*--++++
+
+** {dataset_character}
+
+  This table stores the character-based values of an element for a given dataset.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | datasetId | The dataset identifier. |
+*--++++
+| de_id | NUMBER | deId | The dataset element identifier. |
+*--++++
+| value | VARCHAR2(1024) | value | The character value. |
+*--++++
+
+** {dataset_datetime}
+
+  This table stores the datetime values of an element for a given dataset.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | datasetId | The dataset identifier. |
+*--++++
+| de_id | NUMBER | deId | The dataset element identifier. |
+*--++++
+| value_long | NUMBER | valueLong | The datetime (represented in milliseconds since the EPIC time January 1, 1970) value. |
+*--++++
+
+** {dataset_integer}
+
+  This table store the long integer values of an element for a given dataset.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | datasetId | The dataset Identifier. |
+*--++++
+| de_id | NUMBER | deId | The dataset element identifier. |
+*--++++
+| value | NUMBER | value | The long integer value. |
+*--++++
+| units | VARCHAR2(10) | units | The unit for the value. |
+*--++++
+
+** {dataset_real}
+
+  This table store the real values of an element for a given dataset.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | datasetId | The dataset Identifier. |
+*--++++
+| de_id | NUMBER | deId | The dataset element identifier. |
+*--++++
+| value | NUMBER | value | The real value. |
+*--++++
+| units | VARCHAR2(10) | units | The unit for the value. |
+*--++++
+
+** {dataset_spatial}
+
+  This table store the spatial value for the dataset.
+
+*--++++                                                               
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| dataset_id | NUMBER | datasetId | The dataset identifier. |
+*--++++
+| spatial_geometry | SDO_GEOMETRY | spatialGeometry | The collection of endpoints. |
+*--++++

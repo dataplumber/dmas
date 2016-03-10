@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright (c) 2007
+    Jet Propulsion Laboratory, California Institute of Technology
+    All rights reserved
+
+    PO.DAAC Java Message Service destination service.  This file contains definitions of
+    message topics that message clients can publish/subscribe to.
+
+    This file should be installed under ${JBOSS_HOME}/server/${JBOSS_INSTANCE}/deploy/jms
+
+    @author T. Huang {Thomas.Huang@jpl.nasa.gov}
+    @version $Id: podaac-destinations-service.xml 1174 2008-05-22 00:08:10Z thuang $
+-->
+
+<server>
+
+   <mbean code="org.jboss.mq.server.jmx.Topic"
+          name="jboss.mq.destination:service=Topic,name=podaac/all">
+      <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+      <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+      <attribute name="SecurityConf">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+   <mbean code="org.jboss.mq.server.jmx.Topic"
+          name="jboss.mq.destination:service=Topic,name=podaac/sip/post">
+      <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+      <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+      <attribute name="SecurityConf">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+   <mbean code="org.jboss.mq.server.jmx.Topic"
+          name="jboss.mq.destination:service=Topic,name=podaac/sip/ack">
+      <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+      <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+      <attribute name="SecurityConf">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+   <mbean code="org.jboss.mq.server.jmx.Topic"
+          name="jboss.mq.destination:service=Topic,name=podaac/sip/complete">
+      <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+      <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+      <attribute name="SecurityConf">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+   <mbean code="org.jboss.mq.server.jmx.Topic"
+          name="jboss.mq.destination:service=Topic,name=podaac/aip/post">
+      <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+      <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+      <attribute name="SecurityConf">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+   <mbean code="org.jboss.mq.server.jmx.Topic"
+          name="jboss.mq.destination:service=Topic,name=podaac/aip/ack">
+      <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+      <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+      <attribute name="SecurityConf">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+   <mbean code="org.jboss.mq.server.jmx.Topic"
+          name="jboss.mq.destination:service=Topic,name=podaac/aip/complete">
+      <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+      <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+      <attribute name="SecurityConf">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+   <mbean code="org.jboss.mq.server.jmx.Topic"
+          name="jboss.mq.destination:service=Topic,name=podaac/dip/post">
+      <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+      <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+      <attribute name="SecurityConf">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+   <mbean code="org.jboss.mq.server.jmx.Topic"
+          name="jboss.mq.destination:service=Topic,name=podaac/management">
+      <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+      <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+      <attribute name="SecurityConf">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+   <mbean code="org.jboss.mq.server.jmx.Topic"
+          name="jboss.mq.destination:service=Topic,name=podaac/sigevents">
+      <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+      <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+      <attribute name="SecurityConf">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+</server>

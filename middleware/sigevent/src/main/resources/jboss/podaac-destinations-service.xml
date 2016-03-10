@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+     Messaging Destinations deployment descriptor.
+
+     $Id: destinations-service.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $
+ -->
+
+<server>
+
+   <!--
+      The Default Dead Letter Queue. This destination is a dependency of an EJB MDB container.
+   -->
+   
+   <mbean code="org.jboss.jms.server.destination.TopicService"
+      name="jboss.messaging.destination:service=Topic,name=podaac.all"
+      xmbean-dd="xmdesc/Topic-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+      <attribute name="JNDIName">podaac.all</attribute>
+      <attribute name="SecurityConfig">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+   </mbean>
+   
+   <mbean code="org.jboss.jms.server.destination.TopicService"
+      name="jboss.messaging.destination:service=Topic,name=podaac.sip.post"
+      xmbean-dd="xmdesc/Topic-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+      <attribute name="JNDIName">podaac.sip.post</attribute>
+      <attribute name="SecurityConfig">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+   </mbean>
+   
+   <mbean code="org.jboss.jms.server.destination.TopicService"
+      name="jboss.messaging.destination:service=Topic,name=podaac.sip.ack"
+      xmbean-dd="xmdesc/Topic-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+      <attribute name="JNDIName">podaac.sip.ack</attribute>
+      <attribute name="SecurityConfig">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+   </mbean>
+   
+   <mbean code="org.jboss.jms.server.destination.TopicService"
+      name="jboss.messaging.destination:service=Topic,name=podaac.sip.complete"
+      xmbean-dd="xmdesc/Topic-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+      <attribute name="JNDIName">podaac.sip.complete</attribute>
+      <attribute name="SecurityConfig">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+   </mbean>
+   
+   <mbean code="org.jboss.jms.server.destination.TopicService"
+      name="jboss.messaging.destination:service=Topic,name=podaac.aip.post"
+      xmbean-dd="xmdesc/Topic-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+      <attribute name="JNDIName">podaac.aip.post</attribute>
+      <attribute name="SecurityConfig">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+   </mbean>
+   
+   <mbean code="org.jboss.jms.server.destination.TopicService"
+      name="jboss.messaging.destination:service=Topic,name=podaac.aip.ack"
+      xmbean-dd="xmdesc/Topic-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+      <attribute name="JNDIName">podaac.aip.ack</attribute>
+      <attribute name="SecurityConfig">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+   </mbean>
+   
+   <mbean code="org.jboss.jms.server.destination.TopicService"
+      name="jboss.messaging.destination:service=Topic,name=podaac.aip.complete"
+      xmbean-dd="xmdesc/Topic-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+      <attribute name="JNDIName">podaac.aip.complete</attribute>
+      <attribute name="SecurityConfig">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+   </mbean>
+   
+   <mbean code="org.jboss.jms.server.destination.TopicService"
+      name="jboss.messaging.destination:service=Topic,name=podaac.dip.post"
+      xmbean-dd="xmdesc/Topic-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+      <attribute name="JNDIName">podaac.dip.post</attribute>
+      <attribute name="SecurityConfig">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+   </mbean>
+   
+   <mbean code="org.jboss.jms.server.destination.TopicService"
+      name="jboss.messaging.destination:service=Topic,name=podaac.management"
+      xmbean-dd="xmdesc/Topic-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+      <attribute name="JNDIName">podaac.management</attribute>
+      <attribute name="SecurityConfig">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+   </mbean>
+   
+   <mbean code="org.jboss.jms.server.destination.TopicService"
+      name="jboss.messaging.destination:service=Topic,name=podaac.sigevents"
+      xmbean-dd="xmdesc/Topic-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+      <attribute name="JNDIName">podaac.sigevents</attribute>
+      <attribute name="SecurityConfig">
+         <security>
+            <role name="guest" read="true" write="false"/>
+            <role name="publisher" read="true" write="true" create="false"/>
+            <role name="durpublisher" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+   </mbean>
+</server>

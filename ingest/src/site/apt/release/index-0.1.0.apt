@@ -1,0 +1,219 @@
+~~ Copyright 2007, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index-0.1.0.apt 6223 2010-11-11 23:16:17Z thuang $
+
+  ---
+  Release Description 0.1.0
+  ---
+  Sean Hardman
+  ---
+  
+Release Description 0.1.0
+
+  This release of the Ingest Program Set represents the first release ({{{../../cm/release/index-0.0.0.html}0.0.0}}) of the Next Generation PO.DAAC Data Management System. Due to development delays and other setbacks, this release consists of a subset of the intended functionality and has yet to be integrated with the other programs sets that make up the core system (Inventory, Archive and Generate). Because of this, this release is intended as a test release and not an operational release.
+
+  That said, this release focuses on demonstrating a new architecture for PO.DAAC including development of Java-based applications utilizing the Java Message Service (JMS) for communication within a Service Oriented Architecture (SOA). The following sections can be found in this document:
+
+  * {{{Capabilities}Capabilities}}
+
+  * {{{Liens}Liens}}
+
+  * {{{Installation}Installation}}
+
+  * {{{Operation}Operation}}
+
+  * {{{Appendix_A_-_Requirements_Support}Appendix A - Requirements Support}}
+
+  * {{{Appendix_B_-_Test_Status}Appendix B - Test Status}}
+
+{Capabilities}
+
+  This section details the new, modified and corrected capabilities that comprise this release of the Ingest Program Set. In lieu of listing the capabilities by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix_A_-_Requirements_Support}Appendix A}}.
+
+* New Capabilities
+
+  The following capabilities are new for this release:
+
+  * Client/Server Communication
+
+  Communication between the client and server is facilitated in three methods. The first is via direct socket allowing simple applications that might not be JMS savvy to submit a request. The second is via JMS allowing applications that are JMS-enabled to post a request on the message bus. The third is via a Servlet, which will probably be the preferred method for data providers that are external to PO.DAAC.
+
+  * Standard Interface
+
+  The SIP provides the structure of the metadata along with the TCP/IP and JMS communication mechanisms which lay the groundwork for our preferred/standard interface for data submission.
+
+  * Event Handling
+
+  An ingestion event is triggered via receipt of an SPM or SIP. The data provider, as specified in the SPM or SIP, is notified via e-mail acknowledging receipt of the request, errors that occurred during ingestion and completion of the event.
+
+  * SPM to SIP Conversion
+
+  The currently supported Submission Package Message (SPM) utilized by QuikSCAT and other projects is converted into the new Submission Information Package (SIP).
+
+  * Retrieve Files via FTP
+
+  Upon receipt of a valid SIP, the files specified in the SIP to be ingested are transferred to the local staging area via FTP.
+
+  * Generate Checksum
+
+  A checksum value for each file ingested is generated and stored in the SIP.
+
+* Modified Capabilities
+
+  Not applicable in the first release.
+
+* Corrected Capabilities
+
+  Not applicable in the first release.
+
+{Liens}
+
+  This section details the liens against the capabilities that have yet to be implemented or are partially implemented. In lieu of listing the liens by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix_A_-_Requirements_Support}Appendix A}}.
+
+  * Integration with Core Program Sets
+
+  Integration with Inventory, Archive and Generate has not been implemented.
+
+  * Electronic Data Retrieval
+
+  Support for direct push and pull via FTP without being triggered by an SPM or SIP has not been implemented yet. These capabilities are all lumped under <L3.158>.
+
+  * Data Verification
+
+  Neither of the verification capabilities specified by <L3.166>, <L3.167> nor <L3.168> have been implemented.
+
+  * Metadata Registration
+
+  The interface to the Inventory program set is required to satisfy <L3.170>.
+
+  * Metadata Extraction
+
+  Neither of the metadata extraction capabilities specified by <L3.174> nor <L3.175> have been implemented.
+
+  * Agreed/Standard Interfaces
+
+  Need to determine how to satisfy <L3.258>, but implementation of <L3.259> is well on the way.
+
+  * Secondary Failover
+
+  Running more than one instance of Ingest, as specified in <L3.270> has not been tested yet.
+
+  * Request Transmission/Retransmission
+
+  Neither capabilities specified by <L3.293> nor <L3.294> have been implemented.
+
+{Installation}
+
+  This section details the system requirements and procedures for installing and configuring the software in this program set.
+
+* System Requirements
+
+  The software contained in this program set was developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The software was specifically developed under Sun Java version 1.5 and has only been tested with this version.
+
+  * PO.DAAC Standard Computing Environment
+
+  This will eventually be documented on the Wiki and linked to in future releases. For now, the following software and tools should be available in the current environment:
+
+    * Sun Java Standard Edition (J2SE) 1.5.X
+
+    * Perl 5.X
+
+    * Subversion Client 1.3.X
+
+    * FTP Client/Server
+
+[]
+
+  * JBoss Application Server
+
+  The Ingest Program Set requires an instance of the JBoss Application Server to be installed, configured for PO.DAAC and running in the current environment. In order to satisfy this requirement, the administrator should following the procedure detailed in the {{{../jboss/index.html}JBoss Application Server}} document.
+
+* Ingest-Server Installation
+
+  The Ingest Server module consists of the core implementation for the program set (everything happens here). The installation of this module is covered in the {{{../ingest-server/install/index.html}Ingest Server Installation}} document.
+
+* Ingest-Client Installation
+
+  The Ingest Client module consists of command-line applications for interfacing with the Ingest Server and the Java Message Service (JMS). The installation of this module is covered in the {{{../ingest-client/install/index.html}Ingest Client Installation}} document.
+
+* Ingest-Web Installation
+
+  The Ingest Web module consists of a Servlet and a simple web application for interfacing with the Ingest Server via the Java Message Service (JMS). For this release, installation of this module is covered in the {{{../jboss/index.html#Deploy Ingest Web Application}JBoss Application Server}} document.
+
+{Operation}
+
+  This section details any necessary setup and the commands for running the software in this program set.
+
+* Ingest-Server Operation
+
+  The operation of this module is covered in the {{{../ingest-server/operate/index.html}Ingest Server Operation}} document.
+
+* Ingest-Client Operation
+
+  The operation of this module is covered in the {{{../ingest-client/operate/index.html}Ingest Client Operation}} document.
+
+* Ingest-Web Operation
+
+  The operation of this module is covered in the {{{../ingest-web/operate/index.html}Ingest Web Operation}} document.
+
+{Appendix A - Requirements Support}
+
+  The capabilities in this release are detailed in the table below based on the requirements specified in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Document-279402/PO.DAAC_Reqs_20070726.xls}PO.DAAC User and System Requirements}} document. The allocation of the Level 3 system requirements to the program sets is captured in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Document-407255/podaac_req_alloc_20070917.xls}Level 3 Requirements Allocation}} document. The values for the Support column are defined as follows:
+
+  * <<Full>> - The capability specified by the associated requirement has been implemented.
+
+  * <<Partial>> - The capability has been partially implemented. The content of the Description column should provide more details.
+
+  * <<No>> - The capability has not yet been implemented.
+
+[]
+
+*--+++
+| <<Requirement>> | <<Support>> | <<Description>> |
+*--+++
+| L3.158 The PO.DAAC shall acquire data electronically. |  Partial | Supports retrieval of data via FTP when triggered by the receipt of a Submission Package Message (SPM). |
+*--+++
+| L3.160 The PO.DAAC shall provide remote event handling (i.e. handshaking) to initiate data transfer from the data provider. | Partial | SPMs and SIPs are accepted via TCP/IP or Java Message Service (JMS). |
+*--+++
+| L3.161 The PO.DAAC shall acknowledge receipt of data (e.g. receipt confirmation notification (RCN), as directed by provider. | Partial | An e-mail is sent to the specified sender of the SPM or SIP acknowledging receipt as well as completion of ingestion. |
+*--+++
+| L3.164 The PO.DAAC shall log/capture all transmission anomalies. | Partial | All messages generated during an ingestion are captured in a log file. The severity level is configurable. |
+*--+++
+| L3.166 The PO.DAAC shall verify data for readability. | No | Verification beyond checksum generation has not been addressed yet. |
+*--+++
+| L3.167 The PO.DAAC shall verify granule data with appropriate checksum information. | Partial | A checksum value is generated for each file ingested. |
+*--+++
+| L3.168 The PO.DAAC shall capture all verification results. | No | Not been addressed yet. |
+*--+++
+| L3.170 The PO.DAAC shall register and maintain the following information for every acquired granule:
+a. Granule Name.
+b. Granule size (Mbytes)
+c. Receipt time.
+d. Data stream name
+e. Status of granule push (optional)
+f. Transfer time of granule to external destination host (optional)
+g. Checksum value. | Partial | All of the attributes are captured in the SIP. |
+*--+++
+| L3.174 The PO.DAAC shall extract metadata information from data granules when necessary. | No | Extracting metadata from granule data files has not been addressed yet. |
+*--+++
+| L3.175 The PO.DAAC shall extract content-based information from data granules (e.g. quality, statistical analysis, etc.) | No | Extracting metadata from granule data files has not been addressed yet. |
+*--+++
+| L3.258 The PO.DAAC shall acquire data via an agreed upon interface described in the Interface Control Document (ICD) or Memorandum Of Understanding (MOU) in cooperation with external entities (i.e., projects, foreign data centers and principal investigators), when and where appropriate. | Partial | I believe this requirement specifies that an ICD or MOU must be in place before data is acquired. If that is the case, then it is not much of a software requirement. |
+*--+++
+| L3.259 The PO.DAAC shall have a set of standard interfaces to select from to initiate negotiation with data provider. | Partial | The SIP provides the structure of the metadata along with the TCP/IP and JMS communication mechanisms lay the groundwork for meeting this requirement. |
+*--+++
+| L3.270 The PO.DAAC shall provide secondary fail-over systems in support of the acquisition and receipt of data. | No | Fail-over and scalability have not directly been addressed yet. |
+*--+++
+| L3.181 The PO.DAAC shall produce metadata satisfying minimum quality standards. | Partial | Not sure how we will ever prove complete satisfaction of this requirement but the information captured in the SIP is a good start. |
+*--+++
+| L3.293 The PO.DAAC shall report verification results and request retransmission in the event of an anomaly. | No | Not been addressed yet. |
+*--+++
+| L3.294 The PO.DAAC shall request transmission or retransmission in the event of an anomaly. | No | Not been addressed yet. |
+*--+++
+| L3.324 The PO.DAAC shall manage the processing history and source of data products. | No | For Ingest, this will be addressed in the SIP structure. |
+*--+++
+
+{Appendix B - Test Status}
+
+  TBD

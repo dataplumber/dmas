@@ -1,0 +1,1145 @@
+~~ Copyright 2010, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: $
+
+  ---
+  API
+  ---
+  Thomas Huang, Atsuya Takagi
+  ---
+
+{API}
+
+   This document describes the API that SigEvents provides:
+
+   * {{{Event}Event}}
+
+   * {{{EventGroup}EventGroup}}
+
+   * {{{Notify}Notify}}
+
+   * {{{Constant}Constant}}
+
+   * {{{User}User}}
+
+
+{Event}
+
+* events/create
+
+** Url
+
+   events/create
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * type [required]:
+
+   * category [required]:
+
+   * source [required]:
+
+   * provider [required]:
+
+   * computer [required]:
+
+   * description [required]:
+
+   * pid [optional]:
+
+   * data [optional]:
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><Content><SysEvents>
+  <SysEvent>
+    <Id>147</Id>
+    <Category>DMAS</Category>
+    <Type>WARN</Type>
+    <DataSize>4</DataSize>
+    <DataUrl>http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=147</DataUrl>
+    <Computer>podaac</Computer>
+    <Description>FirstMessage</Description>
+    <FirstReceived>1313528412955</FirstReceived>
+    <LastReceived>1313528412955</LastReceived>
+    <Occurrence>1</Occurrence>
+    <Pid></Pid>
+    <Provider>me</Provider>
+    <Resolution>N/A</Resolution>
+    <ResolvedAt></ResolvedAt>
+    <Source>192.168.1.1</Source>
+  </SysEvent>
+</SysEvents></Content><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "Content": {
+            "SysEvents":[
+                {
+                    "Id":152,
+                    "Category":"DMAS",
+                    "Type":"WARN",
+                    "DataSize":4,
+                    "DataUrl":"http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=152",
+                    "Computer":"podaac",
+                    "Data":"DATA",
+                    "Description":"FirstMessage",
+                    "FirstReceived":1313532013407,
+                    "LastReceived":1313532013407,
+                    "Occurrence":1,
+                    "Pid":"",
+                    "Provider":"me",
+                    "Resolution":"N/A",
+                    "ResolvedAt":"",
+                    "Source":"192.168.1.1"
+                }
+            ]
+        },
+        "Type": "OK"
+    }
+}
++--
+
+
+* events/list
+
+** Url
+
+   events/list
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * page [optional]:
+
+   * sort [optional]: lastReceived, computer, description, firstReceived, occurrence, pid, provider, resolution, resolvedAt, source, category, type
+
+   * order [optional]: asc, desc
+
+   * computer [optional]:
+
+   * description [optional]:
+
+   * pid [optional]:
+
+   * provider [optional]:
+
+   * source [optional]:
+
+   * category [optional]:
+
+   * type [optional]:
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><AvailablePages>1</AvailablePages><Content><SysEvents>
+  <SysEvent>
+    <Id>145</Id>
+    <Category>DMAS</Category>
+    <Type>WARN</Type>
+    <DataSize>4</DataSize>
+    <DataUrl>http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=145</DataUrl>
+    <Computer>podaac</Computer>
+    <Description>FirstMessage</Description>
+    <FirstReceived>1313532013407</FirstReceived>
+    <LastReceived>1313532013407</LastReceived>
+    <Occurrence>1</Occurrence>
+    <Pid></Pid>
+    <Provider>me</Provider>
+    <Resolution>N/A</Resolution>
+    <ResolvedAt></ResolvedAt>
+    <Source>192.168.1.1</Source>
+  </SysEvent>
+  <SysEvent>
+    <Id>147</Id>
+    <Category>DMAS</Category>
+    <Type>WARN</Type>
+    <DataSize>4</DataSize>
+    <DataUrl>http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=147</DataUrl>
+    <Computer>podaac</Computer>
+    <Description>FirstMessage</Description>
+    <FirstReceived>1313528412955</FirstReceived>
+    <LastReceived>1313528412955</LastReceived>
+    <Occurrence>1</Occurrence>
+    <Pid></Pid>
+    <Provider>me</Provider>
+    <Resolution>N/A</Resolution>
+    <ResolvedAt></ResolvedAt>
+    <Source>192.168.1.1</Source>
+  </SysEvent>
+</SysEvents></Content><CurrentPage>0</CurrentPage><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "AvailablePages": "1",
+        "Content": {
+            "SysEvents":[
+                {
+                    "Id":147,
+                    "Category":"DMAS",
+                    "Type":"WARN",
+                    "DataSize":4,
+                    "DataUrl":"http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=147",
+                    "Computer":"podaac",
+                    "Data":"DATA",
+                    "Description":"FirstMessage",
+                    "FirstReceived":1313528412955,
+                    "LastReceived":1313528412955,
+                    "Occurrence":1,
+                    "Pid":"",
+                    "Provider":"me",
+                    "Resolution":"N/A",
+                    "ResolvedAt":"",
+                    "Source":"192.168.1.1"
+                },
+                {
+                    "Id":149,
+                    "Category":"DMAS",
+                    "Type":"WARN",
+                    "DataSize":4,
+                    "DataUrl":"http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=149",
+                    "Computer":"podaac",
+                    "Data":"DATA",
+                    "Description":"FirstMessage",
+                    "FirstReceived":1313532013407,
+                    "LastReceived":1313532013407,
+                    "Occurrence":1,
+                    "Pid":"",
+                    "Provider":"me",
+                    "Resolution":"N/A",
+                    "ResolvedAt":"",
+                    "Source":"192.168.1.1"
+                }
+            ]
+        },
+        "CurrentPage": "0",
+        "Type": "OK"
+    }
+}
++--
+
+
+* events/update
+
+** Url
+
+   events/update
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * id [required]:
+
+   * any parameter to be updated [optional]:
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><Content><SysEvents>
+  <SysEvent>
+    <Id>152</Id>
+    <Category>DMAS</Category>
+    <Type>WARN</Type>
+    <DataSize>4</DataSize>
+    <DataUrl>http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=152</DataUrl>
+    <Computer>podaac</Computer>
+    <Description>FirstMessage</Description>
+    <FirstReceived>1313532013407</FirstReceived>
+    <LastReceived>1313532013407</LastReceived>
+    <Occurrence>1</Occurrence>
+    <Pid></Pid>
+    <Provider>me</Provider>
+    <Resolution>N/A</Resolution>
+    <ResolvedAt></ResolvedAt>
+    <Source>aaa</Source>
+  </SysEvent>
+</SysEvents></Content><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "Content": {
+            "SysEvents":[
+                {
+                    "Id":152,
+                    "Category":"DMAS",
+                    "Type":"WARN",
+                    "DataSize":4,
+                    "DataUrl":"http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=152",
+                    "Computer":"podaac",
+                    "Data":"DATA",
+                    "Description":"FirstMessage",
+                    "FirstReceived":1313532013407,
+                    "LastReceived":1313532013407,
+                    "Occurrence":1,
+                    "Pid":"",
+                    "Provider":"me",
+                    "Resolution":"N/A",
+                    "ResolvedAt":"",
+                    "Source":"aaa"
+                }
+            ]
+        },
+        "Type": "OK"
+    }
+}
++--
+
+
+* events/delete
+
+** Url
+
+   events/delete
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * id [required]:
+
+   * username [required]:
+
+   * password [required]:
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><Content><SysEvents>
+  <SysEvent>
+    <Id>152</Id>
+    <Category>DMAS</Category>
+    <Type>WARN</Type>
+    <DataSize>4</DataSize>
+    <DataUrl>http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=152</DataUrl>
+    <Computer>podaac</Computer>
+    <Description>FirstMessage</Description>
+    <FirstReceived>1313532013407</FirstReceived>
+    <LastReceived>1313532013407</LastReceived>
+    <Occurrence>1</Occurrence>
+    <Pid></Pid>
+    <Provider>me</Provider>
+    <Resolution>N/A</Resolution>
+    <ResolvedAt></ResolvedAt>
+    <Source>aaa</Source>
+  </SysEvent>
+</SysEvents></Content><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "Content": {
+            "SysEvents":[
+                {
+                    "Id":152,
+                    "Category":"DMAS",
+                    "Type":"WARN",
+                    "DataSize":4,
+                    "DataUrl":"http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=152",
+                    "Computer":"podaac",
+                    "Data":"DATA",
+                    "Description":"FirstMessage",
+                    "FirstReceived":1313532013407,
+                    "LastReceived":1313532013407,
+                    "Occurrence":1,
+                    "Pid":"",
+                    "Provider":"me",
+                    "Resolution":"N/A",
+                    "ResolvedAt":"",
+                    "Source":"aaa"
+                }
+            ]
+        },
+        "Type": "OK"
+    }
+}
++--
+
+
+* events/show
+
+** Url
+
+   events/show
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * id [required]:
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><Content><SysEvents>
+  <SysEvent>
+    <Id>152</Id>
+    <Category>DMAS</Category>
+    <Type>WARN</Type>
+    <DataSize>4</DataSize>
+    <DataUrl>http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=152</DataUrl>
+    <Computer>podaac</Computer>
+    <Description>FirstMessage</Description>
+    <FirstReceived>1313532013407</FirstReceived>
+    <LastReceived>1313532013407</LastReceived>
+    <Occurrence>1</Occurrence>
+    <Pid></Pid>
+    <Provider>me</Provider>
+    <Resolution>N/A</Resolution>
+    <ResolvedAt></ResolvedAt>
+    <Source>aaa</Source>
+
+    <Data>DATA</Data>
+  </SysEvent>
+</SysEvents></Content><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "Content": {
+            "SysEvents":[
+                {
+                    "Id":152,
+                    "Category":"DMAS",
+                    "Type":"WARN",
+                    "DataSize":4,
+                    "DataUrl":"http://lanina.jpl.nasa.gov:8100/sigevent/events/data?id=152",
+                    "Computer":"podaac",
+                    "Data":"DATA",
+                    "Description":"FirstMessage",
+                    "FirstReceived":1313532013407,
+                    "LastReceived":1313532013407,
+                    "Occurrence":1,
+                    "Pid":"",
+                    "Provider":"me",
+                    "Resolution":"N/A",
+                    "ResolvedAt":"",
+                    "Source":"aaa"
+                }
+            ]
+        },
+        "Type": "OK"
+    }
+}
++--
+
+
+{EventGroup}
+
+* groups/create
+
+** Url
+
+   groups/create
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * type [required]:
+
+   * category [required]:
+
+   * purgeRate [required]:
+
+
+* groups/list
+
+** Url
+
+   groups/list
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * page [optional]:
+
+   * sort [optional]: category, type, purgeRate
+
+   * order [optional]: asc, desc
+
+   * category [optional]:
+
+   * type [optional]:
+
+   * purgeRate [optional]:
+
+
+* groups/update
+
+** Url
+
+   groups/update
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * id [required]:
+
+   * any parameter to be updated [optional]:
+
+
+* groups/delete
+
+** Url
+
+   groups/delete
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * id [required]:
+
+   * username [required]:
+
+   * password [required]:
+
+
+* groups/show
+
+** Url
+
+   groups/show
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * id [required]:
+
+* groups/showByCategory
+
+** Url
+
+   groups/showByCategory
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * category [required]:
+
+
+{Notify}
+
+* notifies/create
+
+** Url
+
+   notifies/create
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * type [required]:
+
+   * category [required]:
+
+   * method [required]:
+
+   * contact [required]:
+
+   * rate [required]:
+
+   * messageFormat [required]:
+
+   * content [required]:
+
+   * note [required]:
+
+   * remindRate [optional]:   
+
+
+* notifies/list
+
+** Url
+
+   notifies/list
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * page [optional]:
+
+   * sort [optional]: contact, content, lastNotified, lastReport, messageFormat, method, note, rate, category, type, remindRate, lastRemind
+
+   * order [optional]: asc, desc
+
+   * contact [optional]:
+
+   * content [optional]:
+
+   * lastNotified [optional]:
+
+   * lastReport [optional]:
+
+   * messageFormat [optional]:
+
+   * method [optional]:
+
+   * note [optional]:
+
+   * rate [optional]:
+
+   * category [optional]:
+
+   * type [optional]:
+
+   * remindRate [optional]:
+
+   * lastRemind [optional]:
+
+
+* notifies/update
+
+** Url
+
+   notifies/update
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * id [required]:
+
+   * any parameter to be updated [optional]:
+
+
+* notifies/delete
+
+** Url
+
+   notifies/delete
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * id [required]:
+
+   * username [required]:
+
+   * password [required]:
+
+
+* notifies/show
+
+** Url
+
+   notifies/show
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * id [required]:
+
+
+{Constant}
+
+* constants/eventTypes/list
+
+** Url
+
+   constants/eventTypes/list
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><Content><SysConstants>
+  <SysConstant>
+    <Value>INFO</Value>
+  </SysConstant>
+  <SysConstant>
+    <Value>WARN</Value>
+  </SysConstant>
+  <SysConstant>
+
+    <Value>ERROR</Value>
+  </SysConstant>
+</SysConstants></Content><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "Content": {
+            "SysConstants":[
+                {
+                    "Value":"INFO"
+                },
+                {
+                    "Value":"WARN"
+                },
+                {
+                    "Value":"ERROR"
+                }
+            ]
+        },
+        "Type": "OK"
+    }
+}
++--
+
+
+* constants/messageFormats/list
+
+** Url
+
+   constants/messageFormats/list
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><Content><SysConstants>
+  <SysConstant>
+    <Value>TEXT</Value>
+  </SysConstant>
+  <SysConstant>
+    <Value>XML</Value>
+  </SysConstant>
+  <SysConstant>
+
+    <Value>JSON</Value>
+  </SysConstant>
+</SysConstants></Content><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "Content": {
+            "SysConstants":[
+                {
+                    "Value":"TEXT"
+                },
+                {
+                    "Value":"XML"
+                },
+                {
+                    "Value":"JSON"
+                }
+            ]
+        },
+        "Type": "OK"
+    }
+}
++--
+
+
+* constants/notifyContents/list
+
+** Url
+
+   constants/notifyContents/list
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><Content><SysConstants>
+  <SysConstant>
+    <Value>COMPLETE</Value>
+  </SysConstant>
+  <SysConstant>
+    <Value>DESCRIPTION</Value>
+  </SysConstant>
+</SysConstants></Content><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "Content": {
+            "SysConstants":[
+                {
+                    "Value":"COMPLETE"
+                },
+                {
+                    "Value":"DESCRIPTION"
+                }
+            ]
+        },
+        "Type": "OK"
+    }
+}
++--
+
+
+* constants/notifyMethods/list
+
+** Url
+
+   constants/notifyMethods/list
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><Content><SysConstants>
+  <SysConstant>
+    <Value>EMAIL</Value>
+  </SysConstant>
+  <SysConstant>
+    <Value>JMS</Value>
+  </SysConstant>
+  <SysConstant>
+
+    <Value>MULTICAST</Value>
+  </SysConstant>
+</SysConstants></Content><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "Content": {
+            "SysConstants":[
+                {
+                    "Value":"EMAIL"
+                },
+                {
+                    "Value":"JMS"
+                },
+                {
+                    "Value":"MULTICAST"
+                }
+            ]
+        },
+        "Type": "OK"
+    }
+}
++--
+
+
+* constants/responseFormats/list
+
+** Url
+
+   constants/responseFormats/list
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><Content><SysConstants>
+  <SysConstant>
+    <Value>XML</Value>
+  </SysConstant>
+  <SysConstant>
+    <Value>JSON</Value>
+  </SysConstant>
+  <SysConstant>
+
+    <Value>DOJO_JSON</Value>
+  </SysConstant>
+  <SysConstant>
+    <Value>TEXT</Value>
+  </SysConstant>
+</SysConstants></Content><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "Content": {
+            "SysConstants":[
+                {
+                    "Value":"XML"
+                },
+                {
+                    "Value":"JSON"
+                },
+                {
+                    "Value":"DOJO_JSON"
+                },
+                {
+                    "Value":"TEXT"
+                }
+            ]
+        },
+        "Type": "OK"
+    }
+}
++--
+
+
+* constants/categories/list
+
+** Url
+
+   constants/categories/list
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><Content><SysConstants>
+  <SysConstant>
+    <Value>ABOM-L4HRfnd-AUS-RAMSSA_09km</Value>
+  </SysConstant>
+  <SysConstant>
+    <Value>ABOM-L4LRfnd-GLOB-GAMSSA_28km</Value>
+  </SysConstant>
+  <SysConstant>
+    <Value>ALL</Value>
+  </SysConstant>
+  <SysConstant>
+    <Value>ALT_TIDE_GAUGE_L4_OST_SLA_US_WEST_COAST</Value>
+  </SysConstant>
+</SysConstants></Content><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "Content": {
+            "SysConstants":[
+                {
+                    "Value":"ABOM-L4HRfnd-AUS-RAMSSA_09km"
+                },
+                {
+                    "Value":"ABOM-L4LRfnd-GLOB-GAMSSA_28km"
+                },
+                {
+                    "Value":"ALL"
+                },
+                {
+                    "Value":"ALT_TIDE_GAUGE_L4_OST_SLA_US_WEST_COAST"
+                }
+            ]
+        },
+        "Type": "OK"
+    }
+}
++--
+
+
+{User}
+
+* users/update
+
+** Url
+
+   users/update
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * username [required]:
+
+   * password [required]:
+
+   * setting [required]:
+
+** Return Values
+
+*** XML
+
++--
+<?xml version="1.0" encoding="UTF-8"?><Response><Content><SysUserSettings>
+  <SysUserSetting>
+    <Id>2</Id>
+    <Username>axt</Username>
+    <Setting>test</Setting>
+  </SysUserSetting>
+</SysUserSettings></Content><Type>OK</Type></Response>
++--
+
+*** JSON
+
++--
+{
+    "Response": {
+        "Content": {
+            "SysUserSettings":[
+                {
+                    "Id":2,
+                    "Username":"axt",
+                    "Setting":"test",
+                }
+            ]
+        },
+        "Type": "OK"
+    }
+}
++--
+
+
+* users/show
+
+** Url
+
+   users/show
+
+** HTTP Method
+
+   GET, POST
+
+** Parameters
+
+   * format [required]:
+
+   * username [required]:
