@@ -1,0 +1,14 @@
+~~ Copyright 2007, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 10 2007-06-28 17:57:48Z shardman $
+
+  ---
+  About Security API
+  ---
+  Mike Gangl
+  ---
+  
+About Security API
+
+  The Security API provides an interface for other program sets to interact with the the Security Service. It also has a command line function tool to genereate tokens for a user and install them in a key file.

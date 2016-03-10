@@ -1,0 +1,260 @@
+~~ Copyright 2007-2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 2953 2009-05-07 18:46:20Z thuang $
+
+  ---
+  Operation
+  ---
+  Thomas Huang, Sean Hardman
+  ---
+
+Operation
+
+  This document describes how to use the Ingest Client applications. Running the Ingest clients is simple, since the current release only has a few client command-line programs. The following sections can be found in this document:
+
+   * {{{#Environment_Setup}Environment Setup}}
+
+   * {{{#Running_the_Clients}Running the Clients}}
+
+
+{Environment Setup}
+
+   In order to setup the environment the user must load the <<<useHORIZON.csh>>> script before running any of the Ingest client programs. The automatic loading of this script can be accomplished by adding the loading command into the user's <<<'.cshrc'>>> or <<<'.bash'>>> files. Or it can be run on the command-line as follows:
+
++--
+% source useHORIZON.csh
++--
+
+   In addition, HORIZON_LOGGING can be set to point to where log files should be written to. The default value for HORIZON_LOGGING is current directory.
+
++--
+% setenv HORIZON_LOGGING <path to directory for log files>
++--
+
+{Running the Clients}
+
+   The Ingest Client applications contains utilities and command programs for the user to interact with the PO.DAAC Ingest system.
+
+* Active Notify
+
+   This client application enables the user to subscribe to a message bus topic. All messages published to the message bus for the specified topic will be displayed to the terminal where the application was executed. The example below demonstrates subscribing to the <AIP_COMPLETE> topic:
+
++--
+% activenotify
+usage: activenotify [OPTION]...
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+ -h,--help             Print this usage information
+ -p,--password <arg>   Password
+ -t,--topic <arg>      [AIP_POST, AIP_COMPLETE]
+ -u,--username <arg>   User name
++--
+
++--
+% activenotify -t AIP_POST -u <jms username> -p <jms password>
++--
+
+* Ingest
+
+   This is a multi-operation utility program.  As of this release operations: add, replace, list, login, and help are supported.
+
++--
+% ingest help
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Usage: ingest [Options] 
+where possible options include:
+  add        Add operation.
+  replace    Replace operation.
+  list       List operation.
+  login      Login operation.
+  help       Help operation.
++--
+
+** Add
+
+   The 'add' operation allows the user to submit SIP(s) to a defined product type.  It is assumed the user had already ran 'ingest login' to create the login keychain and is submitting SIPs to an existing product type.
+
++--
+% ingest add help
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Usage: ingest <Options> [ProductFiles] 
+where possible options include:
+  add                               Add operation.
+  -f <value>, --federation=<value>  Federation.
+  -t <value>, --type=<value>        Product Type.
+  -n <value>, --name=<value>        Product File.
+
++--
++--
+% ls
+FR-20070828-GOES11-OSDPD-L2P-GOES11_North_0130Z-v01.xml.daac
+
+% ingest add -t GHRSST-OSDPD-L2P-GOES11 -n FR-20070828-GOES11-OSDPD-L2P-GOES11_North_0130Z-v01.xml.daac
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Using default federation: podaacDev
+[GHRSST-OSDPD-L2P-GOES11:FR-20070828-GOES11-OSDPD-L2P-GOES11_North_0130Z-v01.xml.daac] Product 20070828-GOES11-OSDPD-L2P-GOES11_North_0130Z-v01 of type GHRSST-OSDPD-L2P-GOES11 has been registered for 'ADD' with current state in 'PENDING'.
+%
++--
+
+   The 'add' operation also support submit SIP(s) by regular expression.  The example below adds all the SIP files with '.daac' extension from current working directory.  To prevent the OS shell evaluation of '*' the file name expression must be in quotes (i.e. '') 
+
++--
+% ingest add -t GHRSST-OSDPD-L2P-GOES11 -n '*.daac'
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Using default federation: podaacDev
+[GHRSST-OSDPD-L2P-GOES11:*.daac] Product 20070812-NAR18_SST-EUR-L2P-sst1nar_noaa18_20070812_desc-v01 of type GHRSST-OSDPD-L2P-GOES11 has been registered for 'ADD' with current state in 'PENDING'.
+...
++--
+
+   Submission of multiple SIP(s) is also supported by listing file names.
+
++--
+% ingest add -t GHRSST-OSDPD-L2P-GOES11 File1.sip File2.sip File3.sip
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Using default federation: podaacDev
+[GHRSST-OSDPD-L2P-GOES11:*.daac] Product 20070812-NAR18_SST-EUR-L2P-sst1nar_noaa18_20070812_desc-v01 of type GHRSST-OSDPD-L2P-GOES11 has been registered for 'ADD' with current state in 'PENDING'.
+...
++--
+
+** Replace
+
+   The 'replace' operation allows the user to replace an existing granule/product.  Ingest will only allow a user to replace a granule when the granule has been archived.  The replace request will be denied if the granule is still in transit.  It is assumed the user had already ran 'ingest login' to create the login keychain and is submitting SIPs to an existing product type.
+
++--
+% ingest replace help
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Usage: ingest <Options> [NewProductFiles] 
+where possible options include:
+  replace                           Replace operation.
+  -f <value>, --federation=<value>  Federation.
+  -t <value>, --type=<value>        Product Type.
+  -pn <value>, --previous=<value>   Previous Product Name.
+  -nn <value>, --new=<value>        New Product File.
+
++--
++--
+% ingest replace -t GHRSST-OSDPD-L2P-GOES11 -nn FR-20070828-GOES11-OSDPD-L2P-GOES11_North_0130Z-v01.xml.daac
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Using default federation: podaacDev
+[GHRSST-OSDPD-L2P-GOES11:FR-20070828-GOES11-OSDPD-L2P-GOES11_North_0130Z-v01.xml.daac] Product 20070828-GOES11-OSDPD-L2P-GOES11_North_0130Z-v01 of type GHRSST-OSDPD-L2P-GOES11 has been registered for 'REPLACE' with current state in 'PENDING'.
+%
++--
+
+   The 'replace' operation also support replace granules by regular expression.  The example below replaces all the granule with SIP files with '.daac' extension from current working directory.  To prevent the OS shell evaluation of '*' the file name expression must be in quotes (i.e. '') 
+
++--
+% ingest replace -t GHRSST-OSDPD-L2P-GOES11 -nn '*.daac'
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Using default federation: podaacDev
+[GHRSST-OSDPD-L2P-GOES11:*.daac] Product 20070812-NAR18_SST-EUR-L2P-sst1nar_noaa18_20070812_desc-v01 of type GHRSST-OSDPD-L2P-GOES11 has been registered for 'REPLACE' with current state in 'PENDING'.
+...
++--
+
+   Submission of multiple SIP(s) is also supported by listing file names.
+
++--
+% ingest replace -t GHRSST-OSDPD-L2P-GOES11 File1.sip File2.sip File3.sip
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Using default federation: podaacDev
+[GHRSST-OSDPD-L2P-GOES11:*.daac] Product 20070812-NAR18_SST-EUR-L2P-sst1nar_noaa18_20070812_desc-v01 of type GHRSST-OSDPD-L2P-GOES11 has been registered for 'REPLACE' with current state in 'PENDING'.
+...
++--
+
+** Login
+
+   The 'login' operation should be the very first operation an Ingest user should run.  It creates a login keychain entry for the user to connect to the Ingest Grails system.  By default, the keychain file is kept in '$HOME/.horizon/.keychain' file.
+
++--
+% ingest login help
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Usage: ingest [Options] 
+where possible options include:
+  login                             Login operation.
+  -f <value>, --federation=<value>  Federation.
+  -u <value>, --user=<value>        Username.
+
++--
++--
+% ingest login
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Using default federation: podaacDev
+podaacDev:User name >> thuang
+podaacDev:Password >>
+%
++--
+
+** List
+
+   The 'list' operation allows the user to query for status of given product.
+
++--
+% ingest list help
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+Usage: ingest <Options> 
+where possible options include:
+  list                              List operation.
+  -f <value>, --federation=<value>  Federation.
+  -t <value>, --type=<value>        Product Type.
+  -n <value>, --name=<value>        Product Name.
+
++--
++--
+% ingest list -t JASON-1_TRSR -n JA1_TRSR1_2008_10_07_05_51_30_c248
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.3.0, April 2009
+Horizon API release 3.3.0
+
+1 products found.
+
+   name         = JA1_TRSR1_2008_10_07_05_51_30_c248
+   state        = ASSIGNED
+   lock         = ADD
+   metadata     = <?xml version="1.0" encoding="UTF-8"?><message xmlns="http://podaac.jpl.nasa.gov">...</message>
+   note         = {PENDING}: Ingestion request received.
+{ASSIGNED}: Done assigning product JA1_TRSR1_2008_10_07_05_51_30_c248 for ingestion.
+
+   archiveNote  = 
+   createdTime  = 2009-01-30T15:01:44.661
+   stagedTime   = 
+   archivedTime = 
+   FILE[0] = JA1_TRSR1_2008_10_07_05_51_30 | 165210 | 
+
++--

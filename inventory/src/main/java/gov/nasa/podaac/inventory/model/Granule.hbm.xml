@@ -1,0 +1,227 @@
+<?xml version="1.0"?>
+
+<!-- $Id: Granule.hbm.xml 13818 2015-01-29 18:22:43Z gangl $ -->
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="gov.nasa.podaac.inventory.model">
+	<typedef class="gov.nasa.podaac.inventory.core.EnumUserType" name="granuleStatus">
+        <param name="enumClassName">gov.nasa.podaac.inventory.api.Constant$GranuleStatus</param>
+        <param name="identifierMethod">getID</param>
+        <param name="valueOfMethod">ValueOf</param>
+    </typedef>
+    <class name="Granule" table="GRANULE">
+      <id name="granuleId" column="Granule_ID">
+         <generator class="sequence">
+            <param name="sequence">granule_id_seq</param>
+         </generator>
+      </id>
+      <property name="name" length="120" />
+      <!-- <property name="officialName" length="120" column="OFFICIAL_NAME"/> -->
+      <!--  Bug found in Hibernate to map timestamp type into oracle;
+         It maps into only DATE so MUST use sql-type -->
+      <property name="startTimeLong" type="java.lang.Long">
+         <column name="START_TIME_LONG"  sql-type="NUMBER" />
+      </property>
+      <property name="stopTimeLong">
+         <column name="STOP_TIME_LONG" sql-type="NUMBER" />
+      </property>
+       <property name="requestedTimeLong">
+         <column name="REQUESTED_TIME_LONG" sql-type="NUMBER" />
+      </property>
+       <property name="acquiredTimeLong">
+         <column name="ACQUIRED_TIME_LONG" sql-type="NUMBER" />
+      </property>
+      <property name="createTimeLong">
+         <column name="CREATE_TIME_LONG" sql-type="NUMBER" />
+      </property>
+      <property name="ingestTimeLong">
+         <column name="INGEST_TIME_LONG" sql-type="NUMBER" />
+      </property>
+      <property name="verifyTimeLong">
+         <column name="VERIFY_TIME_LONG" sql-type="NUMBER" />
+      </property>
+      <property name="version" />
+      <property name="accessType" column="ACCESS_TYPE" length="20" />
+      <property name="dataFormat" column="DATA_FORMAT" length="20" />
+      <property name="compressType" column="COMPRESS_TYPE" length="20" />
+      <property name="checksumType" column="CHECKSUM_TYPE" length="20" />
+      <property name="status" type="granuleStatus" column="STATUS" length="10" />
+      <property name="rootPath" column="ROOT_PATH" length="765" />
+      <property name="relPath" column="REL_PATH" length="8" />
+      <property name="archiveTimeLong">
+         <column name="ARCHIVE_TIME_LONG" sql-type="NUMBER" />
+      </property>
+                
+
+      <!--- Dependent Objects -->
+	  <set name="granuleCharacterSet" table="GRANULE_CHARACTER">
+         <key column="GRANULE_ID" foreign-key="GRANULE_CHARACTER_FK1" />
+         <composite-element node="granuleCharacter"
+            class="GranuleCharacter">
+            <property name="value" />
+            <many-to-one name="datasetElement"
+               class="DatasetElement" not-null="true"
+               column="DE_ID" foreign-key="GRANULE_CHARACTER_FK2" />
+         </composite-element>
+      </set>
+      <set name="granuleSIPSet" table="GRANULE_SIP">
+         <key column="GRANULE_ID" foreign-key="GRANULE_SIP_FK1" />
+         <composite-element node="granuleSIP"
+            class="GranuleSIP">
+            <property name="sip" />
+         </composite-element>
+      </set>
+      <!--<class name="GranuleSIP" table="GRANULE_SIP">
+   		<id name="id" column="GRANULE_ID">
+            <generator class="foreign">
+            	<param name="property">Granule</param>
+            </generator>
+        </id>
+        <property name="sip" column="SIP" />
+        <one-to-one name="Granule" class="Granule" constrained="true"/>
+   </class>
+      --><set name="granuleIntegerSet" table="GRANULE_INTEGER">
+         <key column="GRANULE_ID" foreign-key="GRANULE_INTEGER_FK1" />
+         <composite-element node="granuleInteger"
+            class="GranuleInteger">
+            <property name="value" />
+            <property name="units" length="10">
+               <column name="units" />
+            </property>
+            <many-to-one name="datasetElement"
+               class="DatasetElement" not-null="true"
+               column="DE_ID" foreign-key="GRANULE_INTEGER_FK2" />
+         </composite-element>
+      </set>
+      <set name="granuleRealSet" table="GRANULE_REAL">
+         <key column="GRANULE_ID" foreign-key="GRANULE_REAL_FK1" />
+         <composite-element node="granuleReal" class="GranuleReal">
+            <property name="value">
+               <column name="VALUE" sql-type="number" />
+            </property>
+             <property name="units" length="10">
+               <column name="units" />
+            </property>
+            
+            <many-to-one name="datasetElement"
+               class="DatasetElement" not-null="true"
+               column="DE_ID" foreign-key="GRANULE_REAL_FK2" />
+         </composite-element>
+      </set>
+      <set name="granuleDateTimeSet" table="GRANULE_DATETIME">
+         <key column="GRANULE_ID" foreign-key="GRANULE_DATETIME_FK1" />
+         <composite-element node="granuleDateTime"
+            class="GranuleDateTime">
+            <property name="valueLong">
+               <column name="VALUE_LONG" sql-type="NUMBER" />
+            </property>
+            <many-to-one name="datasetElement"
+               class="DatasetElement" not-null="true"
+               column="DE_ID" foreign-key="GRANULE_DATETIME_FK2" />
+         </composite-element>
+      </set>
+      <!--<set name="granuleSpatialSet" table="GRANULE_SPATIAL" embed-xml="false">
+         <key column="GRANULE_ID" foreign-key="GRANULE_SPATIAL_FK1" />
+         <composite-element node="granuleSpatial"
+            class="GranuleSpatial">
+            <property name="value" 
+			type="org.hibernatespatial.GeometryUserType" 
+			column="VALUE"/>
+            <many-to-one name="datasetElement"
+               class="DatasetElement" not-null="true"
+               column="DE_ID" foreign-key="GRANULE_SPATIAL_FK2" />
+         </composite-element>
+      </set>-->
+      <set name="granuleArchiveSet" table="GRANULE_ARCHIVE">
+         <key column="GRANULE_ID" foreign-key="GRANULE_ARCHIVE_FK1" />
+         <composite-element node="granuleArchive"
+            class="GranuleArchive">
+            <property name="type" length="20" />
+            <property name="fileSize">
+               <column name="FILE_SIZE" sql-type="number" />
+            </property>
+            <property name="compressFlag" column="COMPRESS_FLAG"
+               length="1" />
+            <property name="checksum" length="32" />
+            <property name="name" />
+            <property name="status" length="10" />
+         </composite-element>
+      </set>
+      <set name="granuleReferenceSet" table="GRANULE_REFERENCE">
+         <key column="GRANULE_ID" foreign-key="GRANULE_REFERENCE_FK1" />
+         <composite-element node="granuleReference"
+            class="GranuleReference">
+            <property name="path" />
+            <property name="type" length="31" />
+            <property name="status" length="10" />
+            <property name="description" length="1024" />
+         </composite-element>
+      </set>
+
+      <!-- Related Entities -->
+      <!-- classes with composite-id that hibernate does not have a way to exclude its key-many-to-one FK -->
+      <set name="metaHistorySet" inverse="true" embed-xml="false">
+         <key column="GRANULE_ID" />
+         <one-to-many node="granuleMetaHistory" class="GranuleMetaHistory" />
+      </set>
+      <set name="granuleContactSet" inverse="true" embed-xml="false" cascade="all-delete-orphan">
+         <key column="GRANULE_ID" />
+         <one-to-many node="granuleContact" class="GranuleContact"/>
+      </set>
+      <many-to-one name="dataset" embed-xml="false" class="Dataset"
+         column="DATASET_ID" foreign-key="GRANULE_FK1" />
+   </class>
+
+	
+
+   <!-- Definitions for Granule related classes -->
+   
+   
+   <class name="GranuleMetaHistory" table="GRANULE_META_HISTORY">
+      <composite-id name="metaHistoryPK"
+         class="GranuleMetaHistory$GranuleMetaHistoryPK">
+         <key-many-to-one name="granule" class="Granule"
+            column="GRANULE_ID" foreign-key="GRANULE_META_HISTORY_FK1" />
+         <!-- versionId is the max number within the dataset -->
+         <key-property name="versionId" column="VERSION_ID" />
+      </composite-id>
+      <property name="creationDateLong" column="CREATION_DATE_LONG" />
+      <property name="lastRevisionDateLong" column="LAST_REVISION_DATE_LONG" />
+      <property name="revisionHistory" column="REVISION_HISTORY"
+         length="1024" />
+      <property name="echoSubmitDateLong" column="ECHO_SUBMIT_DATE_LONG" />
+   </class>
+
+   <class name="GranuleContact" table="GRANULE_CONTACT">
+      <composite-id name="granuleContactPK"
+         class="GranuleContact$GranuleContactPK">
+         <key-many-to-one name="granule" class="Granule"
+            column="GRANULE_ID" foreign-key="GRANULE_CONTACT_FK1" />
+         <key-many-to-one name="contact" class="Contact"
+            column="CONTACT_ID" foreign-key="GRANULE_CONTACT_FK2" />
+      </composite-id>
+   </class>
+
+   <class name="ElementDD" table="ELEMENT_DD">
+      <id name="elementId" column="ELEMENT_ID">
+         <generator class="sequence">
+            <param name="sequence">element_id_granule_seq</param>
+         </generator>
+      </id>
+      <property name="shortName" column="SHORT_NAME" length="30"
+         unique="true" />
+      <property name="longName" column="LONG_NAME" length="80" />
+      <property name="type" length="20" />
+      <property name="description" length="1024" />
+       <property name="maxLength">
+               <column name="MAX_LENGTH" sql-type="number" />
+            </property>
+      <property name="scope" length="10"/>
+      <set name="datasetElementSet" inverse="true" embed-xml="false">
+         <key column="ELEMENT_ID" />
+         <one-to-many class="DatasetElement" />
+      </set>
+   </class>
+   
+</hibernate-mapping>

@@ -1,0 +1,14 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 1036 2008-04-28 03:11:50Z shardman $
+
+  ---
+  About Common Crawler Cache Binding
+  ---
+  Sean Hardman
+  ---
+  
+About Common Crawler Cache Binding
+
+  The Common Crawler Cache Binding sub-module contains the schema for the crawler cache.

@@ -1,0 +1,162 @@
+~~ Copyright 2007-2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 9870 2012-03-22 23:37:49Z nchung $
+
+  ---
+  Installation
+  ---
+  Thomas Huang
+  ---
+  
+Installation
+
+  This document describes how to install and configure the Ingest (Horizon) Client. The following sections can be found in this document:
+
+   * {{{Distribution_Contents}Distribution Contents}}
+
+   * {{{Client_Configuration}Client Configuration}}
+
+{Distribution Contents}
+
+   This release of the Horizon client requires {{{http://java.sun.com/javase/downloads/index_jdk5.jsp}Java Standard Edition 1.5}} or higher.  The client is shipped in a self-contained TAR/ZIP file.  Below is an illustration of the client distribution after it has been expanded:
+
+[../images/horizon_client_dist.jpg]
+
+   * <<<bin>>> - this directory contains client executables.  The current release has three executables.
+
+      * <<<activenotify>>> - a JMS subscription client allowing the user to subscribe to any predefined JMS topics.
+
+      * <<<daactrans>>> - an utility program to translate a MMR file into a Submission Information Package (SIP).
+
+      * <<<ingest>>> - the common ingest command line.  It provides user options to login, add, and replace granule. Ingest is now merged with quikscatsubmit and jason1submit and includes functionalities that they had.
+         
+   * <<<config>>> - this directory contains client/server configuration information.
+
+      * <<<horizonclient.lcf>>> - this is a log configuration file for the client distribution.
+
+      * <<<horizonconfig.pm>>> - this is a global command launcher script that gets included by both the client and server launchers.
+
+      * <<<horizondomain.cfg>>> - this is the interface file that contains the URL mapping to the Ingest Grails middleware.
+
+   * <<<lib>>> - this directory contains all run-time libraries for both client and server applications.
+
+   * <<<useHORIZON.csh>>> - the file is a script for setting up the environment.
+
+{Client Configuration}
+
+   It is assumed the client distribution is made available by the Horizon server administrator, which assumes it has an updated <<<horizonif.cfg>>> file referencing the correct TCP server instance and the correct JNDI server name.
+
+* Regarding the <<<useHORIZON.csh>>> script
+
+   The <<<useHORIZON.csh>>> is a environment setting script.  
+
++--
+% cat useHORIZON.csh
+
+#!/bin/csh -f
+#
+### ==================================================================== ###
+#                                                                          #
+#  The PO.DAAC Ingest Client Setup Script                                  #
+#                                                                          #
+#  Function:                                                               #
+#  Simple c-shell script to add Ingest launchers to client's path.         #
+#                                                                          #
+#  Created:                                                                #
+#  August 29, 2007 - T. Huang {Thomas.Huang@jpl.nasa.gov}                  #
+#                                                                          #
+#  Modifications:                                                          #
+### ==================================================================== ###
+#
+# $Id: index.apt 9870 2012-03-22 23:37:49Z nchung $
+#
+
+if (! $?JAVA_HOME) then
+   setenv JAVA_HOME /usr/local/java
+   setenv PATH ${JAVA_HOME}/bin:${PATH}
+endif
+
+setenv HORIZON ${cwd}/config
+
+if (! $?HORIZON_NAMING) then
+   setenv HORIZON_NAMING jnp://localhost:1099
+endif
+
+if (! $?HORIZON_LOGGING) then
+   setenv HORIZON_LOGGING `pwd`
+endif
+
+setenv PATH ${HORIZON}/../bin:${PATH}
++--
+
+   The script assumes your Java distribution is installed under <<</user/local/java>>> if JAVA_HOME is not set.  And the JNDI host name is <<<jndihost.jpl.nasa.gov>>>.  They should be updated according to your local Java installation and the actual JNDI host name (i.e. JBoss server host).  The script also assumes the user is sourcing it within the Ingest distribution directory.  For multi-user operation environment, the line below should be modified with the correct directory path.
+
++--
+setenv HORIZON <path to the ingest client software distribution>/config 
++--
+
+   HORIZON_LOGGING is used to specify where log files should be written to. The default value is current directory, however, it should point to appropriate location.
+
++--
+setenv HORIZON_LOGGING <path to directory for log files> 
++--
+
+* Regarding the <<<horizondomain.xml>>> file
+
+   The domain file contains connection lookup information.  It is a simple federation to URL mapping file.  Ingest client uses this file to lookup the federation connection string.
+
++--
+<?xml version="1.0" encoding="UTF-8" ?>
+<domain xmlns="http://podaac.jpl.nasa.gov">
+   <default>podaacDev</default>
+   <federation>
+      <name>podaacDev</name>
+      <url>http://lanina.jpl.nasa.gov:8080/manager/ingest</url>
+   </federation>
+   <federation>
+      <name>podaacJason1</name>
+      <url>http://seastore.jpl.nasa.gov:8090/manager/ingest</url>
+      <productType>JASON-1_TRSR1280</productType>
+      <productType>JASON-1_AUX</productType>
+   </federation>
+   <sigevent>http://lanina.jpl.nasa.gov:8080/sigevent</sigevent>
+   <jobkeeper>
+      <server>lapinta:2181</server>
+      <webservice>lapinta:9998</webservice>
+   </jobkeeper>
+   <discovery>http://seastorm.jpl.nasa.gov:8983/solr.war</discovery>
+   <inventory>http://lanina.jpl.nasa.gov:9191</inventory>
+</domain>
++--   
+
+   The domain file above defines federation name <podaacDev> as the default federation to the client distribution.  The \<federation\>\</federation\> block contains the mapping from the federation name to the URL that the client will use to establish connection.  Optionally, the \<federation\>\</federation\> block can contain \<productType\>\</productType\> elements, which defines product types to federation mapping. In the sample domain file above, <<JASON-1_TRSR1280>> and <<JASON-1_AUX>> granules will be handled by federation <<podaacJason1>> and all other granules will be handled by the default federation <<podaacDev>>. It is recommended that you use the domain file generated from the Operator Tool since it will contain all product types to federation mapping.  See the {{{../../../administer/operator/operate/index.html#StorageEngine_Management_Instructions}Operator Tool Operation Guide}} for details on generating the domain file. 
+
+
+* Host Map Setup
+
+   The host map file contains host name and login information for the 'ingest' utility program to access remote data products for ingestion.  This file should only be accessible by the owner of the user who runs this utility. 'ingest' utility program assumes the host map file is located at ~/.horizon/.hostmap, however, this can be directed via command line argument for 'ingest' utility program. 
+
+   The host map file is an XML file it replaces the legacy <<hostmap>> file.
+
++--
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hostmap xmlns="http://podaac.jpl.nasa.gov/webservice/schema">
+
+  <host>
+    <name>hostname01.jpl.nasa.gov</name>
+    <protocol>FTP</protocol>
+    <authentication>username:password</authentication>
+    <connections>5</connections>
+  </host>
+
+  <host>
+    <name>hostname02.jpl.nasa.gov</name>
+    <protocol>FTP</protocol>
+    <authentication>username:password</authentication>
+    <connections>1</connections>
+  </host>
+
+</hostmap>
++--

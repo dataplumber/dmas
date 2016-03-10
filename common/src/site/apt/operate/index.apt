@@ -1,0 +1,80 @@
+~~ Copyright 2008-2009, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 5205 2010-07-07 21:31:00Z gangl $
+
+  ---
+  Operation
+  ---
+  Michael Gangl
+  ---
+  
+Operation
+
+  This document describes how to use the common-httpfetch applications. Each section corresponds with an available application. The following sections can be found in this document:
+
+   * {{{#Modis_Crawler}Modis Crawler}}
+   
+{Modis Crawler}
+
+  The modis crawler consists of one script and a configuration file:
+
++--  
+common-httpfetch-X.X.X/bin/modisHTTPCrawler.csh
+common-httpfetch-X.X.X/config/config.cfg
++--  
+
+  config.cfg can be renamed to anyhting more descriptive, and is a file containing all the top-level links one wants to crawl. Below is an example:
+  
++--
+% more ../config/config.cfg 
+http://oceandata.sci.gsfc.nasa.gov/MODISA/L3SMI/2010
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/2010
+http://oceandata.sci.gsfc.nasa.gov/MODISA/L3SMI/Quicklook/2010
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/Quicklook/2010
+http://oceandata.sci.gsfc.nasa.gov/MODISA/L3SMI/2009
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/2009
+http://oceandata.sci.gsfc.nasa.gov/MODISA/L3SMI/2008
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/2008
+http://oceandata.sci.gsfc.nasa.gov/MODISA/L3SMI/2007
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/2007
+http://oceandata.sci.gsfc.nasa.gov/MODISA/L3SMI/2006
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/2006
+http://oceandata.sci.gsfc.nasa.gov/MODISA/L3SMI/2005
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/2005
+http://oceandata.sci.gsfc.nasa.gov/MODISA/L3SMI/2004
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/2004
+http://oceandata.sci.gsfc.nasa.gov/MODISA/L3SMI/2003
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/2003
+http://oceandata.sci.gsfc.nasa.gov/MODISA/L3SMI/2002
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/2002
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/2001
+http://oceandata.sci.gsfc.nasa.gov/MODIST/L3SMI/2000
+...
++--
+  
+  To run the modis crawler, issue the command:
+  
++--
+% modisHTTPCrawler.csh -h
+usage: modisHTTPCrawler.sh [-c <arg>] [-d <arg>] [-h] [-s <arg>] [-sd
+       <arg>] [-v]
+modisHTTPCrawler
+ -c,--config <arg>         Config file of URLS to check.
+ -d,--download-dir <arg>   Full path to the download directory.
+ -h,--help                 Print the help information for this file.
+ -s,--statefile <arg>      Full path to the cachefile.
+ -sd,--start-date <arg>    A start date which no files older than will be
+                           downloaded. Format: MM/dd/yyy
+ -v,--version              Print the version info for this tool and exit.
++--
+  
+  The download directory is a path to a top level directory. the tree crawled will be replicated here. So if your download directory is pointing at /data/modisCrawl and you crawl a file at http://oceandata.sci.gsfc.nasa.gov/MODISA/L3SMI/2007/33/file1.gz, your file will appear in /data/modisCrawl/MODISA/L3SMI/2007/33/file1.gz.
+  
+  the statefile/cachefile is a record of previously crawled items, and the start date is a time from which we want to crawl (files created more recently than the time specified.)
+  
+  To run the crawler for the precompiled urls in the config.cfg file, you'll run:
+  
++--
+% modisHTTPCrawler.csh -c ../config/config.cfg -d /path/to/toplevel/data -s ./modis.cache
++--

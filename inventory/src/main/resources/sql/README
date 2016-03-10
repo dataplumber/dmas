@@ -1,0 +1,15 @@
+#To create a copy of ops
+# this assumes you have already generated the baseline,collection, and sequence files from OpsMergeToDev.pl
+
+sh inventory_schema.sh drop
+sh inventory_schema.sh create
+sh inventory_schema.sh inventory.package
+
+sqlplus -> @baseline_file
+sqlplus -> @collection_file
+sqlplus -> @sequence_file
+
+sh inventory_schema.sh create.triggers
+sh inventory_schema.sh dev
+
+#Everything should now be up to date. Check back for changes.

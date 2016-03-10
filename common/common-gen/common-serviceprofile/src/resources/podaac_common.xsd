@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+   Copyright (c) 2008
+   Jet Propulsion Laboratory, California Institute of Technology
+   All rights reserved
+   
+   This XML schema defines common message data types referenced by the PO.DAAC
+   message specifications
+   
+   @author T. Huang {Thomas.Huang@jpl.nasa.gov}
+   @version $Id: podaac_common.xsd 645 2008-02-27 19:09:43Z thuang $
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:podaac.nasa="http://podaac.jpl.nasa.gov"
+   targetNamespace="http://podaac.jpl.nasa.gov" elementFormDefault="qualified">
+   <xsd:complexType name="TimeStampType">
+      <xsd:annotation>
+         <xsd:documentation> Defines general time stamp type that is reusable.
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="start" type="xsd:integer"/>
+         <xsd:element name="stop" type="xsd:integer" minOccurs="0"
+            maxOccurs="1" default="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="AgentType">
+      <xsd:annotation>
+         <xsd:documentation> Defines metadata on management message
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:attribute name="agent" type="xsd:string">
+         <xsd:annotation>
+            <xsd:documentation> The name of the PO.DAAC agent (i.e. the software
+               application) </xsd:documentation>
+         </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="address" type="xsd:string" use="optional" default="">
+         <xsd:annotation>
+            <xsd:documentation> The Internet address of the agent
+            </xsd:documentation>
+         </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="time" type="xsd:nonNegativeInteger" use="optional">
+         <xsd:annotation>
+            <xsd:documentation> The time when the message was sent from the
+               agent. </xsd:documentation>
+         </xsd:annotation>
+      </xsd:attribute>
+   </xsd:complexType>
+   <xsd:simpleType name="DataFormatType">
+      <xsd:annotation>
+         <xsd:documentation> List of possible file formats. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="RAW"/>
+         <xsd:enumeration value="HDF"/>
+         <xsd:enumeration value="HDF5"/>
+         <xsd:enumeration value="NETCDF"/>
+         <xsd:enumeration value="NETCDF4"/>
+         <xsd:enumeration value="LOD"/>
+         <xsd:enumeration value="GRIB"/>
+         <xsd:enumeration value="JPG"/>
+         <xsd:enumeration value="PNG"/>
+         <xsd:enumeration value="TIFF"/>
+         <xsd:enumeration value="GeoTIFF"/>
+         <xsd:enumeration value="GIF"/>
+         <xsd:enumeration value="ASCII"/>
+         <xsd:enumeration value="JPEG"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name="FileClassType">
+      <xsd:annotation>
+         <xsd:documentation> List of possible file types </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="DATA"/>
+         <xsd:enumeration value="METADATA"/>
+         <xsd:enumeration value="CHECKSUM"/>
+         <xsd:enumeration value="THUMBNAIL"/>
+         <xsd:enumeration value="IMAGE"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name="CompressionType">
+      <xsd:annotation>
+         <xsd:documentation> A list of common compression types.
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="BZIP2"/>
+         <xsd:enumeration value="GZIP"/>
+         <xsd:enumeration value="ZIP"/>
+         <xsd:enumeration value="UNIX"/>
+         <xsd:enumeration value="NONE"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name="ChecksumType">
+      <xsd:annotation>
+         <xsd:documentation> List of supported checksum algorithms.
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="MD2"/>
+         <xsd:enumeration value="MD5"/>
+         <xsd:enumeration value="SHA1"/>
+         <xsd:enumeration value="SHA256"/>
+         <xsd:enumeration value="SHA384"/>
+         <xsd:enumeration value="SHA512"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name="AccessRoleType">
+      <xsd:annotation>
+         <xsd:documentation> Defines the list of possible access role type
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="PRIVATE"/>
+         <xsd:enumeration value="RESTRICTED"/>
+         <xsd:enumeration value="PUBLIC"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name="MessageFrequencyType">
+      <xsd:annotation>
+         <xsd:documentation> Defines the list of possible notification
+            frequencies </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="VERBOSE"/>
+         <xsd:enumeration value="ERRORONLY"/>
+         <xsd:enumeration value="SILENT"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name="submitStatusValue">
+      <xsd:annotation>
+         <xsd:documentation> List of possible submission status values.
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="READY"/>
+         <xsd:enumeration value="STAGED"/>
+         <xsd:enumeration value="REGISTERED"/>
+         <xsd:enumeration value="ARCHIVED"/>
+         <xsd:enumeration value="ERROR"/>
+         <xsd:enumeration value="REJECTED"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name="DataPassType">
+      <xsd:annotation>
+         <xsd:documentation> Defines the list of pass type values
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="ASCENDING"/>
+         <xsd:enumeration value="DESCENDING"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:simpleType name="DayNightType">
+      <xsd:annotation>
+         <xsd:documentation> Defines the flag values for day/night.
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="DAY"/>
+         <xsd:enumeration value="NIGHT"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:complexType name="DomainAttributeType">
+      <xsd:annotation>
+         <xsd:documentation> Defines a placeholder for domain-specific
+            attributes. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+         <xsd:element name="extra">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="name">
+                     <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                           <xsd:maxLength value="30"/>
+                        </xsd:restriction>
+                     </xsd:simpleType>
+                  </xsd:element>
+                  <xsd:element name="value">
+                     <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                           <xsd:maxLength value="255"/>
+                        </xsd:restriction>
+                     </xsd:simpleType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="FileType">
+      <xsd:sequence>
+         <xsd:element name="link" type="xsd:anyURI"/>
+         <xsd:element name="size" type="xsd:nonNegativeInteger">
+            <xsd:annotation>
+               <xsd:documentation> The size of the file in bytes.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="checksum" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The provider's checksum for the granule file.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="type" type="podaac.nasa:ChecksumType"/>
+                  <xsd:element name="value" type="xsd:string"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="compression" type="podaac.nasa:CompressionType"
+            minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The type of compression used for compressing
+                  granule data file. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="IngestDetailsType">
+      <xsd:annotation>
+         <xsd:documentation> Defines the ingest details. This information should
+            be provided by the PO.DAAC ingestion service. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="source" type="podaac.nasa:FileType">
+            <xsd:annotation>
+               <xsd:documentation> The source reference the file was ingested
+                  from. In the case where multiple source links is available for
+                  the same data file. This enables PO.DAAC services to track the
+                  actual remote location the file was ingested from.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="localStaging" type="xsd:anyURI">
+            <xsd:annotation>
+               <xsd:documentation> The local staging location of the file.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="remoteStaging" type="xsd:anyURI">
+            <xsd:annotation>
+               <xsd:documentation> The remote staging location of the file.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="size" type="xsd:nonNegativeInteger">
+            <xsd:annotation>
+               <xsd:documentation> The size of the file in bytes.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="checksum">
+            <xsd:annotation>
+               <xsd:documentation> The checksum computed by ingest. It should be
+                  identical to the provider checksum, if there is one.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="type" type="podaac.nasa:ChecksumType"/>
+                  <xsd:element name="value" type="xsd:string"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="time" type="podaac.nasa:TimeStampType">
+            <xsd:annotation>
+               <xsd:documentation> The start and end time when the granule was
+                  being ingested by the PO.DAAC ingest service.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="NotificationType">
+      <xsd:annotation>
+         <xsd:documentation> Defines the user notification information.
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="lastName">
+            <xsd:annotation>
+               <xsd:documentation> The last name of the provider contact.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="80"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="firstName">
+            <xsd:annotation>
+               <xsd:documentation> The first name of the provider contact.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="80"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="middleName" minOccurs="0" maxOccurs="1" default="">
+            <xsd:annotation>
+               <xsd:documentation> The middle name of the provider contact.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="80"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="email">
+            <xsd:annotation>
+               <xsd:documentation> An electronic mail address for the provider
+                  contact. </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="255"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="address" minOccurs="0" maxOccurs="1" default="">
+            <xsd:annotation>
+               <xsd:documentation> The postal address for the provier contact.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="511"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="phone" minOccurs="0" maxOccurs="1" default="">
+            <xsd:annotation>
+               <xsd:documentation> The phone number for the provider contact.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="80"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="fax" minOccurs="0" maxOccurs="1" default="">
+            <xsd:annotation>
+               <xsd:documentation> The FAX number for the provider contact.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="80"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="role" minOccurs="0" maxOccurs="1" default="">
+            <xsd:annotation>
+               <xsd:documentation> The role of the provider contact.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="40"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="messageLevel"
+            type="podaac.nasa:MessageFrequencyType">
+            <xsd:annotation>
+               <xsd:documentation> Message notification level.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,147 @@
+~~ Copyright 2007-2010, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: collection.apt 6269 2010-11-13 07:34:18Z gangl $
+
+  ---
+  Collection
+  ---
+  S. Hardman
+  ---
+  
+Collection
+
+  A Collection is a grouping of one or more Datasets or portions of Datasets. The Collection schema allows for the definition of these groupings for the purpose of mapping to other models or to support a query scenario.
+
+  Much of the information in these tables will be provided via the Product Rollout program set but there are cases where Collections will be generated on the fly for capturing ingestion batches.
+
+* Collection Schema
+
+  The following diagram details the Collection schema:
+
+[../images/collection_2.1.0.gif] Collection Schema Diagram
+
+  The following sub-sections provide detailed descriptions for each of the tables.
+
+** {collection}
+
+  The main table containing identifying attributes for a collection.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| collection_id | NUMBER | | An automatically generated identifier for the collection which is unique. This identifier is generated using a sequence. This column is the primary key for the table.|
+*--++++
+| short_name | VARCHAR2(80) | | A short descriptive and unique name for the collection. If the collection type is "PRODUCT", the name should contain all capital letters to satisfy ECHO constraints. |
+*--++++
+| long_name | VARCHAR2(1024) | | A long descriptive name for the collection. |
+*--++++
+| type | VARCHAR2(20) | | The type of collection. This identifier indicates the set of metadata attributes for the collection. |
+*--++++
+| description | VARCHAR2(4000) | | A description of the collection. |
+*--++++
+| full_description | CLOB | | Full (much more detailed) description of the collection. |
+*--++++
+| AGGREGATE | VARCHAR(1)  | | Flag indicating the collection is multiple datasets or not. |
+*--++++
+
+** {collection_contact}
+
+  This table relates contact information to the collection. A collection may have more than one associated contact. Collection contacts will normally consist of PO.DAAC personnel.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| collection_id | NUMBER | collectionId | The identifier for the collection. This column is part of the primary key for this table and is a foreign key to the <{{{collection}collection}}> table. |
+*--++++
+| contact_id | NUMBER | contactId | The identifier for the contact. This column is part of the primary key for this table and is a foreign key to the <{{{provider.html#contact}contact}}> table. |
+*--++++
+
+** {collection_dataset}
+
+  This table identifies the dataset(s) associated with the collection.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| collection_id | NUMBER | | The identifier for the collection. This column is part of the primary key for the table and is a foreign key to the <{{{collection}collection}}> table. |
+*--++++
+| dataset_id | NUMBER | |  The identifier for the dataset. This column is part of the primary key for this table and is a foreign key to the <{{{dataset.html#dataset}dataset}}> table. |
+*--++++
+| granule_flag | CHAR(1) | | A flag indicating whether the collection consists of all or part of the granules associated with the dataset. A partial set of granules is further detailed by the start_granule_id and stop_granule_id columns. |
+*--++++
+| granule_range_360 | CHAR(1) | | A flag indicating whether the collection use range 0..360 or -180..180 |
+*--++++
+| start_granule_id | NUMBER | | The minimum granule identifier for the dataset indicating the start of the granule range. |
+*--++++
+| stop_granule_id | NUMBER | | The maximum granule identifier for the dataset indicating the end of the granule range. |
+*--++++
+
+** {collection_element}
+
+  This table identifies the metadata elements to be cataloged for each collection. Only one of the *_value columns will be populated for a given element.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| collection_id | NUMBER | |  The identifier for the collection. This column is a foreign key to the <{{{collection}collection}}> table. |
+*--++++
+| element_id | NUMBER | | The identifier for the element. This column is a foreign key to the <{{{collection_element_dd}collection_element_dd}}> table. |
+*--++++
+| character_value | VARCHAR2(255) | | The character value for the associated collection element. |
+*--++++
+| datetime_value_long | NUMBER | | The date/time (represented in milliseconds since the EPIC time January 1, 1970) value for the associated collection element. |
+*--++++
+| integer_value | NUMBER | | The integer value for the associated collection element. |
+*--++++
+| real_value | NUMBER | | The real value for the associated collection element. |
+*--++++
+
+** {collection_element_dd}
+
+  This table contains all of the possible metadata elements that can be cataloged for a collection.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| element_id | NUMBER | | An automatically generated identifier for the element which is unique. This identifier is generated using a sequence. This column is the primary key for the table. |
+*--++++
+| short_name | VARCHAR2(30) | | The short name of the element which must be unique. |
+*--++++
+| long_name | VARCHAR2(80) | | The long name of the element. |
+*--++++
+| type | VARCHAR2(20) | | The data type of the element value. Valid values: character, date, integer, real and time. |
+*--++++
+| description | VARCHAR2(1024) | | A description of the element. |
+*--++++
+
+** {collection_legacy_product}
+
+  This table contains legacy product identifiers.  These identifiers are all numerical values.  We need to keep these before assigning new alphanumeric identifiers to these products for backward compatibility.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| collection_id | NUMBER | | The identifier for the collection.  This column is the primary key for the table. |
+*--++++
+| legacy_product_id | NUMBER | | The legacy product identifier |
+*--++++
+
+** {collection_product}
+
+  This table tracks product numbers and associates them with a collection. This table facilitates the product numbering scheme and publishing to external metadata registries.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| collection_id | NUMBER | |  The identifier for the collection. This column is the primary key for the table and a foreign key to the <{{{collection}collection}}> table. |
+*--++++
+| visible_flag | CHAR(1) | | A flag indicating whether a product is visible to the general public and whether it should be published to external metadata registries. |
+*--++++
+| product_id | VARCHAR(20) | | The identifier for the product which is unique. This is the identifier for tagging a product collection, formerly known as product number. |
+*--++++
+| echo_submit_date_long | NUMBER | | The date (represented in milliseconds since the EPIC time January 1, 1970) when the collection metadata was submitted to the ECHO metadata registry. |
+*--++++
+| gcmd_submit_date_long | NUMBER | | The date (represented in milliseconds since the EPIC time January 1, 1970) when the collection metadata was submitted to the GCMD metadata registry. |
+*--++++
+

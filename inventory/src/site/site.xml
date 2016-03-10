@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- 
+Copyright 2007-2008, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+
+$Id: site.xml 5909 2010-09-18 04:43:01Z thuang $
+-->
+
+<project name="Inventory Program Set">
+  <bannerLeft>
+    <src>images/podaac_logo.jpg</src>
+    <href>https://podaac-cm.jpl.nasa.gov/</href>
+  </bannerLeft>
+
+  <bannerRight>
+    <name>Inventory Program Set&nbsp;&nbsp;</name>
+  </bannerRight>
+
+  <body>
+    <links>
+      <item name="Inventory" href="http://podaac-cm.jpl.nasa.gov/docs/inventory/" />
+    </links>
+
+    <menu name="Software Documentation">
+      <item name="About Inventory" href="index.html"/>
+      <item name="Release Description" href="release/index.html"/>
+      <item name="Compilation" href="compile/index.html"/>
+      <item name="Installation" href="install/index.html"/>
+      <item name="Operation" href="operate/index.html"/>
+      <item name="JavaDoc" href="apidocs/index.html"/>
+      <item name="Data Model" href="data_model/index.html" collapse="true">
+        <item name="Collection" href="data_model/collection.html"/>
+        <item name="Dataset" href="data_model/dataset.html"/>
+        <item name="Data Provider" href="data_model/provider.html"/>
+        <item name="Granule" href="data_model/granule.html"/>
+      </item>
+    </menu>
+
+    <menu ref="reports"/>
+  </body>
+</project>

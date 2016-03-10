@@ -1,0 +1,460 @@
+import gov.nasa.jpl.horizon.api.Encrypt
+import gov.nasa.jpl.horizon.api.Lock
+import gov.nasa.jpl.horizon.api.State
+import gov.nasa.podaac.common.api.zookeeper.api.constants.JobPriority
+import gov.nasa.podaac.common.api.zookeeper.api.ZkAccess
+import gov.nasa.podaac.common.api.zookeeper.api.ZkFactory
+import grails.util.GrailsUtil
+//import gov.nasa.podaac.inventory.hibernate.HibernateSessionFactory
+import org.apache.zookeeper.WatchedEvent
+import org.apache.zookeeper.Watcher
+
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+
+/*
+* Copyright (c) 2008 Jet Propulsion Laboratory,
+* California Institute of Technology.  All rights reserved
+*/
+
+/**
+ * BootStrap setup class to setup the target operating environment
+ *
+ * @author T. Huang [Thomas.Huang@jpl.nasa.gov]
+ * @version $Id: BootStrap.groovy 2686 2009-03-03 22:18:55Z axt $
+ */
+class BootStrap {
+  private static final int ENGINE_JOBS_PER_PAGING = 10
+  
+  def quartzScheduler
+  def storageService
+
+  // supported product types
+  def productTypes = [
+  ]
+
+
+  // parameters for setting up local environment
+  def localParams = [
+          federation: 'podaacDev',
+          users: [
+          ],
+          locations: [
+          ],
+          storages: [
+          ],
+          remoteSystems: [
+          ],
+          purgeRate: 1
+  ]
+
+  // parameters for setting up development environment
+  def developmentParams = [
+          federation: 'podaacDev',
+          users: [
+          ],
+          locations: [
+          ],
+          storages: [
+          ],
+          remoteSystems: [
+          ],
+          purgeRate: 1
+  ]
+
+  // parameters for setting up test environment
+  def testParams = [
+          federation: 'podaacTest',
+          users: [
+          ],
+          locations: [
+          ],
+          storages: [
+          ],
+          remoteSystems: [
+          ],
+          purgeRate: 60
+  ]
+  
+  def testingParams = testParams
+
+  // parameters for setting up ops environment
+  def productionParams = [
+          federation: 'podaacOps',
+          users: [
+          ],
+          locations: [
+          ],
+          storages: [
+          ],
+          remoteSystems: [
+          ],
+          purgeRate: 4320
+  ]
+  
+  def operationParams = productionParams
+
+  /**
+   * Init closure to determine what to setup
+   */
+  def init = {servletContext ->
+    log.debug '*** BootStreap, GrailsUtil.environment: ${GrailsUtil.environment}'
+
+    switch (GrailsUtil.environment) {
+      case 'local':
+      case 'oracle':
+        log.debug '*** detected local'
+        this.config(localParams, 'thuang')
+        break
+      case 'development':
+        log.debug '*** detected development'
+        this.config(developmentParams, 'thuang')
+        break;
+      case 'test':
+        log.debug '*** detected test'
+        //this.config(testParams, 'lrodrig')
+        this.config(testParams, 'thuang')
+        break;
+      case 'testing':
+        log.debug '*** detected testing'
+        //this.config(testParams, 'lrodrig')
+        this.config(testingParams, 'thuang')
+        break;
+      case 'production':
+         log.debug '*** detected production'
+         //this.config(opsParams, 'mckinight')
+         this.config(productionParams, 'thuang')
+         break;
+      case 'operation':
+        log.debug '*** detected operation'
+        //this.config(testParams, 'lrodrig')
+        this.config(operationParams, 'thuang')
+        break;
+    }
+    
+    log.debug("Cleaning up EngineJobs.")
+    cleanEngineJobs()
+    log.debug("Done cleaning up EngineJobs.")
+    
+    quartzScheduler.start()
+  }
+
+  def destroy = {
+  }
+
+  /**
+   * Method to bootstrap environment
+   */
+  void config(def params, String admin) {
+
+    def federation = params.federation
+    def engines = params.engines
+    def users = params.users
+    def locations = params.locations
+    def storages = params.storages
+    def remoteSystems = params.remoteSystems
+
+    log.debug("Setup federation '${federation}'.")
+    // register federation
+    def fed = IngFederation.findByName(federation)
+    if (!fed) {
+      fed = new IngFederation(
+              name: federation,
+              note: "PO.DAAC ${federation} Federation",
+              updated: new Date().getTime(),
+              hostname: System.getProperty('server.host') ?: 'localhost',
+              port: (System.getProperty('server.port.https') ?: 8443).toInteger()
+      );
+    } else {
+       fed.updated = new Date().getTime()
+       fed.hostname = System.getProperty('server.host') ?: 'localhost'
+       fed.port = (System.getProperty('server.port.https') ?: 8443).toInteger()
+    }
+    if (!fed.save(flush: true)) {
+       fed.errors.each {
+         log.error it
+       }
+    }
+
+    /*
+    // register access role
+    IngAccessRole devRole = IngAccessRole.findByName("devAddAndGet")
+    if (!devRole) {
+      devRole = new IngAccessRole(
+              name: 'devAddAndGet',
+              capabilities: 7
+      )
+      if (!devRole.save(flush: true)) {
+        devRole.errors.each {
+          log.error it
+        }
+      }
+    }
+    */
+
+    // register users
+    users.each {rec ->
+      IngSystemUser user = IngSystemUser.findByName(rec.username)
+      if (!user) {
+        IngAccessRole accessRole = IngAccessRole.findByName(rec.role)
+        if (!accessRole) {
+          accessRole = new IngAccessRole(
+                  name: rec.role,
+                  capabilities: rec.capabilities
+          )
+          if (!accessRole.save(flush: true)) {
+            accessRole.errors.each {
+              log.error it
+            }
+          }
+        }
+        
+        user = new IngSystemUser(
+                name: rec.username,
+                password: rec.password,
+                fullname: rec.name,
+                email: rec.email,
+                admin: rec.admin,
+                readAll: rec.readAll,
+                writeAll: rec.writeAll,
+                note: rec.name)
+        if (!user.save(flush: true)) {
+          user.errors.each {
+            log.error it
+          }
+        }
+
+        IngSystemUserRole userRole = new IngSystemUserRole(
+                user: user,
+                role: accessRole
+        )
+        if (!userRole.save(flush: true)) {
+          userRole.errors.each {
+            log.error it
+          }
+        }
+      }
+    }
+
+    // register product types
+    productTypes.each {
+      if (it.federation.equals(fed.name)) {
+      IngEventCategory category = IngEventCategory.findByName(it.event)
+      if (!category) {
+         category = new IngEventCategory(
+               name: it.event
+         )
+         category.save(flush:true)
+      }
+
+      def productTypeName = (it.prefix) ? it.name.substring(it.prefix.length()) : it.name
+      IngProductType productType = IngProductType.findByName(productTypeName)
+      if (!productType) {
+        // it could be that we removed prefix, so check for that
+        productType = IngProductType.findByFederationAndName(fed, it.name)
+        if(!productType) {
+           productType = new IngProductType(
+                   federation: fed,
+                   name: productTypeName,
+                   locked: false,
+                   ingestOnly: false,
+                   relativePath: "${productTypeName}/",
+                   purgeRate: params.purgeRate,
+                   updatedBy: IngSystemUser.findByName(admin),
+                   updated: new Date().getTime(),
+                   note: "${productTypeName} product",
+                   eventCategory: category
+           )
+           if (!productType.save(flush: true)) {
+             productType.errors.each {
+               log.error it
+             }
+           }
+   
+           def accessRoles = IngAccessRole.getAll()
+           accessRoles.each {accessRole ->
+             IngProductTypeRole ptRole = new IngProductTypeRole(
+                     productType: productType,
+                     role: accessRole
+             )
+             if (!ptRole.save(flush: true)) {
+               ptRole.errors.each {
+                 log.error it
+               }
+             }
+           }
+        }
+      } else {
+         if (!productType.eventCategory || !productType.eventCategory.equals(category)) {
+            log.trace("Update event category for ${productType.name}")
+            productType.eventCategory = category
+         }
+         if (productType.federation.id != fed.id) {
+            log.trace("Update federation for ${productType.name}")
+            productType.federation = fed
+         }
+         if (it.priority) {
+            def priority = JobPriority.valueOf(it.priority).value
+            if (productType.priority != priority) {
+               productType.priority = priority
+               log.trace("Changing priority for ${productType.name} to ${it.priority}")
+            }
+         }
+         if (productType.isDirty()) {
+            log.trace("Save ${productType.name}")
+            productType.save(flush: true)
+         }
+      }
+      }
+    }
+
+    // register engine storages
+    locations.each {rec ->
+      IngLocation location = IngLocation.findByLocalPath(rec.localPath)
+      if (!location) {
+        location = new IngLocation(
+                localPath: rec.localPath,
+                remotePath: rec.remotePath,
+                remoteAccessProtocol: rec.protocol,
+                spaceReserved: rec.spaceReserved,
+                spaceThreshold: rec.spaceReserved * 0.8,
+                stereotype: rec.stereotype,
+                hostname: rec.hostname
+        )
+        if (!location.save(flush: true)) {
+          location.errors.each {
+            log.error it
+          }
+        }
+      }
+    }
+    
+    storages.each {rec ->
+      IngLocation location = IngLocation.findByLocalPath(rec.localPath)
+      if (!location) {
+         log.error("Location with local path ${rec.localPath} does not exists. Cannot map storage ${rec.name} to this location.")
+      } else {
+         IngStorage storage = IngStorage.findByName(rec.name)
+         def storagePriority = rec.priority ? JobPriority.valueOf(rec.priority).value : null
+         if (!storage) {
+           storage = new IngStorage(
+                   name: rec.name,
+                   priority: storagePriority,
+                   location: location
+           )
+           if (!storage.save(flush: true)) {
+             storage.errors.each {
+               log.error it
+             }
+           }
+         } else {
+            if (storage.priority != storagePriority) {
+               storage.priority = storagePriority
+               log.debug("Changing priority for storage ${storage.name} to ${rec.priority}")
+            }
+            if (storage.isDirty()) {
+               log.trace("Save storage ${storage.name}")
+               storage.save(flush: true)
+            }
+         }
+         //Create node /engines/[storageName] so engine can register with this storage
+         registerStorage(fed.name, rec.name)
+      }
+    }
+
+    // register remote systems
+    remoteSystems.each {system ->
+      IngRemoteSystem remoteSystem = IngRemoteSystem.findByRootUri(system.rootUri)
+      if (!remoteSystem) {
+        remoteSystem = new IngRemoteSystem(
+                rootUri: system.rootUri,
+                organization: system.organization,
+                username: system.username,
+                password: system.password,
+                maxConnections: system.maxConnections,
+                created: system.created,
+                updated: system.updated,
+                updatedBy: admin/*IngSystemUser.findByName(admin)*/
+        )
+        if (!remoteSystem.save(flush: true)) {
+          remoteSystem.errors.each {
+            log.error it
+          }
+        }
+      }
+    }
+    
+    // store federation for later use
+    ConfigurationHolder.config.put("manager_federation", federation)
+  }
+  
+  private void cleanEngineJobs() {
+    def query = {
+       product {
+          productType {
+             federation {
+                eq("name", ConfigurationHolder.config.manager_federation)
+             }
+          }
+       }
+    }
+    def engineJobsCount = IngEngineJob.createCriteria().count(query)
+    def engineJobsIndex = 0
+    while(engineJobsIndex < engineJobsCount) {
+      def engineJobs = IngEngineJob.createCriteria().list(
+        max: BootStrap.ENGINE_JOBS_PER_PAGING,
+        offset: engineJobsIndex,
+        order: "desc",
+        sort: "assigned",
+        query
+      )
+      def watcher = { WatchedEvent event ->
+         log.debug ("BootStrap:cleanEngineJobs Watcher: received event " + event.type + " " + event.state)
+      }
+      engineJobs.each {engineJob ->
+         ZkAccess zk = ZkFactory.getZk(ConfigurationHolder.config.horizon_zookeeper_url as String, watcher as Watcher)
+         
+         if (engineJob.path) {
+            if (!zk.removeNode(engineJob.path)) {
+               zk.removeProcessNode(engineJob.product.productType.name+"/"+engineJob.product.name)
+            }
+         }
+         
+         // put storage back as needed
+         if ([Lock.ADD, Lock.REPLACE, Lock.ARCHIVE].find{it == Lock.valueOf(engineJob.operation)} 
+               && [State.PENDING, State.PENDING_STORAGE, State.PENDING_ARCHIVE, State.PENDING_ARCHIVE_STORAGE].find{it == State.valueOf(engineJob.previousState)}) {
+            long totalSize = engineJob.product.files.sum {
+               it.fileSize
+            }
+            storageService.updateStorage(-totalSize, new Date().getTime(), engineJob.contributeStorage.location.id)
+         }
+
+        try {
+          IngProduct product = IngProduct.get(engineJob.product.id)
+          product.currentLock = engineJob.operation
+          product.currentState = engineJob.previousState
+          if(!product.save(flush: true)) {
+             throw new Exception("Failed to save product: "+product.errors.allErrors.join())
+          }
+          
+          engineJob.delete()
+          log.debug("Cleaned EngineJob["+engineJob.id+"].")
+        } catch(Exception exception) {
+           log.error("Failed to rollback enginejob.", exception)
+        }
+      }
+      
+      engineJobsIndex += BootStrap.ENGINE_JOBS_PER_PAGING
+    }
+  }
+  
+  private void registerStorage(String federationName, String storageName) {
+     def watcher = { WatchedEvent event ->
+        log.debug ("BootStrap:registerStorage Watcher: received event " + event.type + " " + event.state)
+     }
+     ZkAccess zk = ZkFactory.getZk(ConfigurationHolder.config.horizon_zookeeper_url as String, watcher as Watcher)
+     if (!zk.nodeExists("${ZkAccess.ENGINE_REGISTRATION_ROOT}/$storageName")) {
+        String path = zk.createNode("${ZkAccess.ENGINE_REGISTRATION_ROOT}/$storageName", "$federationName manager registered storage");
+        log.debug("Registered storage with zookeeper with path $path")
+     }
+  }
+}

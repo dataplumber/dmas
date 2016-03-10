@@ -1,0 +1,14 @@
+~~ Copyright 2009, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: $
+
+  ---
+  About Sigevent API
+  ---
+  Thomas Huang
+  ---
+  
+About Sigevent API
+
+  The Sigevent API module contains application programming interface interfacing with the PO.DAAC Significant Event WS implemented in the Groovy programming language.

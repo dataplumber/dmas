@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- 
+Copyright 2007-2008, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+
+$Id: pom.xml 14516 2015-12-03 21:22:49Z nchung $
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+   http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>gov.nasa.podaac</groupId>
+   <artifactId>podaac</artifactId>
+   <version>0.0.0</version>
+   <packaging>pom</packaging>
+   <properties>
+      <dmas.version>4.4.0</dmas.version>
+   </properties>
+
+   <name>Physical Oceanography DAAC</name>
+   <description> This project contains the parent Project Object Model (POM). </description>
+   <url>http://podaac-cm.jpl.nasa.gov/</url>
+
+   <modules>
+      <module>common</module>
+      <module>inventory</module>
+      <module>ingest</module>
+      <module>archive</module>
+      <module>distribute</module>
+   </modules>
+
+   <inceptionYear>2007</inceptionYear>
+   <organization>
+      <name>Physical Oceanography DAAC</name>
+      <url>http://podaac.jpl.nasa.gov/</url>
+   </organization>
+
+   <scm>
+      <developerConnection>scm:svn:https://podaac-cm.jpl.nasa.gov/repo/trunk/</developerConnection>
+      <url>https://podaac-cm.jpl.nasa.gov/repo/trunk/</url>
+   </scm>
+
+   <issueManagement>
+      <system>Trac</system>
+      <url>http://podaac-cm.jpl.nasa.gov/trac/</url>
+   </issueManagement>
+
+   <mailingLists>
+      <mailingList>
+         <name>Developer List</name>
+         <subscribe>podaac-dev-subscribe@list.jpl.nasa.gov</subscribe>
+         <unsubscribe>podaac-dev-unsubscribe@list.jpl.nasa.gov</unsubscribe>
+         <post>podaac-dev@list.jpl.nasa.gov</post>
+      </mailingList>
+   </mailingLists>
+
+   <distributionManagement>
+      <repository>
+         <id>podaac-repo</id>
+         <name>PO.DAAC Repository</name>
+         <url>sftp://lapinta.jpl.nasa.gov/www/seabat/doc/maven2</url>
+         <uniqueVersion>false</uniqueVersion>
+         <layout>default</layout>
+      </repository>
+      <site>
+         <id>podaac-repo</id>
+         <name>PO.DAAC Repository</name>
+         <url>sftp://lapinta.jpl.nasa.gov/www/seabat/doc/docs</url>
+      </site>
+   </distributionManagement>
+
+   <developers>
+      <developer>
+         <id>qchau</id>
+         <name>Qui Chau</name>
+         <email>Qui.T.Chau@jpl.nasa.gov</email>
+         <roles>
+            <role>Developer</role>
+         </roles>
+      </developer>
+      <developer>
+         <id>gangl</id>
+         <name>Michael Gangl</name>
+         <email>Michael.E.Gangl@jpl.nasa.gov</email>
+         <roles>
+            <role>Developer</role>
+         </roles>
+      </developer>
+      <developer>
+         <id>mlhender</id>
+         <name>Matthew Henderson</name>
+         <email>Matthew.L.Henderson@jpl.nasa.gov</email>
+         <roles>
+            <role>Developer</role>
+         </roles>
+      </developer>
+      <developer>
+         <id>thuang</id>
+         <name>Thomas Huang</name>
+         <email>Thomas.Huang@jpl.nasa.gov</email>
+         <roles>
+            <role>Core System Development Lead</role>
+         </roles>
+      </developer>
+      <developer>
+         <id>axt</id>
+         <name>Atsuya Takagi</name>
+         <email>Atsuya.Takagi@jpl.nasa.gov</email>
+         <roles>
+            <role>Developer</role>
+         </roles>
+      </developer>
+      <developer>
+         <id>ckthomps</id>
+         <name>Charles Thompson</name>
+         <email>Charles.Thompson@jpl.nasa.gov</email>
+         <roles>
+            <role>Tools and Services Development Lead</role>
+         </roles>
+      </developer>
+   </developers>
+
+   <contributors>
+      <contributor>
+         <name>Christian Alarcon</name>
+         <email>calarcon@sdsio.jpl.nasa.gov</email>
+         <roles>
+            <role>Deployment Engineer / Developer</role>
+         </roles>
+      </contributor>
+      <contributor>
+         <name>Harry Ashby</name>
+         <roles>
+            <role>Former Database Administrator</role>
+         </roles>
+      </contributor>
+      <contributor>
+         <name>Cynthia Chen</name>
+         <email>Cynthia.Chen@jpl.nasa.gov</email>
+         <roles>
+            <role>Operations Lead</role>
+         </roles>
+      </contributor>
+      <contributor>
+         <name>Chris Finch</name>
+         <email>Chris.Finch@jpl.nasa.gov</email>
+         <roles>
+            <role>System Engineer</role>
+         </roles>
+      </contributor>
+      <contributor>
+         <name>Lela Rodriguez</name>
+         <email>Lela.Rodriguez@jpl.nasa.gov</email>
+         <roles>
+            <role>Test Engineer</role>
+         </roles>
+      </contributor>
+      <contributor>
+         <name>Duc Truong</name>
+         <email>Duc.Truong@jpl.nasa.gov</email>
+         <roles>
+            <role>Database Administrator</role>
+         </roles>
+      </contributor>
+   </contributors>
+
+</project>

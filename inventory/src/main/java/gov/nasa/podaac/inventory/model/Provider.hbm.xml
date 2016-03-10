@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+
+<!-- 
+$Id: Provider.hbm.xml 4744 2010-04-19 18:08:45Z gangl $ 
+-->
+
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="gov.nasa.podaac.inventory.model">
+	<!-- Class Definitions for entities with one-to-many Dataset -->
+	<class name="Provider" table="PROVIDER">
+		<id name="providerId" column="PROVIDER_ID">
+			<generator class="sequence">
+				<param name="sequence">provider_id_seq</param>
+			</generator>
+		</id>
+		<property name="shortName" column="SHORT_NAME" length="31"/>
+		<property name="longName" column="LONG_NAME" length="160"/>
+        <property name="type" length="20"/>
+		<set name="datasetSet" inverse="true" embed-xml="false">
+			<key column="PROVIDER_ID" />
+			<one-to-many class="Dataset"/>
+		</set>
+		<set name="providerResourceSet" table="PROVIDER_RESOURCE">
+			<key column="PROVIDER_ID" foreign-key="PROVIDER_RESOURCE_FK1"/>
+			<composite-element node="providerResource" class="ProviderResource">
+				<property name="resourcePath" column="PATH"/>
+			</composite-element>
+		</set>
+		<set name="contactSet" inverse="true">
+			<key column="PROVIDER_ID" />
+			<one-to-many class="Contact" />
+		</set>
+	</class>
+	
+	<class name="Contact" table="CONTACT">
+		<id name="contactId" column="CONTACT_ID">
+			<generator class="sequence">
+				<param name="sequence">contact_id_seq</param>
+			</generator>
+		</id>
+		<property name="role" length="40"/>
+		<property name="firstName" column="FIRST_NAME" length="80"/>
+		<property name="middleName" column="MIDDLE_NAME" length="80"/>
+		<property name="lastName" column="LAST_NAME" length="80"/>
+		<property name="email" />
+		<property name="phone" length="80"/>
+		<property name="fax" length="80"/>
+		<property name="address" length="512"/>
+		<property name="notifyType" column="NOTIFY_TYPE" length="20"/>
+		<many-to-one name="provider" class="Provider"  embed-xml="false"
+			column="PROVIDER_ID" node="providerId" foreign-key="CONTACT_FK1"/>
+		<set name="datasetContactSet" inverse="true" cascade="all-delete-orphan" embed-xml="false">
+			<key column="CONTACT_ID" />
+			<one-to-many class="DatasetContact"/>
+		</set>
+		<set name="granuleContactSet" inverse="true" embed-xml="false">
+			<key column="CONTACT_ID" />
+			<one-to-many class="GranuleContact"/>
+		</set>
+		<set name="collectionContactSet" inverse="true" embed-xml="false">
+		   <key column="CONTACT_ID"/>
+		   <one-to-many class="CollectionContact"/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,539 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 2577 2009-02-03 18:03:50Z thuang $
+
+  ---
+  Installation
+  ---
+  Thomas Huang, Atsuya Takagi
+  ---
+
+{Installation}
+
+   This document describes how to install and configure the Manager web application. The following sections can be found in this document:
+
+   * {{{Build_Instructions}Build Instructions}}
+
+   * {{{Data_Model}Data Model}}
+
+   * {{{Zookeeper_Installation}Zookeeper Installation}}
+
+
+{Build Instructions}
+
+   Manager is a web application that is designed and built with the {{{http://groovy.codehaus.org/}Groovy}} programming language and the {{{http://grails.org/}Grails}} web application framework.  While both these technologies are fully developed on top of {{{http://java.sun.com}Java}} platform, its support from {{{http://maven.apache.org}Maven}} is still a little behind.  The prerequisite for building the Manager web application is the Grails web framework must be installed.  Below is the source tree of Manager distribution
+   
+[../images/manager-source-tree.jpg]
+
+   While the Manager's business logics are portable to various deployment environment, bootstrap configurations must be made in order for the build to produce the correct WAR (Web Archive) file.  The Manager build configuration is divided in to three deployment types: [development, test, production].  Depending on the target deployment, most of the configuration files are being divided into three different configurable sections.
+
+   * Bootstrap Configuration
+
+   Product types, storages, and other data that need to be populated into the database during start-up can be specified in the 'grails-app/conf/Bootstrap.groovy' file.
+
++--
+def productTypes = [
+   ...
+   [name: 'QSCAT_LEVEL_2B_OWV_COMP_12', event: 'QSCAT_LEVEL_2B_OWV_COMP_12', federation: 'podaacQscat', priority: 'HIGH'],
+   [name: 'QSCAT_LEVEL_2C_SFOWSV_COMP_12', event: 'QSCAT_LEVEL_2C_SFOWSV_COMP_12', federation: 'podaacQscat'],
+   ...
+   [name: 'JASON-1_TRSR1280',event: 'JASON-1_TRSR1280', federation: 'podaacJason'],
+   [name: 'JASON-1_AUX', event: 'JASON-1_AUX', federation: 'podaacJason'],
+   [name: 'JASON-1_GDR_CNES', event: 'JASON-1_GDR_CNES', federation: 'podaacJason'],
+   [name: 'JASON-1_GDR_NASA', event: 'JASON-1_GDR_NASA', federation: 'podaacJason'],
+   ...
+
+def developmentParams = [
+   federation: 'podaacQscat',
+   ...
+   locations: [
+      [protocol: 'SFTP', localPath: '/data/dev/users/podaacdev/data/ingest/podaacdev/horizon_dev1/', remotePath: '/data/dev/users/podaacdev/data/ingest/podaacdev/horizon_dev1/', spaceReserved: (200L * 1024 * 1024 * 1024), stereotype: 'INGEST', hostname: 'seastore.jpl.nasa.gov'],
+      [protocol: 'SFTP', localPath: '/data/dev/users/podaacdev/data/ingest/podaacdev/horizon_dev2/', remotePath: '/data/dev/users/podaacdev/data/ingest/podaacdev/horizon_dev2/', spaceReserved: (200L * 1024 * 1024 * 1024), stereotype: 'INGEST', hostname: 'seastore.jpl.nasa.gov'],
+      [protocol: 'SFTP', localPath: '/data/dev/users/podaacdev/data/archive/', remotePath: '/data/dev/users/podaacdev/data/archive/', spaceReserved: (200L * 1024 * 1024 * 1024), stereotype: 'ARCHIVE', hostname: 'seasprite.jpl.nasa.gov'],
+   ],
+   storages: [
+      [name: 'horizonIngestDev_1', localPath: '/data/dev/users/podaacdev/data/ingest/podaacdev/horizon_dev1/', priority: 'HIGH'],
+      [name: 'horizonIngestDev_2', localPath: '/data/dev/users/podaacdev/data/ingest/podaacdev/horizon_dev2/', priority: 'NORMAL'],
+      [name: 'horizonIngestDev_3', localPath: '/data/dev/users/podaacdev/data/ingest/podaacdev/horizon_dev2/', priority: 'LOW'],
+      [name: 'horizonArchiveDev_2', localPath: '/data/dev/users/podaacdev/data/archive/a', priority: null]
+   ],
+   ...
++--
+
+   Under productTypes, each row specifies a product type (dataset) which contains <name>, <event>, <federation>, and optionally, <priority>.  If the <federation> value for the product type is the same as the <federation> value specified under [development | test | production]Params, then the product type will be served by this Manager instance.  This Manager instance is identified by the <federation> value specified under [development | test | production]Params.
+   
+   Based on what is visible in the sample Bootstrap snippet above, this Manager will run as federation <<podaacQscat>> and will handle the two product types <<QSCAT_LEVEL_2B_OWV_COMP_12>> and <<QSCAT_LEVEL_2C_SFOWSV_COMP_12>>.  To start a separate Manager instance for federation <<podaacJason>>, set the <federation> value under [development | test | production]Params to <<podaacJason>>.
+   
+   Optionally, a <priority> value can be specified for each product type.  Possible <priority> values are HIGH, NORMAL or LOW.  In the sample Bootstrap snippet above, <<QSCAT_LEVEL_2B_OWV_COMP_12>> will be set as being HIGH priority.  If no <priority> value is provided, the <priority> value of the product type remains unchanged.  By default, a new product type will have NORMAL priority.
+   
+   Also under [development | test | production]Params are rows for specifying locations and storages.  
+
+   Each row under locations corresponds to a location and each location must have a unique <localPath> value.  
+
+   Each row under storages corresponds to a storage and each storage is associated with a location by its <localPath> value.  One or more storages can be associated with one location.  The <priority> value for each storage dictates what jobs can be assigned to the storage.  Possible <priority> values are HIGH, NORMAL, LOW or null.  If the storage's <priority> value is set to HIGH, only HIGH priority jobs can be assigned to it.  If the storage's <priority> value is null, any job regardless of priority can be assigned to it.
+   
+   * JNDI Connection Configuration
+   
+   The JNDI configuration information is located in the 'grails-app/conf/Config.groovy' file.  The configuration is necessary for the Manager web application to be able to publish to sigevent.
+   
++--
+environments {
+   development {
+      //horizon_provider_url = "jnp://lanina.jpl.nasa.gov:1099"
+      horizon_sigevent_url = "http://lanina.jpl.nasa.gov:8100/sigevent"
+      horizon_zookeeper_url = "lanina.jpl.nasa.gov:2181"
+      horizon_zookeeper_ws_url = "lanina:9998"
+      horizon_discovery_url = "http://lanina.jpl.nasa.gov:8983/solr.war"
+      horizon_dataset_update_federation = "podaacDev"
+      horizon_dataset_update_purge_rate = 1
+      horizon_dataset_update_sigevent = [[type: "INFO", purgeRate: 1], [type: "WARN", purgeRate: 1], [type: "ERROR", purgeRate: 1]]
+      
+      //SecurityServiceInfo
+      gov.nasa.podaac.security.host = "https://lanina.jpl.nasa.gov"
+      gov.nasa.podaac.security.port = 9197
+      gov.nasa.podaac.security.realm = "PODAAC-MANAGER"
+      
+      //Host and port of inventory service
+      gov.nasa.podaac.manager.inventory.host = "https://lanina.jpl.nasa.gov"
+      gov.nasa.podaac.manager.inventory.port = 9192
+      gov.nasa.podaac.manager.inventory.user = "${username}"
+      gov.nasa.podaac.manager.inventory.pass = "${password}"
+   }
+
+   test {
+      //horizon_provider_url = "jnp://seadeck.jpl.nasa.gov:1099"
+      horizon_sigevent_url = "http://lanina.jpl.nasa.gov:8100/sigevent"
+      horizon_zookeeper_url = "lanina.jpl.nasa.gov:2181"
+      horizon_zookeeper_ws_url = "lanina:9998"
+      horizon_discovery_url = "http://lanina.jpl.nasa.gov:8983/solr.war"
+      horizon_dataset_update_federation = "podaacDev"
+      horizon_dataset_update_purge_rate = 1
+      horizon_dataset_update_sigevent = [[type: "INFO", purgeRate: 1], [type: "WARN", purgeRate: 1], [type: "ERROR", purgeRate: 1]]
+      
+      //SecurityServiceInfo
+      gov.nasa.podaac.security.host = "https://lanina.jpl.nasa.gov"
+      gov.nasa.podaac.security.port = 9197
+      gov.nasa.podaac.security.realm = "PODAAC-MANAGER"
+      
+      //Host and port of inventory service
+      gov.nasa.podaac.manager.inventory.host = "https://lanina.jpl.nasa.gov"
+      gov.nasa.podaac.manager.inventory.port = 9192
+      gov.nasa.podaac.manager.inventory.user = "${username}"
+      gov.nasa.podaac.manager.inventory.pass = "${password}"
+   }
+
+   ...
+}
++--
+
+     * "horizon_sigevent_url" points to where sigevent is running at.
+
+     * "horizon_zookeeper_url" points to the host:port where ZooKeeper is running.
+
+     * "horizon_zookeeper_ws_url" points to the host:port where RESTful service to ZooKeeper is running.
+
+     * "horizon_discovery_url" points to the solr instance, usually the slave solr, that serves search request.
+
+     * "horizon_dataset_update_federation" is a value of federation of the dataset that would be used when dealing with requests from Dataset Manager Tool.
+
+     * "horizon_dataset_update_purge_rate" is a value of purge rate for the dataset when dealing requests from Dataset Manager Tool.
+
+     * "horizon_dataset_update_sigevent" is a list of values of sigevent category and purge rate used when a new dataset created using Dataset Manager Tool.
+
+   Under the comment line "SecurityServiceInfo"
+
+     * "gov.nasa.podaac.security.host" points to the host where Security web service is running on.
+
+     * "gov.nasa.podaac.security.port" points to the port where Security web service is running on.
+
+     * "gov.nasa.podaac.security.realm" is the name required by Security web service to determine how to authenticate/authorize requests coming from Manager web application.
+
+   Under the comment line "Host and port of inventory service"
+
+     * "gov.nasa.podaac.manager.inventory.host" points to the host where Inventory web service is running on.
+
+     * "gov.nasa.podaac.manager.inventory.port" points to the port where Inventory web service is running on.
+
+     * "gov.nasa.podaac.manager.inventory.user" is username of user who has write acess to Inventory web service.
+
+     * "gov.nasa.podaac.manager.inventory.pass" is password of user who has write acess to Inventory web service.
+
+
+   * Manager Database Connection Configuration
+   
+   The Data Source configuration information is located in the "grails-app/conf/DataSource.groovy" file.  The configuration is necessary for the Manager web application to connect to its data catalog, which is the operation registry for this web application.
+   
++--
+environments {
+   development {
+      dataSource {
+         pooled = true
+         driverClassName = "oracle.jdbc.driver.OracleDriver"
+         url = "jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV"
+         dialect = "org.hibernate.dialect.Oracle10gDialect"
+         username = '${db username}'
+         password = '${db password}'
+
+      }
+   }
+
+   test {
+      dataSource {
+         pooled = true
+         driverClassName = "oracle.jdbc.driver.OracleDriver"
+         url = "jdbc:oracle:thin:@seadb.jpl.nasa.gov:1526:DAACDEV"
+         dialect = "org.hibernate.dialect.Oracle10gDialect"
+         username = '${db_username}'
+         password = '${db_password}'
+      }
+   }
+   
+   ...
+}
++--
+
+   
+   * JBoss Setup Configuration <<NOT SUPPORTED FOR CURRENT RELEASE>>
+   
+   The files for JBoss setup are the same as in previous release.  There are no configuration changes for JBoss in this this release.  Please follow the JBoss setup instructions.
+   
+   * Memory Configuration
+   
+   The default JavaVM memory allocation by JBoss may not be sufficient.  It is recommended to increase the PermGen memory space.  This memory space is used for dynamically loading of Java classes.
+   
++--
+% setenv JAVA_OPTS "-Xms128m -Xmx512m -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -XX:PermSize=256m -XX:MaxPermSize=512m"
++--
+   
+   * Data Model Setup Configuration
+   
+   This Data Model Setup files are located in the 'src/sql' directory.  It contains SQL files to load and pre-populate the target environment.  The Manager data model captures environment-specific configurations such as staging area root directory as well as user authentication data.  The source distribution only has development environment setup SQL files.  <<Please work with the development lead to render SQL setup file for target environment other than Development.>>  A shell script <manager_schema.sh> is developed to simplify loading of the SQL files. The following example commands demonstrate clearing and then setting up the data model, respectively:
+      
++--
+% ./manager_schema.sh drop -Dusername=<username> -Dpassword=<password> 
+
+% ./managert_schema.sh create -Dusername=<username> -Dpassword=<password>
+
+% ./managert_schema.sh ingest.package.create -Dusername=<username> -Dpassword=<password>
++--  
+
+   Please work with the development lead on environment changes such as add/remove engine, product type, user, etc..
+
+   * Create and Deploy the Web Application
+   
+   After modifying and loading the target environment information, building the Manager web application should be followed.
+   
+   ** Grails Environment
+
+   Before begin the Maven build, the GRAILS_HOME environment variable must be set.
+
++--
+% setenv GRAILS_HOME /usr/local/grails
++--
+   
+   ** Copy the Dependencies
+   
+   Since a WAR (Web ARchive) is a self-contained component, it must be bundled with its own collection of dependencies.
+   
++--
+% mvn dependency:copy-dependencies
++--
+   
+   The command above will download the required JARs to the '<target/dependency>' directory
+
++--
+% cp target/dependency/* lib
++--      
+
+   Grails expects all of its dependencies in the '<lib>' directory.  The copy command above will satisfy this requirement.
+
+   ** Run as Grails application
+   
+   Specific to 1.4.1, manager needs to run as Grails application instead of creating WAR file and deploying to JBoss. Please skip "Assemble the Web Archive" and "Deploy to JBoss" for 1.4.1 release.
+
+   <<NOTE: Please make sure to remove previousely deployed manager WAR from the JBoss deploy directory before startup JBoss.>>
+   
+   Below is the command to start the Manager Grails application.
+
++--
+% grails -Dgrails.env=<GRAILS_ENV> -Dserver.port=<SERVER_PORT> -Dserver.port.https=<HTTPS_SERVER_PORT> -Dserver.host=<SERVER_HOST> run-app -https
++--
+
+   Here is an example to start the Manager for Development
+
++--
+% grails -Dgrails.env=development -Dserver.port=8090 -Dserver.port.https=8091 -Dserver.host=lanina.jpl.nasa.gov run-app -https
++--
+
+   The command above will run manager as Grails application. GRAILS_ENV should be replaced with "test" for testing, and "production" for ops. SERVER_PORT should be replaced with a port number that manager should listen to. SERVER_HOST should be replaced with a hostname that manager should bind to. Note that it is necessary to open SERVER_HOST:SERVER_PORT to outside in order to allow all clients to access to manager.  
+
+   The "-https" command starts grails up in normal mode as well as a listener on an SSL port. To configure the SSL port, include the "-Dserver.port.https=<HTTPS_SERVER_PORT>" option.
+
+   When grails app starts up, it automatically installs the plugins needed. If grails does not ask to install them, following commands can be executed to install he plugins.
+
++--
+% grails install-plugin http://cloud.github.com/downloads/nebolsin/grails-quartz/grails-quartz-0.4.2.zip
++--
+      
+   ** Assemble the Web Archive <<NOT SUPPORTED FOR CURRENT RELEASE>>
+
++--
+% mvn -Dgrails.env=development compile
++--
+   
+   The command above will produce a WAR file that is specific to the development environment.  If the '-Dgrails.env' argument is missing, the WAR produced would be for the production environment.  For the test environment, the '-Dgrails.env=test' should be used.
+   
+   ** Deploy to JBoss <<NOT SUPPORTED FOR CURRENT RELEASE>>
+   
+   All web component to be serve by JBoss must be installed under '<$JBOSS_HOME/server/<instance>/deploy>' directory.
+      
+   <<Alert:>> The WAR produced contains a 'jbossall-client-*.jar' file.  This file cause conflicts with JBoss Application Server, because the server already has this JAR loaded in memory at startup.  However, including this JAR in pom.xml is necessary for compilation dependency.  This is something Maven/Grails will have to resolve in the future.  For this release, please do the following
+   
++--
+% cd ${JBOSS_HOME}/servers/<instance>/deploy
+% mkdir manager-1.4.1.war
+% cd manager-1.4.1.war
+% jar -xvf <path to the generated war>/manager-1.4.1.war
+% rm WEB-INF/lib/jbossall-client-*.jar
++-- 
+   
+   The above step create a directory 'manager-1.4.1.war' and un-JARs the produced WAR into that directory.  JBoss supports deployment of standard WAR or any directory with '.war' in its 'deploy' directory.
+   
+   ** Start JBoss <<NOT SUPPORTED FOR CURRENT RELEASE>>
+   
+   With all the configuration and build is complete, it time to start JBoss.
+   
++--
+% ${JBOSS_HOME}/bin/run.sh -c <instance name> -b <host name>
++--
+
+   The step above starts up JBoss to serve the '<instance>' provide and binds the server to the '<host name>' provide.  Without the '-b' option, JBoss will bind to to 'localhost'.  All JBoss and Manager activities are captured in a log file under '$JBOSS_HOME/servers/<instance>/log/server.log'.
+
+[]      
+
+{Data Model}
+
+   The Manager web application is built on a data model that supports user authentication, service management, Job scheduling, and product tracking.  The diagram below is the data model created on the Oracle database.
+   
+[../images/manager-datamodel.jpg]
+
+   Some key tables to look at
+   
+   * ing_federation: definition of the high level federation name that represents a collection of product type.
+   
+   * ing_product_type: definition of product type.  Each product type entry captures a collection of products (granules).
+   
+   * ing_product: definition of product (granule) and its state.  Each product entry captures a collection of files.
+   
+   * ing_storage: definition of storage locations and its current usage.
+
+{Zookeeper Installation}
+
+* Installation
+
+   The 4.0.0 release of manager introduced a reliance on the Apache Zookeeper service for concurrency, configuration management, and message passing. The version DMAS works on is currently 3.4.5, and we will be testing the future upgrades for our next release. 
+
+   Zookeeper has it's own installation guide and procedures which can be found {{{http://zookeeper.apache.org/doc/trunk/zookeeperStarted.html}here}}. 
+   
+   Download zookeeper from {{{http://apache.mirrors.tds.net//zookeeper/zookeeper-3.4.5/}here}}. 
+   
+   untar, unzip into some directory
+   
++--
+   tar -zxvf zookeeper-3.4.5.tar.gz
++--
+
+   You should now have a 'zookeeper-3.4.5' directory:
+   
++--
+   $>cd zookeeper-3.4.5
+   $>ls
+CHANGES.txt			build.xml			ivy.xml				zookeeper-3.4.5.jar
+LICENSE.txt			conf				ivysettings.xml			zookeeper-3.4.5.jar.asc
+NOTICE.txt			contrib				lib				zookeeper-3.4.5.jar.md5
+README.txt			dist-maven			recipes				zookeeper-3.4.5.jar.sha1
+bin				docs				src
+
++--
+
+   After downloading and unbundling zookeeper, it's time to change some configuration options. This should be done on each server that is to run a zookeeper server. Most installations use a mounted directory for configuration and hosting the zookeeper files, and run them locally on machines with attached storage.
+   
+* Configuration
+ 
+   Zookeeper comes with an example config file, but we'll need to modify it:
+
++--
+cd conf/
+$> ls
+configuration.xsl	log4j.properties	zoo_sample.cfg
+$> cp  zoo_sample.cfg zoo.cfg
++--
+
+   Edit the zoo.cfg file (leave zoo_sample.cfg as is)
+
++--
+# The number of milliseconds of each tick
+tickTime=6000
+# The number of ticks that the initial 
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between 
+# sending a request and getting an acknowledgement
+syncLimit=5
+# the directory where the snapshot is stored.
+dataDir=/var/zookeeper/server1/data
+# the port at which the clients will connect
+clientPort=2181
+#server.1=zoo1:2888:3888
+#server.2=zoo2:2888:3888
+#server.3=zoo3:2888:3888
++--
+
+   * Set tickTime to 6000 (2000 by default). This allows us to set longer timeouts for the zookeepr clients.
+
+   * Set dataDir to a local disk. It can be done on a mounted disk, but it isn't as fast. Each zookeeper server should write to its own disk space, and it shouldn't be "/tmp"
+
+   * server.1 - 3 are how zookeeper is setup in replicated mode. For more information on replicating zookeeper (which is a good practice), see {{{http://zookeeper.apache.org/doc/trunk/zookeeperStarted.html#sc_RunningReplicatedZooKeeper}Running Replicated Zookeeper}}
+   
+   * The server.1-3 values are the servers used when creating the quorum field for clients to connect to. This should be explained in the manager configuration section.
+
+* REST Service Plugin Build
+
+   In order for the Operator Tool and other external services to connect to Zookeeper via a RESTful web service, the bundled rest module needs to be compiled, packaged, and unzipped. First start by compiling all bundled source. Under the Zookeeper root directory run:
+
++--
+$> ant jar
+Buildfile: build.xml
+
+init:
+
+...
+
+jar:
+      [jar] Building jar: /home/tietest/gibs/thirdparty/zookeeper-3.4.5/build/zookeeper-3.4.5.jar
+
+BUILD SUCCESSFUL
+Total time: 3 seconds
++--
+
+   Next, package the REST module:
+
++--
+$> cd src/contrib/rest
+$> ant tar
+Buildfile: build.xml
+
+clean:
+     [echo] contrib: rest
+   [delete] Deleting directory /home/tietest/gibs/thirdparty/zookeeper-3.4.5/build/contrib/rest
+
+...
+
+tar:
+     [echo] building tar.gz: rest
+      [tar] Building tar: /home/tietest/gibs/thirdparty/zookeeper-3.4.5/build/contrib/rest/zookeeper-dev-rest.tar.gz
+
+BUILD SUCCESSFUL
+Total time: 3 seconds
++--
+
+   Finally, cd into the build/contrib/rest directory and unpack the generated tarball in the same directory it resides.
+
++--
+$> cd ../../../build/contrib/rest/
+$> tar xvzf zookeeper-dev-rest.tar.gz
++--
+
+   If you want to run the ZooKeeper REST Service on a different port than the default port 9998, edit rest.properties file found under build/contrib/rest/conf.
+
+   Likewise, if you are running the ZooKeeper server on a different port than the default port 2181, edit rest.properties file found under conf.
+
+   The example snippet of the rest.properties file below assumes the ZooKeeper REST Service will run on port 8130 and the ZooKeeper Server is running on port 8131.
+
++--
+#
+# ZooKeeper REST Gateway Configuration file
+#
+
+rest.port = 8130
+
+#
+# Endpoint definition
+#
+
+# plain configuration <context-path>;<host-port>
+rest.endpoint.1 = /;localhost:8131
++--
+
+* Starting Zookeeper and the Rest Service
+
+   The best way to start the servers is in a {{{http://www.rackaid.com/resources/linux-screen-tutorial-and-how-to/}detachable screen terminal}}. Zookeeper comes with simple startup scripts that make all of this simple. From the config directory:
+
++--
+
+$>cd ../bin
+$>ls
+README.txt	zkCleanup.sh	zkCli.cmd	zkCli.sh	zkEnv.cmd	zkEnv.sh	zkServer.cmd	zkServer.sh
+
+$>screen
+$>./zkServer.sh 
+JMX enabled by default
+Using config: ./../conf/zoo.cfg
+Usage: ./zkServer.sh {start|stop|restart|status}
+	
+$>./zkServer.sh start
++--
+
+   This should start the server up, and you'll begin seeing log messages. 
+   
+   In order to start the REST server, cd into directory where you unzipped the tarball mentioned above and run the packaged startup script.
+
++--
+$> cd ../build/contrib/rest
+$> ./rest.sh start
++--
+
+   After starting the rest server, you'll see a notice that says:
+   
++--
+Starting ZooKeeper REST Gateway ... 
+STARTED
++--
+ 
+   The Operation Tool is the only piece that relies on the the rest interface, so it will not affect granule ingestion if this gets shutdown, but not all pieces of the operations tool will work if it's offline. Future versions of the rest interface are not as cumbersome to test.
+
+   From here, zookeeper is set up and is ready to use by manager.
+   
+* Verifying installation
+
+   To verify that zookeeper is setup, go to the zookeeper home directory, and cd into bin:
+   
++--
+$> ./zkCli.sh -server localhost:2181
+Connecting to localhost:2181
+[zk: localhost:2181(CONNECTED) 0]
+[zk: localhost:2181(CONNECTED) 0] ls /
+[zookeeper]
+
++--
+
+   And that's it!
+   
+* Verifying the rest interface is running
+
+   From the command line:
+
++--
+curl 'http://localhost:9998/znodes/v1/?view=children'
++--
+
+   Substituting the host name and port for the interface listener host and prot used to start the rest interface above.
+   
+   You should get back a message like:
+
++--
+{"path":"/","uri":"http://localhost:9998/znodes/v1/","child_uri_template":"http://localhost:9998/znodes/v1/{child}","children":["zookeeper"]}
++--
+
+    Which is good. Don't worry about it means, for now, it just means that the service is listening.

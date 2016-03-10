@@ -1,0 +1,296 @@
+~~ Copyright 2007-2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index-0.1.0.apt 6277 2010-11-15 18:29:57Z thuang $
+
+  ---
+  Release Description 0.1.0
+  ---
+  Sean Hardman
+  ---
+  
+Release Description 0.1.0
+
+  This release of the Inventory Program Set is a component of the first integrated release ({{{../../cm/release/index-0.1.0.html}0.1.0}}) of the Next Generation PO.DAAC Data Management System. This release is intended as a test release and not an operational release. The following sections can be found in this document:
+
+  * {{{Capabilities}Capabilities}}
+
+  * {{{Liens}Liens}}
+
+  * {{{Installation}Installation}}
+
+  * {{{Operation}Operation}}
+
+  * {{{Appendix_A_-_Requirements_Support}Appendix A - Requirements Support}}
+
+  * {{{Appendix_B_-_Test_Status}Appendix B - Test Status}}
+
+{Capabilities}
+
+  This section details the new, modified and corrected capabilities that comprise this release of the Inventory Program Set. In lieu of listing the capabilities by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix_A_-_Requirements_Support}Appendix A}}.
+
+* New Capabilities
+
+  The following capabilities are new for this release:
+
+  * Database Schema Adminstration
+
+    Perl and SQL scripts are included to create and drop the database schema as described in the {{{../data_model/index.html}Data Model}} document.
+
+  * Granule Inventory API
+
+    Capabilities to manage the granule inventory are included to add and update a granule entry.
+    
+  * Dataset Inventory API
+
+    Capabilities to manage the dataset inventory are included to add and update a dataset entry.
+    
+  * SIP Metadata API
+
+    The SIP Metadata API is included to take a given SIP file, extract and translate the granule metadata within and insert that metadata into the database.
+  
+  * Query API
+
+    A set of basic queries are included to list and find the major entities as described in the {{{../data_model/index.html}Data Model}} document. Please refer to the {{{../apidocs/index.html}JavaDocs}} for the list of query methods. Due to a lack of test data, only queries associated with granule and dataset inventory have been tested for this release.
+
+* Modified Capabilities
+
+  Not applicable in the first release.
+
+* Corrected Capabilities
+
+  Not applicable in the first release.
+
+{Liens}
+
+  This section details the liens against the capabilities that have yet to be implemented or are partially implemented. In lieu of listing the liens by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix_A_-_Requirements_Support}Appendix A}}.
+
+  * TBD
+
+  TBD
+
+{Installation}
+
+  This section details the system requirements and procedures for installing and configuring the software in this program set.
+
+* System Requirements
+
+  The software contained in this program set was developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The software was specifically developed under Sun Java version 1.5 and has only been tested with this version.
+
+  * PO.DAAC Standard Computing Environment
+
+  This will eventually be documented on the Wiki and linked to in future releases. For now, the following software and tools should be available in the current environment:
+
+    * Sun Java Standard Edition (J2SE) 1.5.X
+
+    * Perl 5.X
+
+    * Subversion Client 1.3.X
+
+    * Maven 2.0.X
+
+    * Oracle Client 10.x
+
+[]
+
+  * Oracle Database Server
+
+  The Inventory Program Set requires an instance of the Oracle Database Server to be installed, configured for PO.DAAC and running in the current environment. This requirement should be satisfied by the PO.DAAC Oracle database administrator.
+
+* Software Installation
+
+  The Inventory Program Set consists solely of an Application Program Interface (API) and some command-line applications for interfacing with the Oracle database server and installing the database schema. Installation is covered in the Ingest Server Module {{{../../ingest/ingest-server/install/index.html}Installation}} document. That document does refer back to the Inventory {{{../install/index.html}Installation}} document for creation of the database schema.
+
+{Operation}
+
+  This section details any necessary setup and the commands for running the command-line applications in this program set. Operation is covered in a separate {{{../operate/index.html}Operation}} document.
+
+{Appendix A - Requirements Support}
+
+  The capabilities in this release are detailed in the table below based on the requirements specified in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Document-279402/PO.DAAC_Reqs_20070726.xls}PO.DAAC User and System Requirements}} document. The allocation of the Level 3 system requirements to the program sets is captured in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Document-407255/podaac_req_alloc_20070917.xls}Level 3 Requirements Allocation}} document. The values for the Support column are defined as follows:
+
+  * <<Full>> - The capability specified by the associated requirement has been implemented and tested at the program set level.
+
+  * <<Partial>> - The capability has been partially implemented. The content of the Description column should provide more details.
+
+  * <<No>> - The capability has not yet been implemented.
+
+[]
+
+*--+++
+| <<Requirement>> | <<Support>> | <<Description>> |
+*--+++
+| L3.169 The PO.DAAC shall maintain the following information for every data stream.
+a. Data stream name
+b. Data destination
+c. Data frequency
+d. Expiration time
+e. Source of Data (e.g. Instrument)
+f. Measurement type | Partial | The specified elements map to the following table.column in the database schema: (a. dataset.short_name, b. dataset_policy.base_path, c. dataset_policy.data_frequency, d. dataset_policy.data_duration, e. sensor.short_name). Measurement type has not been captured in the data model yet. |
+*--+++
+| L3.170 The PO.DAAC shall register and maintain the following information for every acquired granule:
+a. Granule Name.
+b. Granule size (Mbytes)
+c. Receipt time.
+d. Data stream name
+e. Status of granule push (optional)
+f. Transfer time of granule to external destination host (optional)
+g. Checksum value. | Partial | The specified elements map to the following table.column in the database schema: (a. granule.name, b. granule_archive.file_size, c. granule.ingest_time, d. dataset.short_name related via granule.dataset_id, g. granule_archive.checksum). Push status and transfer time have not been captured in the data model yet. |
+*--+++
+| L3.171 The PO.DAAC shall establish and maintain a list of the following information about data providers:
+a. Institution name
+b. Postal address
+c. Web location
+d. Primary contact person information
+e. Secondary contact person information
+f. Data stream name(s)
+g. Data Frequency per data stream
+h. Remote interface detail (e.g. host id, IP address and privileges) | Partial | The specified elements map to the following table.column in the database schema: (a. provider.short_name, b. provider_contact.address, c. provider_resource.path, d. provider_contact specified via provider_contact.role, e. provider_contact specified via provider_contact.role, f. dataset.short_name related via dataset.provider_id, g. dataset_policy.data_frequency related via dataset.provider_id). Remote interface information has not been captured in the data model yet. |
+*--+++
+| L3.173 The PO.DAAC shall map between the PO.DAAC data model and the following data models
+a. GCMD/DIF
+b. FGDC
+c. ISO-11179, ISO-19115 
+d. Dublin Core
+e. ECHO | No | Although the design of the data model should facilitate the prescribed mapping, we have yet to implement any of these mappings in order to test out this theory. |
+*--+++
+| L3.181 The PO.DAAC shall produce metadata satisfying minimum quality standards. | Partial | The design of the data model specifies constraints on the metadata contained in the database schema. The scope of this requirement still needs to be determined so that a test plan can be formulated. |
+*--+++
+| L3.184 The PO.DAAC shall capture latency metrics on data produced. | No | Not been addressed yet. |
+*--+++
+| L3.188 The data model for granule-based metadata shall be implemented using a widely accepted metadata standard (e.g. ISO-19115). | Partial | Standards such as ISO-19115 and ISO-11179 have been referenced during implementation. The scope of this requirement still needs to be determined so that a test plan can be formulated. |
+*--+++
+| L3.190 The data model for granule-based metadata shall contain the following mandatory information:
+a. Data Product name
+b. Granule name
+c. Version number
+d. Start date
+e. End date
+f. Creation date
+g. File size
+h. File Format (compression)
+j. Parameters(s)
+k. Location(s)
+l. Ingest date
+m. Last updated date | Partial | The specified elements map to the following table.column in the database schema: (a. dataset.short_name related via granule.dataset_id, b. granule.name, c. granule.version, d. granule.start_time, e. granule.stop_time, f. granule.create_time, g. granule_archive.file_size, h. dataset_policy.compress_type related via granule.dataset_id, j. dataset_parameters related via granule.dataset_id, k. granule_reference.path, l. granule.ingest_time). |
+*--+++
+| L3.191 The data model for granule-based metadata shall maintain the following swath (orbit) spatial container type specific metadata extensions.
+a. Inclination angle (granule override)
+b. Swath width (granule override)
+c. Equatorial crossing time in ascending node
+d. Equatorial crossing longitude in ascending node
+e. Ascending node (asc  or  desc)
+f. Spatial resolution (collection level) | Partial | TBD |
+*--+++
+| L3.192 The data model for granule-based metadata shall maintain the following gridded (bounding rectangle) spatial container type specific metadata extensions.
+a. Geolocation coordinates
+b. region (e.g. global, pacific, north atlantic) | Partial | TBD |
+*--+++
+| L3.193 The data model for granule-based metadata shall support any of the following content-based metadata extension, where appropriate.
+a. Statistical analysis
+b. Data mining
+c. Quality of data | No | TBD |
+*--+++
+| L3.194 The data model for granule-based metadata shall allow insertion of new fields. | Partial | TBD |
+*--+++
+| L3.196 The data model for catalog-based metadata shall be implemented using a widely accepted metadata standard (e.g. ISO-19115). | Partial | Standards such as ISO-19115 and ISO-11179 have been referenced during implementation. The scope of this requirement still needs to be determined so that a test plan can be formulated. |
+*--+++
+| L3.198 The data model for catalog-based metadata shall contain the following mandatory information.
+a. Data Product author
+b. Data Product release date
+c. Data Product  title
+d. Version number
+e. Source name
+f. Sensor name
+g. Start date
+h. End date
+i. Geolocation coordinates
+j. Region
+k. Data level
+l. Spatial container (e.g. gridded, swath, ellipsoid, point, line)
+m. Contact information
+n. Temporal resolution
+o. Spatial resolution | Partial | TBD |
+*--+++
+| L3.199 The data model for catalog-based metadata shall maintain the following additional information.
+a. External location (e.g. root location)
+b. Access constraints
+c. Use constraints
+d. Read software location
+e. Document location
+f. Period (orbit/swath specific)
+g. Inclination angle (orbit/swath specific)
+h. Swath width (orbit/swath specific)
+i. Orbit model name (orbit/swath specific)
+j. Loader file info
+k. FTP root path
+l. Archive root path | Partial | TBD |
+*--+++
+| L3.200 The data model for catalog-based metadata shall be capable of handling up 10,000 products. | Partial | TBD |
+*--+++
+| L3.204 The PO.DAAC shall maintain a granule and catalog entries of data transferred to a long-term archive when that metadata can not be directly accessed at the long-term archive from PO.DAAC. | No | TBD |
+*--+++
+| L3.206 The PO.DAAC shall maintain a data dictionary which includes common vocabulary used to describe its products and services. | Partial | TBD |
+*--+++
+| L3.209 The PO.DAAC shall provide granule/catalog on-line search by the following selection including but not limited to:
+a. Date and time
+b. Parameter
+c. Geolocation
+d. Temporal resolution (e.g. daily, weekly, monthly)
+e. Spatial resolution
+f. Algorithm
+g. Event-based (i.e., hurricanes, el nino, la nina)
+h. Content-based (i.e., statistics, cloud cover, quality) | No | TBD |
+*--+++
+| L3.243 The PO.DAAC shall maintain the following required user information for single sign-on.
+a. E-mail
+b. Password
+c. First name
+d. Last name | No | TBD |
+*--+++
+| L3.244 The PO.DAAC shall maintain the following optional user information.
+a. Affiliation
+b. Location
+c. Institution
+d. Subscription information | No | TBD |
+*--+++
+| L3.262 The PO.DAAC shall provide remote database queries. | Partial | TBD |
+*--+++
+| L3.266 The PO.DAAC shall return database search results within 3 seconds at least 90% of the time. | No | TBD |
+*--+++
+| L3.287 The PO.DAAC shall provide users with electronic access to data product catalog information. | Partial | TBD |
+*--+++
+| L3.288 The PO.DAAC shall provide users with electronic access to inventory information. | Partial | TBD |
+*--+++
+| L3.292 The PO.DAAC shall be scalable for storage growth to 85 TB in 2008, 105 TB in 2009, and  and 130 TB in 2010 [according to PO.DAAC capacity plan]. | No | TBD |
+*--+++
+| L3.295 The PO.DAAC shall maintain algorithm information in database. | No | TBD |
+*--+++
+| L3.324 The PO.DAAC shall manage the processing history and source of data products. | No | TBD |
+*--+++
+| L3.328 The PO.DAAC shall maintain metadata for locating backup data at remote locations. | No | TBD |
+*--+++
+| L3.329 The PO.DAAC shall maintain information of backup data holdings stored in a separate location for retrieval. | No | TBD |
+*--+++
+| L3.330 The PO.DAAC shall maintain a backup schedule of all archive data. | No | TBD |
+*--+++
+| L3.341 The PO.DAAC shall associate read software and documentation with data products. | Partial | TBD |
+*--+++
+| L3.501 The PO.DAAC shall maintain the following geophysical event information:
+a. Event name or ID
+b. Event type
+c. Temporal extent
+d. Spatial extent(s) | No | TBD |
+*--+++
+
+{Appendix B - Test Status}
+
+  This appendix details tests and test procedures for unit and program set level testing performed prior to integration and test by the development staff.
+
+* Unit Tests
+
+  The results of unit testing prior to deployment can be found in the {{{../surefire-report.html}Maven Surefire Report}}. Descriptions of the unit tests can be found in the {{{../testapidocs/index.html}Test JavaDocs}}.
+
+* Program Set Tests
+
+  TBD

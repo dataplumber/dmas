@@ -1,0 +1,71 @@
+~~ Copyright 2010, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: $
+
+  ---
+  Release Description 4.3.0
+  ---
+  Michael Gangl & Nga Chung
+  ---
+
+Release Description 4.3.0
+
+  This release of the Distribute Program Set is a component of the integrated release ({{{../../cm/release/index-4.2.1.html}4.2.1}}) of the PO.DAAC System. This release is intended as an operational release. The following sections can be found in this document:
+
+  * {{{Capabilities}Capabilities}}
+
+  * {{{Liens}Liens}}
+
+  * {{{System_Requirements}System Requirements}}
+
+  * {{{Installation}Installation}}
+
+  * {{{Operation}Operation}}
+
+
+{Capabilities}
+
+  This section details the new, modified and corrected capabilities that comprise this release of the Inventory Program Set. In lieu of listing the capabilities by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix_A_-_Requirements_Support}Appendix A}}.
+
+* New Capabilities
+
+  * {{{https://podaac-redmine.jpl.nasa.gov/issues/1737}1737}} - Merge from 3.4 - Distribute - Distribute/EMS - Update Rolling Store handling
+
+  * {{{https://podaac-redmine.jpl.nasa.gov/issues/1739}1739}} - Merge from 3.4 - Distribute - Distribute/EMS - Allow ingestion of granule state file
+
+  * {{{https://podaac-redmine.jpl.nasa.gov/issues/1755}1755}} - Merge from 3.4 - Distribute - Distribute/ECHO Export - ProcessingCenter value truncated by 1 character
+
+  * {{{https://podaac-redmine.jpl.nasa.gov/issues/1793}1793}} - Merge from 3.4 - Distribute - Distribute/EMS: EMS daily archive report should time sort all of the entries
+
+  * {{{https://podaac-redmine.jpl.nasa.gov/issues/1794}1794}} - Merge from 3.4 - Distribute/EMS: Do not insert delete time for deleted data-only granule from DMAS into the ingested entries on the EMS archive report
+
+  * {{{https://podaac-redmine.jpl.nasa.gov/issues/1822}1822}} - Merge from 3.4 - Distribute - Distribute/EMS: EMS daily archive report should time sort all of the entries and only include the latest entry
+
+  * {{{https://podaac-redmine.jpl.nasa.gov/issues/1752}1752}} - Merge from 3.4 - Distribute - ECHO export has bad output for EAST=-180
+
+  * {{{https://podaac-redmine.jpl.nasa.gov/issues/1768}1768}} - Merge from 3.4 - Distribute - GHRSST GDS2 to NOAA interface requirement
+
+  * {{{https://podaac-redmine.jpl.nasa.gov/issues/1833}1833}} - Merge from 3.4 - Distribute - ECHO Export Translate Dataset Bounding Box from 0,360 to -180,180 Convention
+
+  * {{{https://podaac-redmine.jpl.nasa.gov/issues/1893}1893}} - Merge from 3.4 - Distribute - ECHO Export dataset collection_ids 2,5 out of memory error
+
+* Modified Capabilities
+
+  * N/A
+
+* Corrected Capabilies
+
+  * N/A
+
+[]
+
+{Installation}
+
+  This section details the procedures for installing and configuring the software in this program set. Installation is covered in a separate {{{../distribute-main/install/index.html}Installation}} document.
+
+{Operation}
+
+  This section details any necessary setup and the commands for running the applications in this program set. Operation is covered in a separate {{{../distribute-main/operate/index.html}Operation}} document.
+
+

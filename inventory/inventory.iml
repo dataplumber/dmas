@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module relativePaths="true" type="JAVA_MODULE" version="4">
+  <component name="DBNavigator.Module.ConnectionManager">
+    <connections />
+  </component>
+  <component name="FacetManager">
+    <facet type="hibernate" name="Hibernate">
+      <configuration>
+        <datasource-map>
+          <unit-entry name="src/main/resources/config/hibernate.cfg.xml" />
+        </datasource-map>
+        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/resources/config/hibernate.cfg.xml" optional="false" version="3.0" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/target/dependency/hibernate-3.2.6.ga.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/jta-1.0.1B.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/avalon-framework-4.1.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/jaxb-impl-2.1.6.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/stax-api-1.0-2.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/hibernate-spatial-1.0-M2.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/asm-attrs-1.5.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/commons-net-1.4.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/jaxb-api-2.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/ojdbc14-10.2.0.3.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/ehcache-1.2.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/commons-io-1.3.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/javassist-3.6.ga.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/junit-4.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/oro-2.0.8.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/antlr-2.7.6.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/ojdbc14-10.2.0.1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/asm-1.5.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/logkit-1.0.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/jts-1.8.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/commons-collections-2.1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/log4j-1.2.14.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/c3p0-0.9.1.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/hibernate-spatial-oracle-1.0-M2.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/dom4j-1.6.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/commons-lang-2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/commons-vfs-20070730.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/commons-logging-1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/runtime-0.2.GA.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/jsch-0.1.23.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/cglib-2.1_3.jar!/" />
+          <root url="jar://$MODULE_DIR$/target/dependency/activation-1.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/target/dependency" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/target/dependency" recursive="false" />
+      </library>
+    </orderEntry>
+  </component>
+</module>
+

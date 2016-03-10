@@ -1,0 +1,15 @@
+~~ Copyright 2007, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: event.apt 143 2007-09-10 05:19:59Z shardman $
+
+  ---
+  Event
+  ---
+  S. Hardman
+  ---
+  
+Event
+
+  An Event is a trackable activity within the PO.DAAC system. Events will be captured for the purposes of monitoring system performance and anomalies as well as for metrics generation.
+

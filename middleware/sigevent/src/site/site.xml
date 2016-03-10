@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+Copyright 2009, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+
+$Id: $
+-->
+
+<project name="Significant Event">
+  <bannerLeft>
+    <src>images/podaac_logo.jpg</src>
+    <href>http://podaac-cm.jpl.nasa.gov/</href>
+  </bannerLeft>
+
+  <bannerRight>
+    <name>Sigevent&nbsp;&nbsp;</name>
+  </bannerRight>
+
+  <body>
+    <links>
+      <item name="SigEvent" href="http://podaac-cm.jpl.nasa.gov/docs/middleware/sigevent/index.html" />
+    </links>
+
+    <menu name="Software Documentation">
+      <item name="About SigEvent" href="index.html"/>
+      <item name="Installation" href="install/index.html"/>
+      <item name="Operation" href="operate/index.html"/>
+      <item name="API" href="api/index.html"/>
+      <item name="XSD Docs" href="xsddoc/index.html"/>
+    </menu>
+
+    <menu ref="reports"/>
+  </body>
+</project>

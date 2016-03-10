@@ -1,0 +1,498 @@
+~~ Copyright 2008-2009, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 13212 2014-04-25 18:27:09Z gangl $
+
+  ---
+  Operation
+  ---
+  Cynthia Wong, Sean Hardman
+  ---
+  
+Operation
+
+  This document describes how to use the Archive applications. Each section corresponds with an available application. The following sections can be found in this document:
+
+   * {{{AIP_Subscribe}AIP Subscribe}}
+
+   * {{{Archive_Monitor}Archive Monitor}}
+
+   * {{{Archive_Tool}Archive Tool}}
+   
+   * {{{Archive_Popularity}Archive Popularity}}
+   
+   * {{{GHRSST_Reconciliation_Utility}GHRSST Reconciliation Utility}}
+
+{AIP Subscribe}
+
+  This Application has been made obsolete by changes to the {{{https://podaac-cm/docs/ingest/ingest-server/index.html}Ingest server}}.
+
+ 
+{Archive Monitor}
+
+	This Application has been made obsolete by changes to the {{{https://podaac-cm/docs/ingest/ingest-server/index.html}Ingest server}}.
+
+{Archive Tool}
+
+  This application is a command-line tool to allow different capabilities to manipulate the archived data and its associated metadata via Inventory API.
+  
+  The verify command is to query the database for granule archive references and verify the files for existence, size, and checksum.
+
+  For delete and rolling store options a new feature is introduced, which is a "mirror location" delete. In the archive.config file, the following 3 entries have been added:
+
++--
+
+default.data.path=file:///store/ghrsst/open/data
+mirror.directory1=file:///store/mirror1/open/data
+mirror.directory2=file:///store/mirror2/open/data
+  
++--
+
+  Given a directory of data: /store/ghrsst2/open/<source>/<sensor>/YYYY/DOY/dataFile.dat
+  
+  There can exist another directory of mirrored data for FGDC generation: /store/ghrsst2/noaa/<source>/<sensor>/YYYY/DOY/dataFile.dat
+  
+  To ensure a delete or rolling store removes all files, specify the default.data.path as /store/ghrsst2/open and the mirror.directory1 value as /store/ghrsst2/noaa. 
+  
+  This path will be checked on a delete or rolling store to remove the auxillary files.
+
+  If multiple mirror directories exist (or if the mirror could be one of several directories) you can list them as mirror.directory#, and each will be checked when rolloing of or deleting a file.
+  
+  
+  To view the archive_tool's usage, execute this command as below:
+
++--
+% archive_tool.sh
+usage: ArchiveTool -d <datasetId> | -g <granuleId> | -gl <id1,id2,id3,...>
+       | -gr <beginId:endId> -delete | -relocate | -rolling_store | -verify
+       [-help]
+ -d,--datasetId <datasetId>   Dataset Id
+ -delete                      Delete the archived entity by granuleId;
+ -g,--granuleId <granuleId>   Granule Id
+ -gl <id1,id2,id3,...>        List of granule id
+ -gr <beginId:endId>          Range of granule id
+ -help                        print usage
+ -locate                      Locate granule IDs based on name or
+                              start/stop times;
+ -relocate                    Relocate the archived entity by granuleId;
+ -rolling_store               Scan for and process rolling store data;
+ -verify                      Verify the archived entity by granuleId or
+                              datasetId;
+
++--
+
+  where option -d is to execute the function based on dataset and options -g, -gl, and -gr are to apply the function based on granule.
+  The log messages including the result report from archive_tool.sh is captured into the archive log file which file name is specified in the archive configuration file.
+
+  The key options include verify, relocate, delete, and rolling_store. Each option has its own help usage page but they're very similar. 
+ 
+  Another common input is the indexes (<-i or --index>). When the request is dataset based, this tool allows to process a number of granules within the dataset using beginning and ending indexes. This option is useful when you have a large list of granules, let's say 50,000, and you only want to process 500 at a time. You can use the -i 1:500 syntax to process the first 500 granules, this is not equivalent to granule ids 1-500, merely any 1-500 granules that match what you are querying on (i.e. the first 500 granules in the dataset named X).  
+  
+  Here is the usage for option relocate. Note that the argument, <-bp> or <--basepath>, is used for the base path location where the archived data is to relocate to. See {{{http://seabat:8080/display/Dev/Granule+Relocate}Granule Relocate}} for the granule relocation use scenario.
+  
++--
+% archive_tool.sh -relocate -help
+usage: ArchiveTool -bp <basepath> -d <datasetId> | -g <granuleId> | -gl
+       <id1,id2,id3,...> | -gr <beginId:endId>    [-help] [-i
+       <beginIndex:endIndex>] -relocate
+ -bp,--basepath <basepath>          Base Path Location
+ -d,--datasetId <datasetId>         Dataset Id
+ -f,--force                         Force the relocation of granules
+                                    without prompting user
+ -g,--granuleId <granuleId>         Granule Id
+ -gl <id1,id2,id3,...>              List of granule id
+ -gr <beginId:endId>                Range of granule id
+ -help                              print verify usage
+ -i,--index <beginIndex:endIndex>   Begin & end Index to use with
+                                    datasetId;
+ -relocate                          Relocate the archived entity by
+                                    granuleId;
++--
+
+  Here is the usage for option verify. Note that if argument, <-lp> or <--locationPolicy>, is specified, this tool only validates the granule references and regenerate if they are missing.
+
++--
+% archive_tool.sh -verify -help
+usage: ArchiveTool -d <datasetId> | -g <granuleId> | -gl <id1,id2,id3,...>
+       | -gr <beginId:endId>    [-help] [-i <beginIndex:endIndex>] [-lp] -verify
+ -cs,--checksum                     When verifying a granule, also verify
+                                    its checksum.
+ -d,--datasetId <datasetId>         Dataset Id
+ -g,--granuleId <granuleId>         Granule Id
+ -gl <id1,id2,id3,...>              List of granule id
+ -gr <beginId:endId>                Range of granule id
+ -help                              print verify usage
+ -i,--index <beginIndex:endIndex>   Begin & end Index to use with
+                                    datasetId;
+ -lp,--locationPolicy               Validate references against dataset
+                                    location policy
+ -verify                            Verify the archived entity by
+                                    granuleId or datasetId;
+                                    
++--
+  If the checksum option is not included, the tool will not calculate the checksum for the files, which will speed up operation. The granule can still be marked as 'CORRUPT' due to file size mismatches which are still checked. Also, the checksum option computes the files checksum in realtime, it does not read what the value should be from any checksum files.
+
+  Here is an overview of the verify program flow:
+  [../images/verify.jpg]
+
+  Here is the usage for option delete. Note that if argument, <--data-only>, is specified, this tool retains the granule metadata and sets their status accordingly. See {{{http://seabat:8080/display/Dev/Granule+Delete}Granule Delete}} for the granule deletion use scenario.
+
++--
+% archive_tool.sh -delete -help
+usage: ArchiveTool -d <datasetId> | -g <granuleId> | -gl <id1,id2,id3,...>
+       | -gr <beginId:endId> [--data-only] -delete    [-help] [-i
+       <beginIndex:endIndex>]
+ -d,--datasetId <datasetId>         Dataset Id
+    --data-only                     Delete Archived data only (default);
+ -delete                            Delete the archived entity by
+                                    granuleId;
+    --delete-metadata               Delete Inventory metadata                                    
+ -g,--granuleId <granuleId>         Granule Id
+ -gl <id1,id2,id3,...>              List of granule id
+ -gr <beginId:endId>                Range of granule id
+ -help                              print delete usage
+ -i,--index <beginIndex:endIndex>   Begin & end Index to use with
+                                    datasetId;
++--
+  Here is the usage for option rolling store. Note that if there is no input arguments specified with this option, this tool scans and processes all ROLLING-STORE datasets. See {{{http://seabat:8080/display/Dev/Rolling+Store}Rolling Store}} for the rolling store use scenario.
+  
++--
+% archive_tool.sh -rolling_store -help
+usage: ArchiveTool -d <datasetId> | -g <granuleId> | -gl <id1,id2,id3,...>
+       | -gr <beginId:endId>    [-help] [-i <beginIndex:endIndex>] -rolling_store
+ -d,--datasetId <datasetId>         Dataset Id
+ -g,--granuleId <granuleId>         Granule Id
+ -gl <id1,id2,id3,...>              List of granule id
+ -gr <beginId:endId>                Range of granule id
+ -help                              print rolling_store usage
+ -i,--index <beginIndex:endIndex>   Begin & end Index to use with
+                                    datasetId;
+ -rolling_store                     Scan for and process rolling store
+                                    data;
+ -start,--start-date <arg>          A start date (MM/dd/yyyy) with which
+                                    only granules after should be
+                                    processed.
+ -stop,--stop-date <arg>            A stop date (MM/dd/yyyy) with which
+                                    only granules before should be
+                                    processed.
+
++--
+
+  Here is an overview of the rolling_store program flow:
+
+[../images/rolling_store.jpg]
+
+
+  For example, the following command is to run rolling_store for all datasets.
+
++--
+% archive_tool.sh -rolling_store
++--
+
+
+  For example, the following command is to run rolling_store for a range of granules with IDs 15-35 from january 1st, 2002 to january 5th, 2002.
+
++--
+% archive_tool.sh -gr 15:35 -rolling_store -start 01/01/2002 -stop /01/05/2002
++--
+
+
+  For example, the following command is to run relocate for dataset with id 6, moving it's data to /store/new/location/of/base/path. This command will prompt the user to confirm the relocation of the granule outside of the new base path.
+
++--
+% archive_tool.sh -bp /store/new/location/of/base/path -d 6 -relocate
++--
+
+ For example, the following command is to run relocate for dataset with id 6, moving it's data to /store/new/location/of/base/path. Using the -f option ensures that the relocate command does not prompt the user. This is a useful option for automated tasks where no operator is at the terminal to confirm or deny a move.
+
++--
+% archive_tool.sh -bp /store/new/location/of/base/path -d 6 -f -relocate
++--
+
+                  
+  For example, the following command is to verify the data for dataset id 2.
+
++--
+% archive_tool.sh -d 2 -verify
++--
+
+  The result report can be found in the archive log file as follows:
+
++--
+===== Sat May 31 23:49:18 PDT 2008   Archive Verification Summary =====
+
+Dataset Id	:	2
+No. Granules	:	3
+No. Archives	:	6	Failures:	4
+
+CORRUPTED:	{GranuleId=[Paths]}
+	{4=[file:///podaac/testData/archive/2007/240/testDataFile, 
+  file:///podaac/testData/archive/2007/240/testDataFile.md5], 
+  5=[file:///podaac/testData/archive/2007/241/testDataFile, 
+  file:///podaac/testData/archive/2007/241/testDataFile.md5]}
+
+No. References	:	9	Failures:	4
+
+MISSING:	{GranuleId=[Paths]}
+	{4=[http://localhost/podaac/testData/archive/testDataFile.html, 
+  ftp://localhost/podaac/testData/archive/testDataFile], 
+  5=[http://localhost/podaac/testData/archive/testDataFile.html, 
+  ftp://localhost/podaac/testData/archive/testDataFile]}
+
+Process Time	:	5.756 seconds
+
+===== Sat May 31 23:50:10 PDT 2008   End of Summary ===================
++--
+
+  The following example is to verify the data for granule id 4.
+
++--
+% archive_tool.sh -g 4 -verify
++--
+
+  The result report can be found in the archive log file as follows:
+
++--
+===== Mon Jun 02 08:24:19 PDT 2008   Archive Verification Summary =====
+
+No. Granules	:	1
+No. Archives	:	3	Failures:	2
+
+CORRUPTED:	{GranuleId=[Paths]}
+	{4=[file:///podaac/testData/archive/2007/240/testDataFile, 
+  file:///podaac/testData/archive/2007/240/testDataFile.md5]}
+
+No. References	:	3	Failures:	2
+
+MISSING:	{GranuleId=[Paths]}
+	{4=[http://localhost/podaac/testData/archive/testDataFile.html, 
+  ftp://localhost/podaac/testData/archive/testDataFile]}
+
+Process Time	:	3.965 seconds
+
+===== Mon Jun 02 08:24:23 PDT 2008   End of Summary ===================
++--
+
+  The following table contains a brief summary of expected results for each key option. The Archive Tool processes only the granule related metadata/data.
+  
+  * <State> - State of an operation action;
+
+  * <Location Policy> - The Dataset Location Policy table;
+
+  * <Granule Status> - The granule status column, STATUS, in GRANULE table;
+
+  * <Archive Paths> - The granule archive paths, PATH, in GRANULE_ARCHIVE table;
+
+  * <Archives' Status> - The granule archive status column, STATUS, in GRANULE_ARCHIVE table;
+
+  * <Reference Paths> - The granule reference paths, PATH, in GRANULE_REFERENCE table;
+
+  * <References' Status> - The granule reference status column, STATUS, in GRANULE_REFERENCE table;
+
+  * <Data> - The archived data; 
+
+[]
+
+*--++++++++
+|| <<State>> || <<Location Policy>> || <<Granule Status>> || <<Archive Paths>> || <<Archives' Status>>|| <<Reference Paths>> || <<References' Status>> || <<Data>> | 
+*--++++++++
+| Pre-archived | pre-assigned | IN-PROCESS | inventoried | IN-PROCESS | inventoried | IN-PROCESS | staging |
+*--++++++++
+| Archived | unchanged | ONLINE | unchanged | ONLINE | unchanged | ONLINE | archived-data |
+*--++++++++
+| Not Verified | unchanged | OFFLINE | unchanged | OFFLINE | unchanged | OFFLINE | unchanged |
+*--++++++++
+| Relocated | unchanged | unchanged | changed to specified location | unchanged | deleted LOCAL paths | unchanged | moved |
+*--++++++++
+| Deleted | unchanged | deleted | deleted | deleted | deleted | deleted | deleted |
+*--++++++++
+| Deleted (data only) | unchanged | DELETED | unchanged | DELETED | deleted LOCAL paths | unchanged | deleted |
+*--++++++++
+| Changed Location Policy | pre-assigned | unchanged | unchanged | unchanged | generated LOCAL paths | ONLINE | unchanged |
+*--++++++++
+
+Here is the usage for option locate. This tool allows Ops to lcate granules based on a naming pattern and/or archive_time.
+  
++--
+% archive_tool.sh -locate -help
+usage:   -d <datasetId> | -g <granuleId> | -gl <id1,id2,id3,...> | -gr
+       <beginId:endId>    [-help] [-i <beginIndex:endIndex>] -locate
+       [-pattern <arg>] [-start <arg>] [-stop <arg>]
+ -d,--dataset <arg>                 The dataset on which to locate
+                                    granules.
+ -g,--granuleId <granuleId>         Granule Id
+ -gl <id1,id2,id3,...>              List of granule id
+ -gr <beginId:endId>                Range of granule id
+ -help                              print locate usage
+ -i,--index <beginIndex:endIndex>   Begin & end Index to use with
+                                    datasetId;
+ -locate                            Locate granule IDs based on name or
+                                    start/stop times;
+ -pattern,--pattern <arg>           A pattern to search granule names on,
+                                    using '#' as wildcard characters.
+ -start,--start-date <arg>          A start date (MM/dd/yyyy) with which
+                                    only granules after should be
+                                    processed.
+ -stop,--stop-date <arg>            A stop date (MM/dd/yyyy) with which
+                                    only granules before should be
+                                    processed.
++--
+
+Here is an example fo searching ASCAT dataset for granules containing the string '20'
+
++--
+./archive_tool.sh -locate -d 219 -pattern #20#
++--
+
+And the result list:
+
++--
+returned size: 10000
+[granule_id] granule_name
+--------------
+
+[3177484] ascat_20100826_211202_metopa_19992_eps_o_250_1019_ovw.l2.nc
+[3162907] ascat_20100817_090901_metopa_19857_eps_o_250_1019_ovw.l2.nc
+[3160412] ascat_20100815_181802_metopa_19834_eps_o_250_1019_ovw.l2.nc
+[3180850] ascat_20100829_013601_metopa_20023_eps_o_250_1019_ovw.l2.nc
+[3183777] ascat_20100830_231201_metopa_20050_eps_o_250_1019_ovw.l2.nc
+[3178653] ascat_20100827_173003_metopa_20004_eps_o_250_1019_ovw.l2.nc
+[3180909] ascat_20100829_031503_metopa_20024_eps_o_250_1019_ovw.l2.nc
+[3172150] ascat_20100823_120901_metopa_19944_eps_o_250_1019_ovw.l2.nc
+[3167110] ascat_20100820_012100_metopa_19895_eps_o_250_1019_ovw.l2.nc
+[3172197] ascat_20100823_134803_metopa_19945_eps_o_250_1019_ovw.l2.nc
+[3158328] ascat_20100814_133600_metopa_19817_eps_o_250_1019_ovw.l2.nc
+[3167213] ascat_20100820_030301_metopa_19896_eps_o_250_1019_ovw.l2.nc
+...
++--
+
+The tool can return at most 10,000 results at a time.
+
+This is the usage for the archive_tool reassociate:
+
++--
+% archive_tool.sh -reassociate -help
+usage:   [-fd <arg>] [-help] [-pattern <arg>] [-reassociate] [-td <arg>]
+       [-test]
+ -fd,--from-dataset <arg>   The dataset to which the granules currently
+                            belong.
+ -help                      print Reassociate usage
+ -pattern,--pattern <arg>   A pattern to search granule names on, using
+                            '#' as wildcard characters.
+ -reassociate               Reassociate Command
+ -td,--to-dataset <arg>     The dataset to which the granules will be
+                            moved.
+ -test,--test-only          Test only mode will not move files or change
+                            metadata. Only prinst out the new paths for a
+                            granule.
+
++--
+
+Here is an example to searching ASCAT dataset for granules containing the string '20'
+
++--
+./archive_tool.sh -reassociate -fd PODAAC-ASOP2-25X01 -td -test
++--
+
+and the output shows what the files will be moved to:
+
++--
+2011-08-19 14:06:06,777 INFO  Command:811 - Processing from dataset [PODAAC-ASOP2-25X01:219] to dataset [PODAAC-ASOP2-12X01:672]
+2011-08-19 14:06:06,870 INFO  Reassociate:63 - Number of granules to reassociate: 10
+Processing granule 1 of 10 [3729601:INVENTORY-TEST-GRANULE-2-NO-HISTORY]
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/25km/2007/241/testMetadataFile
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2007/241/testMetadataFile
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/25km/2007/241/testDataFile
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2007/241/testDataFile
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/25km/2007/241/testDataFile.md5
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2007/241/testDataFile.md5
+Processing granule 2 of 10 [3729602:INVENTORY-TEST-GRANULE-33-NO-HISTORY]
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/25km/coastal/2007/241/testMetadataFile
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2007/241/testMetadataFile
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/25km/coastal/2007/241/testDataFile
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2007/241/testDataFile
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/25km/coastal/2007/241/testDataFile.md5
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2007/241/testDataFile.md5
+Processing granule 3 of 10 [3729603:INVENTORY-TEST-GRANULE-34-NO-HISTORY]
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/NEWPATH/2007/241/testMetadataFile
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2007/241/testMetadataFile
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/NEWPATH/2007/241/testDataFile
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2007/241/testDataFile
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/NEWPATH/2007/241/testDataFile.md5
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2007/241/testDataFile.md5
+Processing granule 4 of 10 [3732127:ANOTHER_TESTascat_20100413_210900_metopa_18074_eps_o_125_1019_ovw.l2.nc]
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/25km/2010/103/ascat_20100413_210900_metopa_18074_eps_o_125_1019_ovw.l2.nc.gz.md5
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2010/103/ascat_20100413_210900_metopa_18074_eps_o_125_1019_ovw.l2.nc.gz.md5
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/25km/2010/103/ascat_20100413_210900_metopa_18074_eps_o_125_1019_ovw.l2.nc.gz
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2010/103/ascat_20100413_210900_metopa_18074_eps_o_125_1019_ovw.l2.nc.gz
+....
+Processing granule 10 of 10 [3734041:ascat_20110815_053602_metopa_25012_eps_o_250_1019_ovw.l2.nc]
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/25km/2011/227/ascat_20110815_053602_metopa_25012_eps_o_250_1019_ovw.l2.nc.gz
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2011/227/ascat_20110815_053602_metopa_25012_eps_o_250_1019_ovw.l2.nc.gz
+	From: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/25km/2011/227/ascat_20110815_053602_metopa_25012_eps_o_250_1019_ovw.l2.nc.gz.md5
+	to: file:///data/dev/users/podaacdev/data/archive/store/ascat/preview/L2/12km/2011/227/ascat_20110815_053602_metopa_25012_eps_o_250_1019_ovw.l2.nc.gz.md5
+-----------------------------------
+Processing completed without errors
+-----------------------------------
++--
+
+The -test option is highly recommended to see where and whate files will be changed. The non-test run will also update the metadata fro all of the granules. If no pattern is used when doing a reassociate, a confirmation will ask if you're sure you'd like to reassociate ALL granules.
+
+
+{Archive Popularity}
+
+  Archive popularity consists of two tools: archive_report_parser.csh and archive_popularity.sh.
+  
+  archive_report_parser.csh is a utility to convert EMS reports (which we recieve monthly) into a common format. This is done so that a change to EMS report files will not require a change to the java software.
+  
++--
+% archive_report_parser.csh user|size <monthly/total EMS report>
++--
+
+  The output of this file will be space delimited values like the following:
+
++--
+pid year month transfer amount (in MB)
+252 2010 07 8261356.82
+257 2010 07 5934334.114
+161 2010 07 2035294.136
+258 2010 07 2714344.45
++--
+
+  This output should be piped into a file, which is up to operations to decide what to name. YYYYMM_monthly.dat and YYYYMM_total.dat would be descriptive enough.
+
+  This file can be read by the archive_popularity.sh tool to create an XML file with the rankings.
+  
++--
+% sh archive_popularity.sh
+usage: archivePopularity.sh [-f <arg>] [-h] [-o <arg>] [-pid]
+archivePopularity
+ -f,--input-file <arg>   Full path to the input file
+ -h,--help               Print the help information for this file.
+ -o,--output <arg>       Path to write output
+ -pid,--Product Id       use if the ID in the inputfiles is a product ID.
+                         Otherwise Dataset IDs will be used.
++--
+  
+  The -pid option will be used almost all fo the time. This will only change if we begin submitting reports to EMS using the dataset ID instead of the product ID.
+
+  Example usage to convert the 2010 june report to rankings xml:
+  
++--
+% archive_popularity.sh -f /store/podaac/ems/2010_june_total.dat -o /store/podaac/ems/total_201006.xml -pid
++--
+
+
+{GHRSST Reconciliation Utility}
+
+  This application is a command-line tool to allow capability to reconcile checksum and filesize differences between local or remote files and the information stored in the database.
+  
+  This application should be run as follows:
+
++--
+% archive_GHRSST_Reconciliation.sh -id <dataset id>
++--
+  
+  Note that the -id field is required.
+  
+  See {{{http://seabat.jpl.nasa.gov:8080/display/Dev/GHRSST+Reconciliation}GHRSST Reconciliation}} for its use scenario. Also see its command-line usage for its command-line syntax.

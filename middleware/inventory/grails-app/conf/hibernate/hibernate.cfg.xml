@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+$Id: hibernate.cfg.xml 6513 2010-12-16 18:59:42Z gangl $ 
+-->
+
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+  
+        <!-- Drop and re-create the database schema on startup 
+        <property name="hbm2ddl.auto">create</property> -->
+        <mapping resource="gov/nasa/podaac/inventory/model/Granule.hbm.xml"/>
+       	<mapping resource="gov/nasa/podaac/inventory/model/Dataset.hbm.xml"/>
+       	<mapping resource="gov/nasa/podaac/inventory/model/Provider.hbm.xml"/>
+      	<mapping resource="gov/nasa/podaac/inventory/model/Collection.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>

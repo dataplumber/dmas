@@ -1,0 +1,5 @@
+<project type="template"> 
+	<field name="project_projectId" type="int" required="true"></field>
+	<field name="project_shortName" type="char" required="true"></field>
+	<field name="project_longName" type="char" required="true"></field>
+</project>

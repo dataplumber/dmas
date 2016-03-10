@@ -1,0 +1,9 @@
+<element type="template"> 
+	<field name="element_elementId" type="int" required="true"></field>
+	<field name="element_shortName" type="char" required="true"></field>
+	<field name="element_longName" type="char" required="true"></field>
+	<field name="element_type" type="char" required="true"></field>
+	<field name="element_description" type="char" required="true"></field>
+	<field name="element_maxLength" type="int" required="true"></field>
+	<field name="element_scope" type="char" required="true"></field>
+</element>

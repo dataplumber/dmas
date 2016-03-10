@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+   Copyright (c) 2008
+   Jet Propulsion Laboratory, California Institute of Technology
+   All rights reserved
+   
+   This XML schema defines Submission Information Package message for PO.DAAC
+   ingestion services
+   
+   @author T. Huang {Thomas.Huang@jpl.nasa.gov}
+   @version $Id: podaac_sip.xsd 593 2008-02-12 23:34:46Z thuang $
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:podaac.nasa="http://podaac.jpl.nasa.gov"
+    targetNamespace="http://podaac.jpl.nasa.gov" elementFormDefault="qualified">
+    <xsd:include schemaLocation="podaac_common.xsd" />
+    <xsd:include schemaLocation="podaac_sip_header.xsd" />
+    <xsd:include schemaLocation="podaac_sip_complete.xsd" />
+    <xsd:complexType name="SubmissionType">
+        <xsd:annotation>
+            <xsd:documentation> The Submission Information Package message
+                definition. </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="header" type="podaac.nasa:SubmissionHeaderType">
+                <xsd:annotation>
+                    <xsd:documentation> The submission message header
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="content">
+                <xsd:annotation>
+                    <xsd:documentation> The body of the submission of message.
+                        There are two types of submission message. The classic
+                        submission message is the direct XML translation of the
+                        legacy SPM message. The complete submission message is a
+                        self-contained message with granule data and the file(s)
+                        the granule describes. </xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="complete"
+                            type="podaac.nasa:CompleteSubmissionType"
+                            minOccurs="0" maxOccurs="1" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

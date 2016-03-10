@@ -1,0 +1,82 @@
+~~ Copyright 2010, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: provider.apt 6269 2010-11-13 07:34:18Z gangl $
+
+  ---
+  Data Provider
+  ---
+  S. Hardman
+  ---
+  
+Data Provider
+
+  A Data Provider is an individual or organization that provides data to the PO.DAAC. A Data Provider can have one or more associated contacts.
+
+  Much of the information in these tables will be provided via the Product Rollout program set. The source of this information are the Data Management Plans (DMPs) and Interface Control Documents (ICDs) that are negotiated with the Data Provider.
+
+* Data Provider Schema
+
+  The following diagram details the Data Provider schema:
+
+[../images/provider_2.1.0.gif] Data Provider Schema Diagram
+
+  The following sub-sections provide detailed descriptions for each of the tables.
+
+** {contact}
+
+  This table contains identifying information for each contact. A Data Provider may have one or more related contacts but a contact does not need to be associated with a Data Provider.
+
+*--++++
+|| <<Column Name>> || <<Data Type>> || <<Element Map>> || <<Definition>> |
+*--++++
+| contact_id | NUMBER | contactId | An automatically generated identifier for the contact which is unique. This identifier is generated using a sequence. This column is the primary key for this table. |
+*--++++
+| role | VARCHAR2(40) | role | The role of the contact. |
+*--++++
+| first_name | VARCHAR2(80) | firstName | The first name of the provider contact. |
+*--++++
+| middle_name | VARCHAR2(80) | middleName | The middle name of the provider contact. |
+*--++++
+| last_name | VARCHAR2(80) | lastName | The last name of the provider contact. |
+*--++++
+| email | VARCHAR2(255) | email | An electronic mail address for the provider contact. |
+*--++++
+| phone | VARCHAR2(80) | phone | The phone number for the provider contact. |
+*--++++
+| fax | VARCHAR2(80) | fax | The FAX number for the provider contact. |
+*--++++
+| address | VARCHAR2(512) | address | The postal address for the provider contact. |
+*--++++
+| provider_id | NUMBER | providerId | The identifier for the data provider. This column is a foreign key to the <{{{provider}provider}}> table. |
+*--++++
+| notify_type | VARCHAR2(20) | notifyType | The notification type indicating when the contact is notified regarding ingestion events. |
+*--++++
+
+** {provider}
+
+  This table contains identifying information for each Data Provider.
+
+*--++++
+|| <<Column Name>> || <<Data Type>> || <<Element Map>> || <<Definition>> |
+*--++++
+| provider_id | NUMBER | providerId | An automatically generated identifier for the data provider which is unique. This identifier is generated using a sequence. This column is the primary key for the table. |
+*--++++
+| short_name | VARCHAR2(31) | shortName | The abbreviated name for the organization providing the data. |
+*--++++
+| long_name | VARCHAR2(160) | longName | The full name for the organization providing the data. |
+*--++++
+| type | VARCHAR2(20) | providerType | The type of provider. |
+*--++++
+
+** {provider_resource}
+
+  This table contains links to web-accessible resources for the Data Provider. A Data Provider may have zero or more related resources.
+
+*--++++
+|| <<Column Name>> || <<Data Type>> || <<Element Map>> || <<Definition>> |
+*--++++
+| provider_id | NUMBER | providerId | The identifier for the data provider. This column is a foreign key to the <{{{provider}provider}}> table. |
+*--++++
+| path | VARCHAR2(255) | resourcePath | The web address for a provider web site or other web-accessible resource in the form of a Uniform Resource Identifier (URI). |
+*--++++

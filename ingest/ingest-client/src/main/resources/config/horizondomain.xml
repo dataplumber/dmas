@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<domain xmlns="http://podaac.jpl.nasa.gov">
+   <default>podaacDev</default>
+   <federation>
+      <name>podaacDev</name>
+      <url>http://lanina.jpl.nasa.gov:8080/manager-1.4.1/ingest</url>
+   </federation>
+   <sigevent>http://lanina.jpl.nasa.gov:8080/sigevent-1.4.1</sigevent>
+   <jobkeeper>
+      <server>lapinta:2181</server>
+      <webservice>lapinta:9998</webservice>
+   </jobkeeper>
+   <discovery>http://seastorm.jpl.nasa.gov:8983/solr.war</discovery>
+   <inventory>http://lanina.jpl.nasa.gov:9191</inventory>
+</domain>

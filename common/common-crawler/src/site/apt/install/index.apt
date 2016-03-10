@@ -1,0 +1,30 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 1036 2008-04-28 03:11:50Z shardman $
+
+  ---
+  Installation Common Crawler
+  ---
+  Mike Gangl
+  ---
+  
+	Installation
+
+
+  The program set is packaged in a self-contained TAR/GZIP file. The package can be extracted with the following command (where X.X.X is the current version):
+
++--
+% tar -xzvf common-crawler-X.X.X-common-crawler.tar.gz
++--
+
+ The contents of the package are as follows:
+ 
+ * <<bin>> - Directory containing the executables.
+ 	* <<start_crawler.csh>> - command to execute a generic crawler. 
+ 
+ * <<lib>> - contains the required *.jar files to run commands in ../bin
+ 
+ * <<useCommon.csh>> - source file for setting the classpath necessary to run the commands in /bin.
+ 
+ That's it for installation, just untar and unzip it to the directory you want to run it out of.

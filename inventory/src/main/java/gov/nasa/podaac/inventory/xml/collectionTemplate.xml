@@ -1,0 +1,18 @@
+<collection type="template"> 
+	<field name="collection_collectionId" type="char" required="false"></field>
+	<field name="collection_shortName" type="char" required="true"></field>
+	<field name="collection_longName" type="char" required="true"></field>
+	<field name="collection_type" type="char" required="true"></field>
+	<field name="collection_description" type="char" required="true"></field>
+	<field name="collection_fullDescription" type="char" required="false"></field>
+	<field name="collection_aggregate" type="char" required="false"></field>
+	<field name="collectionContact_contactId#" type="char" required="true"></field>
+	<field name="collectionDataset_datasetId#" type="char" required="true"></field>
+	<field name="collectionDataset_granuleFlag#" type="char" required="true"></field>
+	<field name="collectionDataset_granuleRange360#" type="boolean" required="true"></field>
+	<field name="collectionDataset_startGranuleId#" type="char" required="false"></field>
+	<field name="collectionDataset_stopGranuleId#" type="char" required="false"></field>
+	<field name="collectionLegacyProduct_legacyProductId" type="int" required="false"></field>
+	<field name="collectionProduct_visibleFlag" type="char" required="true"></field>
+	<field name="collectionProduct_productId" type="char" required="true"></field>
+</collection>

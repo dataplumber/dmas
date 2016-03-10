@@ -1,0 +1,47 @@
+~~ Copyright 2007-2010, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 6859 2011-02-01 20:52:20Z thuang $
+
+  ---
+  Data Model
+  ---
+  S. Hardman
+  ---
+  
+Data Model
+
+  The approach taken to designing the data model is as follows:
+
+  * Glean criteria from the PO.DAAC level 3 requirements.
+
+  * Investigate applicable standards (e.g., ISO 19115, DIF).
+
+  * Reference the PO.DAAC legacy and GHRSST data models.
+
+  * Develop a high-level entity view (see the diagram).
+
+  * Develop a detailed and well documented schema.
+
+* High-Level Entities
+
+  The following diagram details the high-level entities found in the PO.DAAC data model:
+
+[../images/entity_2.1.0.gif] Data Model Entity Diagram
+
+  See the corresponding documents, listed in the menu on the left, for specific information regarding each of these entities. For more details regarding the elements for each of these entities, see the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Document-1320469/podaac_dictionary-3.0.0.xlsx}Data Dictionary}} document.
+
+  In addition to the database tables detailed in the documents listed in the menu on the left, the JBoss Application Server also creates and populates a number of tables to support message persistence. These tables are detailed in the {{{../../ingest/jboss/index.html#Customization_for_PO.DAAC_Ingest}Customization for PO.DAAC Ingest}} section of the {{{../../ingest/jboss/index.html}JBoss Application Server}} document. In addition to the JBoss tables, the Ingest program set also creates and populates a number of tables. These tables are detailed in the {{{../../ingest/ingest-grails/install/index.html#Data_Model}Data Model}} section of the Ingest Grails {{{../../ingest/ingest-grails/install/index.html}Installation}} document.
+
+* Diagram Legend
+
+  The data model is represented utilizing the standard UML notations. The relationships and entities are defined as follows:
+
+[../images/legend_2.1.0.gif] Legend for Entity-Relationship Diagrams
+
+  The following indicators are found within tables:
+
+  * Bold Type: Primary Key
+
+  * Underline Type: Required Attribute
+

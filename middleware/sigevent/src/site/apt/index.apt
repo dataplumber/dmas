@@ -1,0 +1,14 @@
+~~ Copyright 2009, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: $
+
+  ---
+  About SigEvent
+  ---
+  Thomas Huang
+  ---
+  
+About SigEvent
+
+  The SigEvent module contains web components for the RESTful interface to the PO.DAAC significant event capturing and notification system.

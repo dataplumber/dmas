@@ -1,0 +1,120 @@
+~~ Copyright 2007-2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 10129 2012-06-07 17:29:52Z nchung $
+
+  ---
+  Operation
+  ---
+  Thomas Huang
+  ---
+
+Operation
+
+   This document describes how to start and stop the Ingest Engine. The following sections can be found in this document:
+
+   * {{{Launch_the_Server}Launch the Server}}
+
+   * {{{Pause/Resume_the_Server}Pause/Resume the Server}}
+
+   * {{{Kill_the_Server}Kill the Server}}
+
+{Launch the Server}
+
+  Once the Ingest Engine has been installed and configured as described in the {{{../install/index.html}Installation}} document, the engine can be started with the following commands:
+
++--
+% horizonserver help
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.2.0, January 2009
+Horizon API release 3.2.0
+
+Usage: horizonserver <Options> 
+where possible options include:
+  -f <value>  Federation name
+  -n <value>  Engine name
+  -t <value>  Stereotype (ingest, archive)
+  -s <value>  Storage Name
+  -w <value>  Maximum engine wait time in milliseconds
+  -u <value>  User name
+  -p <value>  Password
+  -r <value>  Registry URL
+  -e <value>  SigEvent URL
+  -z <value>  ZooKeeper URL
+  -h          Print usage
++--
+
+   Beginning with Version 4.0, "Stereotype" is required to identify whether the engine will handle ingest or archive jobs and "Storage Name" is required to identify which storage the engine will register with.
+   
+   Startup the engine without using the keychain file
+
++--
+% source useHORIZON.csh
+
+% cd sbin
+% horizonserver -n horizonDev_1 -u thuang -p mypass -t ingest -s horizonIngestDev_1 &
++--
+
+   Startup the engine using the keychain file created by the Horizon client distribution
+ 
++--
+% source useHORIZON.csh
+
+% ingest login
+Copyright 2009, Jet Propulsion Laboratory, Caltech, NASA
+PO.DAAC Ingest Client Release 1.2.0, January 2009
+Horizon API release 3.2.0
+
+Using default federation: podaacDev
+podaacDev:User name >> thuang
+podaacDev:Password >>  
+
+% cd sbin
+% horizonserver -n horizonDev_1 -t ingest -s horizonIngestDev_1 &
++--
+
+   To startup a sequence of engine, create and execute a script similar to the one below. The script below will startup 10 ingest engines with name horizonDev_1, horizonDev_2, ... , horizonDev_10. All 10 engines are registered with storage horizonIngestDev_1. 
+
++--
+#!/bin/csh
+
+source useHORIZON.csh
+
+set i=1
+while ( $i <= 10 )
+   horizonserver -n horizonDev_$i -t ingest -s horizonIngestDev_1 &
+   @ i = $i + 1
+end
++--
+
+   When the federation name is not specified, the default federation defined with in the domain file will be used.  The username and password are optional when the user keychain is available.
+   
+{Pause/Resume the Server}
+
+   To tell the engine to first finish its current job and then stop taking any more add, move or delete jobs, locate the engine on the {{{../../../administer/operator/operate/index.html#StorageEngine_Management_Instructions}Operator Tool}} Storage/Engine Management Tab and click the <Pause> button.
+
+   To tell the engine to resume picking up jobs, click the <Resume> button.
+
+
+{Kill the Server}
+
+  The Ingest engine may occasionally have to be stopped and restarted due to a configuration modification. 
+  
+  The recommended way to gracefully shutdown the engine is to locate the engine on the {{{../../../administer/operator/operate/index.html#StorageEngine_Management_Instructions}Operator Tool}} Storage/Engine Management Tab and click the <Stop> button. Once you hit <Stop>, the engine will first finish its current job and then shutdown.
+
+  Alternatively, the server may be killed by identifying the active processes on the host machine and then using the <kill> command to stop those processes as in the example that follows:
+
++--
+% ps -ef | grep thuang
+
+thuang    8789 32319 99 00:53 pts/3    00:32:25 /usr/bin/perl -w ./horizonserver -n horizon_lapinta
+thuang    8805  8789  0 00:53 pts/3    00:00:00 /usr/bin/perl -w ./horizonserver -n horizon_lapinta
+thuang    8806  8805  3 00:53 pts/3    00:01:13 /usr/local/java/bin/java -classpath \
+:/home/thuang/dev/ingest-server-0.4.0/config/../lib/activation-1.1.jar:/home/thuang/dev/ingest ...
+
+% kill 8789 8805
++--
+
+  The above example searches for the processes by the user name that launched them. There should be a Perl process and Java process.
+
+  Note that there is a delay of up to 2 minutes in ZooKeeper registration node clean up if the engine is shutdown using the <kill> command.  Once a connection times out without ZooKeeper being able to contact the client that opened it, ZooKeeper will clean up the connection, watches, and any ephemeral nodes that the connection created.  An engine creates an ephemeral node to register itself as active.  If it loses its connection (the same as a kill on the process) the ephemeral node will be there until the connection is cleaned up by ZooKeeper.  As long as the registration node still exists, an engine with the same name cannot be started. 

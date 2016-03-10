@@ -1,0 +1,14 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 6366 2010-11-24 20:16:51Z thuang $
+
+  ---
+  About Common
+  ---
+  Sean Hardman
+  ---
+  
+About Common
+
+  The Common program set captures the collection of commonly reusable programming modules for use by other program set in the DMAS system.  This includes modules for SIP XML manipulation, FTP/SFTP/HTTP data crawler, file and date/time utilities.

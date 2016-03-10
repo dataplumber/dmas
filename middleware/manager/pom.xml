@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright 2008, by the California Institute of Technology.
+    ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+
+    Build file for the Manager.
+
+    @author Thomas Huang {Thomas.Huang@jpl.nasa.gov}
+    @version $Id: pom.xml 1432 2008-07-07 18:12:35Z thuang $
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+    http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>gov.nasa.podaac</groupId>
+      <artifactId>middleware</artifactId>
+      <version>4.4.0</version>
+      <relativePath>../pom.xml</relativePath>
+   </parent>
+   <artifactId>manager</artifactId>
+   <packaging>war</packaging>
+   <name>Manager</name>
+   <description>The Manager Grails Web App</description>
+   <url>http://podaac-cm.jpl.nasa.gov/docs/middleware/manager/</url>
+
+   <dependencies>
+      <dependency>
+         <groupId>gov.nasa.podaac</groupId>
+         <artifactId>ingest-api</artifactId>
+         <version>4.4.0</version>
+      </dependency>
+      <dependency>
+         <groupId>gov.nasa.podaac</groupId>
+         <artifactId>sigevent-api</artifactId>
+         <version>4.4.0</version>
+      </dependency>
+      <dependency>
+         <groupId>gov.nasa.podaac</groupId>
+         <artifactId>security-api</artifactId>
+         <version>4.4.0</version>
+      </dependency>
+      <dependency>
+         <groupId>gov.nasa.podaac</groupId>
+         <artifactId>inventory</artifactId>
+         <version>4.4.0</version>
+         <exclusions>
+            <exclusion>
+               <groupId>org.hibernate</groupId>
+               <artifactId>hibernate-annotations</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.hibernate</groupId>
+               <artifactId>hibernate-core</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.hibernate</groupId>
+               <artifactId>hibernate-c3p0</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.hibernate</groupId>
+               <artifactId>hibernate-commons-annotations</artifactId>
+            </exclusion>
+            <!--
+            <exclusion>
+               <groupId>hibernate-annotations</groupId>
+               <artifactId>hibernate-annotations</artifactId>
+            </exclusion>
+            -->
+            <!--
+            <exclusion>
+               <groupId>org.hibernate</groupId>
+               <artifactId>hibernate3</artifactId>
+            </exclusion>
+            -->
+            <exclusion>
+               <groupId>org.hibernatespatial</groupId>
+               <artifactId>hibernate-spatial-oracle</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>commons-collections</groupId>
+               <artifactId>commons-collections</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>antlr</groupId>
+               <artifactId>antlr</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>javax.transaction</groupId>
+               <artifactId>jta</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <!--
+      <dependency>
+         <groupId>gov.nasa.podaac</groupId>
+         <artifactId>archive</artifactId>
+         <version>4.4.0</version>
+         <exclusions>
+            <exclusion>
+               <groupId>hibernate</groupId>
+               <artifactId>hibernate</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>commons-collections</groupId>
+               <artifactId>commons-collections</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>antlr</groupId>
+               <artifactId>antlr</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>javax.transaction</groupId>
+               <artifactId>jta</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>gov.nasa.podaac</groupId>
+               <artifactId>inventory</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>jboss</groupId>
+               <artifactId>jbossall-client</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      -->
+      <!--
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-log4j12</artifactId>
+         <version>1.5.5</version>
+      </dependency>
+      -->
+      <dependency>
+         <groupId>com.oracle</groupId>
+         <artifactId>ojdbc6</artifactId>
+         <version>11.2.0.4</version>
+      </dependency>
+      <!--
+      <dependency>
+         <groupId>jboss</groupId>
+         <artifactId>jbossall-client</artifactId>
+         <version>4.2.2.GA</version>
+      </dependency>
+      -->
+      <dependency>
+         <groupId>xerces</groupId>
+         <artifactId>xercesImpl</artifactId>
+         <version>2.9.1</version>
+         <exclusions>
+            <exclusion>
+               <groupId>xml-apis</groupId>
+               <artifactId>xml-apis</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>javax.jms</groupId>
+         <artifactId>jms</artifactId>
+         <version>1.1</version>
+      </dependency>
+   </dependencies>
+
+   <build>
+      <pluginManagement/>
+      <plugins>
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-war-plugin</artifactId>
+  <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+  </configuration>
+</plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>2.1.1</version>
+            <dependencies>
+               <dependency>
+                  <groupId>commons-httpclient</groupId>
+                  <artifactId>commons-httpclient</artifactId>
+                  <version>3.1</version>
+                  <exclusions>
+                     <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                     </exclusion>
+                  </exclusions>
+               </dependency>
+            </dependencies>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>compile</id>
+                  <phase>compile</phase>
+                  <configuration>
+                     <tasks>
+                        <property name="compile_classpath" refid="maven.compile.classpath"/>
+                        <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+                        <property name="test_classpath" refid="maven.test.classpath"/>
+                        <property name="plugin_classpath" refid="maven.plugin.classpath"/>
+                        <property name="base_dir" value="${basedir}"/>
+                        <property name="grails.env" value="${grails.env}"/>
+                        <property name="java.home" value="${env.JAVA_HOME}"/>
+                        <ant antfile="${basedir}/build.xml" inheritRefs="true">
+                           <target name="war"/>
+                        </ant>
+                     </tasks>
+                  </configuration>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+               </execution>
+               <execution>
+                  <id>clean</id>
+                  <phase>clean</phase>
+                  <configuration>
+                     <tasks>
+                        <property name="compile_classpath" refid="maven.compile.classpath"/>
+                        <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+                        <property name="test_classpath" refid="maven.test.classpath"/>
+                        <property name="plugin_classpath" refid="maven.plugin.classpath"/>
+                        <property name="base_dir" value="${basedir}"/>
+                        <ant antfile="${basedir}/build.xml" inheritRefs="true">
+                           <target name="clean"/>
+                        </ant>
+                     </tasks>
+                  </configuration>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+               <source>1.6</source>
+               <target>1.6</target>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+
+   <reporting>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <reportSets>
+               <reportSet>
+                  <reports>
+                     <report>dependencies</report>
+                     <report>summary</report>
+                  </reports>
+               </reportSet>
+            </reportSets>
+         </plugin>
+         <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+         </plugin>
+      </plugins>
+   </reporting>
+
+</project>

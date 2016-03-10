@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+Copyright 2007, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+
+$Id: site.xml 5898 2010-09-18 00:24:10Z thuang $
+-->
+
+<project name="Ingest Commons">
+  <bannerLeft>
+    <src>images/podaac_logo.jpg</src>
+    <href>http://podaac-cm.jpl.nasa.gov/</href>
+  </bannerLeft>
+
+  <bannerRight>
+    <name>Ingest Commons&nbsp;&nbsp;</name>
+  </bannerRight>
+
+  <body>
+    <links>
+      <item name="Ingest Commons" href="http://podaac-cm.jpl.nasa.gov/docs/ingest/ingest-commons/index.html" />
+    </links>
+
+    <menu name="Software Documentation">
+      <item name="About Ingest Commons" href="index.html"/>
+      <item name="GroovyDoc" href="apidocs/index.html"/>
+    </menu>
+
+    <menu ref="reports"/>
+  </body>
+</project>

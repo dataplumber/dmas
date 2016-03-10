@@ -1,0 +1,265 @@
+~~ Copyright 2009, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: $
+
+  ---
+  Release Description 1.4.0
+  ---
+  Thomas Huang
+  ---
+  
+Release Description 1.4.0
+
+  This release of the Middleware Program Set is a component of the integrated release ({{{../../cm/release/index-1.4.0.html}1.4.0}}) of the PO.DAAC System. This release is intended as an operational  release to support GHRSST.
+
+  The Middleware Program Set is new to the PO.DAAC System.  This program is defined to group all middleware-related modules for the PO.DAAC System.  In the ({{{../../cm/release/index-1.4.0.html}1.4.0}}) of PO.DAAC System, a middleware components was released as part of the Ingest Program Set, the ingest-grails module.  Our success in the application of middleware technology into the PO.DAAC System has demonstrated the need of more web-enable service components in the future of PO.DAAC.  
+  
+  The first module being released with this program set is the Manager module.  The Manager module is the successor of the ingest-grails module.  Building on capabilities delivered in the last release, this release focuses on improving the overall reliability of the Middleware Services used by the PO.DAAC System.  The service architecture offers simplified and flexible approach for organizing data products from various mission and/or instruments.  Details on this release can be found in the following sections of this document:
+
+  * {{{Capabilities}Capabilities}}
+
+  * {{{Liens}Liens}}
+
+  * {{{System_Requirements}System Requirements}}
+
+  * {{{Installation}Installation}}
+
+  * {{{Operation}Operation}}
+
+  * {{{Appendix_A_-_Requirements_Support}Appendix A - Requirements Support}}
+
+  * {{{Appendix_B_-_Test_Status}Appendix B - Test Status}}
+
+{Capabilities}
+
+  This section details the new, modified and corrected capabilities that comprise this release of the Ingest Program Set. In lieu of listing the capabilities by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix_A_-_Requirements_Support}Appendix A}}.
+
+
+* New Capabilities
+
+  The following capabilities are new for this release
+  
+  * Manager
+
+      * Integrated with Significant Event WS for new Granule AIP publication and error reporting.
+
+
+  * Significant Event
+
+      * This is a new addition to the DMAS system.  Its purpose is to create a centralized webservice for capturning and report any significant issues concerning the PO.DAAC data system.
+
+
+[]
+
+* Modified Capabilities
+
+  The following capabilities have been modified for this release:
+    
+  * Manager
+
+      * Upgraded to use Grails 1.1.1 and Groovy 1.6.3
+
+      * A new way to start the Manager WS due to Grails upgrade
+
+[]
+
+* Corrected Capabilities
+
+  The following capabilities have been corrected for this release:
+
+  * N/A
+
+{Liens}
+
+  This section details the liens against the capabilities that have yet to be implemented or are partially implemented. In lieu of listing the liens by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix A - Requirements Support}Appendix A}}.
+
+  * {{{https://podaac-cm.jpl.nasa.gov/trac/ticket/98}CR-98}} - make sipcreator web interface filename box longer
+
+[]
+
+  * Secondary Failover
+
+  Running more than one instance of Manager, as specified in <L3.270> has not been tested yet.
+
+  * Request Transmission/Retransmission
+
+  Neither of the capabilities specified by <L3.293> nor <L3.294> have been implemented.
+
+  * L3.170
+
+  Two of the elements listed in this requirement have been interpreted differently from the original intention. They are:
+
+    * e. Status of granule push (optional)
+
+      Instead of having a separate status value for each granule, a status value has been assigned for each ingested package which may contain one or more granules. If one granule fails, the whole package will be rejected. Suggest removing this element from the requirement.
+
+    * f. Transfer time of granule to external destination host (optional)
+
+      Instead of tracking the time to transfer to the destination host, this element will track the time to transfer from the source host. Suggest rewording this element.
+
+  A request will be made to the System Engineer to reword this requirement.
+
+{System Requirements}
+
+  The software contained in this program set was developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The software was specifically developed under Sun Java version 1.5 and has only been tested with this version.
+
+  * PO.DAAC Standard Computing Environment
+
+  This will eventually be documented on the Wiki and linked to in future releases. For now, the following software and tools should be available in the current environment:
+
+    * Apache Ant 1.7.X
+
+    * Apache Maven 2.0.9
+    
+    * JBoss 4.2.2.GA
+
+    * SFTP/FTP Client/Server
+
+    * Grails 1.1.1
+
+    * Groovy 1.6.3
+
+    * Perl 5.X
+
+    * Subversion Client 1.4.X
+
+    * Sun Java Standard Edition (J2SE) 1.5.X
+    
+    []
+
+    See the system-level {{{../../cm/release/index-1.4.0.html}release}} document for specific version numbers.
+
+  * JBoss Application Server
+
+  The Middleware Set requires an instance of the JBoss Application Server to be installed, configured for PO.DAAC and running in the current environment. In order to satisfy this requirement, the administrator should following the procedure detailed in the {{{../jboss/index.html}JBoss Application Server}} document.
+
+  For this release, it is not necessary to reinstall or reconfigure the JBoss Application Server.
+
+{Installation}
+
+  This section details the procedures for installing and configuring the software in this program set.
+
+* Manager Installation
+
+  The Manager module consists of the RESTful interface to the PO.DAAC data acquisition and archive service. The installation of this module is covered in the {{{../manager/install/index.html}Manager Installation}} document.
+
+{Operation}
+
+* Manager Operation
+
+  The operation of this module is covered in the {{{../manager/operate/index.html}Manager Operation}} document.
+
+{Appendix A - Requirements Support}
+
+  The capabilities in this release are detailed in the table below based on the requirements specified in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Document-279402/PO.DAAC_Reqs_20070726.xls}PO.DAAC User and System Requirements}} document. The allocation of the Level 3 system requirements to the program sets is captured in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Version-548802/podaac_req_alloc_20080427.xls}Level 3 Requirements Allocation}} document. The values for the Support column are defined as follows:
+
+  * <<Full>> - The capability specified by the associated requirement has been implemented and tested at the program set level.
+
+  * <<Partial>> - The capability has been partially implemented. The content of the Description column should provide more details.
+
+  * <<No>> - The capability has not yet been implemented.
+
+[]
+
+*--+++
+| <<Requirement>> | <<Support>> | <<Description>> |
+*--+++
+| L3.158 The PO.DAAC shall acquire data electronically. |  Full | Supports retrieval of data via FTP/SFTP when triggered by the receipt of a Submission Information Package (SIP). |
+*--+++
+| L3.160 The PO.DAAC shall provide remote event handling (i.e. handshaking) to initiate data transfer from the data provider. | Full | SIPs are accepted via HTTP submission. |
+*--+++
+| L3.161 The PO.DAAC shall acknowledge receipt of data (e.g. receipt confirmation notification (RCN), as directed by provider. | Partial | Information is captured within the Ingest data model. Operator can track the submission stages via database queries. |
+*--+++
+| L3.164 The PO.DAAC shall log/capture all transmission anomalies. | Full | Processing information is captured in log files.  SIPs are cataloged directly within the database for fast retrieval and archive. |
+*--+++
+| L3.166 The PO.DAAC shall verify data for readability. | No | Implementation is planned for phase II. |
+*--+++
+| L3.167 The PO.DAAC shall verify granule data with appropriate checksum information. | Full | Checksums are computed and verified against the provided checksum. |
+*--+++
+| L3.168 The PO.DAAC shall capture all verification results. | Full | Checksums are computed and cataloged directly within the database. |
+*--+++
+| L3.170 The PO.DAAC shall register and maintain the following information for every acquired granule:
+a. Granule Name.
+b. Granule size (Mbytes)
+c. Receipt time.
+d. Data stream name
+e. Status of granule push (optional)
+f. Transfer time of granule to external destination host (optional)
+g. Checksum value. | Full | The specified elements map to the following elements in the SIP within the <ingestibleFileList.fileIngestible> element except for <e.> which is within the <ingestiblePackageListType.ingestiblePackage> element: (a. metadata.granuleName, b. ingestDetails.size, c. ingestDetails.ingestTime, d. metadata.datasetName, e. ingestiblePackage.status, f. ingestDetails.ingestTime, g. ingestDetails.checksum). |
+*--+++
+| L3.174 The PO.DAAC shall extract metadata information from data granules when necessary. | No | Extracting metadata from granule data files has not been addressed yet. |
+*--+++
+| L3.175 The PO.DAAC shall extract content-based information from data granules (e.g. quality, statistical analysis, etc.) | No | Extracting metadata from granule data files has not been addressed yet. |
+*--+++
+| L3.258 The PO.DAAC shall acquire data via an agreed upon interface described in the Interface Control Document (ICD) or Memorandum Of Understanding (MOU) in cooperation with external entities (i.e., projects, foreign data centers and principal investigators), when and where appropriate. | Partial | I believe this requirement specifies that an ICD or MOU must be in place before data is acquired. If that is the case, then it is not much of a software requirement. |
+*--+++
+| L3.259 The PO.DAAC shall have a set of standard interfaces to select from to initiate negotiation with data provider. | Partial | The SIP provides the structure of the metadata along with the TCP/IP communication mechanisms lay the groundwork for meeting this requirement. |
+*--+++
+| L3.270 The PO.DAAC shall provide secondary fail-over systems in support of the acquisition and receipt of data. | Full | Ingest's federated architecture enable hot deployment of new Ingest engine(s) when necessary. |
+*--+++
+| L3.181 The PO.DAAC shall produce metadata satisfying minimum quality standards. | Partial | Not sure how we will ever prove complete satisfaction of this requirement but the information captured in the SIP is a good start. |
+*--+++
+| L3.293 The PO.DAAC shall report verification results and request retransmission in the event of an anomaly. | Partial | Ingest supports automatic retry when checksum failure is encountered and the failure information is captured within the data model |
+*--+++
+| L3.294 The PO.DAAC shall request transmission or retransmission in the event of an anomaly. | Full | Ingest supports automatic retry when checksum failure is encountered.  The maximum number of retries is configurable within the Ingest data model. |
+*--+++
+| L3.324 The PO.DAAC shall manage the processing history and source of data products. | No | For Ingest, this will be addressed in the SIP structure. |
+*--+++
+
+{Appendix B - Test Status}
+
+* Program Set Tests
+
+  The following test scenarios were performed prior to deployment using various test data inputs.
+
+** Testing reliable submission
+
+  * Start JBoss with Manager deployed.
+  
+  * Start Ingest daemons and Archive daemons that registers to the Manager.
+  
+  * Verify the engine instance has been registered and it is active - according to the Manager
+  
++--
+  SELECT ing_engine.active, ing_engine.is_online
+  FROM ing_federation, ing_engine
+  WHERE ing_federation.name='<federation name>'
+     AND ing_engine.name='<engine name>'
++--
+  
+  * Run <<<ingest add>>> from the Ingest Program Set to submit a new product (granule).
+
+  * Verification by query in the Ingest ing_product table
+  
++--  
+  SELECT ing_product.* 
+  FROM ing_product, ing_product_type 
+  WHERE ing_product_type.name='<product type>' 
+     AND ing_product.name='<granule name>'
++--
+
+  * Use the query above to monitor the 'current_state' and 'current_lock' for the product.
+  
+  * When the granule's state is in 'INVENTORIED', or 'PENDING_ARCHIVE', or 'ARCHIVED', the query above also returns an 'inventory_id'.  That is the Granule id within the inventory.
+
+  * Verify inventory data.  Use the following example queries below to verify the inventory granule data
+
++--
+SELECT 
+    GRANULE_ID, 
+    DATASET_ID, 
+    NAME, 
+    START_TIME, 
+    STOP_TIME, 
+    INGEST_TIME, 
+    CREATE_TIME, 
+    VERSION, 
+    ACCESS_TYPE, 
+    STATUS 
+FROM 
+    GRANULE
+WHERE
+    GRANULE_ID=<inventory_id>;
++--
+

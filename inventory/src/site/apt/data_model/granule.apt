@@ -1,0 +1,233 @@
+~~ Copyright 2007-2010, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: granule.apt 6269 2010-11-13 07:34:18Z gangl $
+
+  ---
+  Granule
+  ---
+  S. Hardman
+  ---
+  
+Granule
+
+  A Granule is the smallest organizational unit of data within a Dataset and usually corresponds to a single data file.
+
+  The Granule schema will capture metadata for data files accessible via PO.DAAC interfaces. Much of this information in these tables will be provided by the Ingest program set. The source of this information is the Data Provider.
+
+* Granule Schema (1 of 2)
+
+  The following diagram details a portion of the Granule schema:
+
+[../images/granule1_2.1.0.gif] Granule Schema Diagram (1 of 2)
+
+  The following sub-sections provide detailed descriptions for each of the tables.
+
+** {granule}
+
+  The main table containing identifying attributes for a granule.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| granule_id | NUMBER | granuleId | An automatically generated identifier for the granule which is unique. This identifier is generated using a sequence. This column is the primary key for the table. |
+*--++++
+| dataset_id | NUMBER | | The identifier for the dataset. This column is a foreign key to the <{{{dataset.html#dataset}dataset}}> table. |
+*--++++
+| name | VARCHAR2(120) | | The name of the granule which could be the file name or some other descriptive identifier. |
+*--++++
+| start_time_long | NUMBER | | The start time (represented in milliseconds since the EPIC time January 1, 1970) for data within this granule. |
+*--++++
+| stop_time_long | NUMBER | | The end time (represented in milliseconds since the EPIC time January 1, 1970) for data within this granule. |
+*--++++
+| create_time_long | NUMBER | | The date/time (represented in milliseconds since the EPIC time January 1, 1970) when the granule was created as specified by the provider. |
+*--++++
+| ingest_time_long | NUMBER | | The date/time (represented in milliseconds since the EPIC time January 1, 1970) when the granule was placed in the PO.DAAC inventory. |
+*--++++
+| archive_time_long | NUMBER | | The date/time (represented in milliseconds since the EPIC time January 1, 1970) when the granule was placed in the PO.DAAC archive. |
+*--++++
+| verify_time_long | NUMBER | | The last date/time (represented in milliseconds since the EPIC time January 1, 1970) when the files associated with the granule were verified. |
+*--++++
+| acquired_time_long | NUMBER | | The time (represented in milliseconds since the EPIC time January 1, 1970) when the acquisition was made by the data handler. |
+*--++++
+| requested_time_long | NUMBER | | The time (represented in milliseconds since the EPIC time January 1, 1970) when the ingestion request was made. |
+*--++++
+| version | NUMBER | | The version of the granule. This value is used internally to track granule replacements. |
+*--++++
+| access_type | VARCHAR2(20) | | The access type for the granule. This value should be initially inherited from the access type for the dataset. |
+*--++++
+| data_format | VARCHAR2(20) | | The data format for the data file(s) associated with this granule. If not provided by the Data Provider, this value should be inherited from the data format for the dataset. |
+*--++++
+| compress_type | VARCHAR2(20) | | The type of compression used for compressing the data file(s) for this granule. If not provided by the Data Provider, this value should be inherited from the compression type for the dataset. |
+*--++++
+| checksum_type | VARCHAR2(20) | | The type of checksum used to verify the integrity of the granule files. If not provided by the Data Provider, this value should be inherited from the checksum type for the dataset. |
+*--++++
+| status | VARCHAR2(10) | | The status of the granule. A granule is either <ONLINE> or <OFFLINE>. A granule is <ONLINE> when the associated files are accessible from private, restricted or public storage. A granule is <OFFLINE> when it is in the process of being ingested, it has been obsoleted or is determined to be corrupted. |
+*--++++
+| root_path | VARCHAR2(765) | | The root directory path for the granule. |
+*--++++
+| rel_path | VARCHAR2(8) | | The customizable (by data engineers) relative path of the granule. |
+*--++++
+
+** {granule_character}
+
+  This table contains the metadata elements with the character data type.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| granule_id | NUMBER | granuleId | The identifier for the granule. This column is a foreign key to the <{{{granule}granule}}> table. |
+*--++++
+| de_id | NUMBER | | The dataset element identifier. This column is a foreign key to the <{{{dataset.html#dataset_element}Dataset Element}}> table.|
+*--++++
+| value | VARCHAR2(255) | | The value for the corresponding element. |
+*--++++
+
+** {granule_datetime}
+
+  This table contains the metadata elements with the date or time data types. Date types will be stored as time.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| granule_id | NUMBER | granuleId | The identifier for the granule. This column is a foreign key to the <{{{granule}granule}}> table. |
+*--++++
+| de_id | NUMBER | | The dataset element identifier for the element. This column is a foreign key to the <{{{dataset.html#dataset_element}Dataset Element}}> table. |
+*--++++
+| value_long | NUMBER | | The value (represented in milliseconds since the EPIC time January 1, 1970) for the corresponding element. |
+*--++++
+
+** {granule_integer}
+
+  This table contains the metadata elements with the integer data type.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| granule_id | NUMBER | granuleId | The identifier for the granule. This column is a foreign key to the <{{{granule}granule}}> table. |
+*--++++
+| de_id | NUMBER | | The dataset element identifier. This column is a foreign key to the <{{{dataset.html#dataset_element}Dataset Element}}> table. |
+*--++++
+| value | NUMBER | | The value for the corresponding element. |
+*--++++
+
+** {granule_real}
+
+  This table contains the metadata elements with the real data type.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| granule_id | NUMBER | granuleId | The identifier for the granule. This column is a foreign key to the <{{{granule}granule}}> table. |
+*--++++
+| de_id | NUMBER | | The dataset element identifier. This column is a foreign key to the <{{{dataset.html#dataset_element}Dataset Element}}> table. |
+*--++++
+| value | NUMBER | | The value for the corresponding element. |
+*--++++
+
+** {granule_spatial}
+
+  This table contains the metadata elements with the spatial data type. The spatial geometry value is derived from the corresponding lat/lon values for the granule.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| granule_id | NUMBER | granuleId | The identifier for the granule. This column is a foreign key to the <{{{granule}granule}}> table. |
+*--++++
+| de_id | NUMBER | | The dataset element identifier. This column is a foreign key to the <{{{dataset.html#dataset_element}Dataset Element}}> table. |
+*--++++
+| value | SDO_GEOMETRY | | The value for the corresponding element. |
+*--++++
+
+* Granule Schema (2 of 2)
+
+  The following diagram details a portion of the Granule schema:
+
+[../images/granule2_2.1.0.gif] Granule Schema Diagram (2 of 2)
+
+  The following sub-sections provide detailed descriptions for each of the tables.
+
+** {granule_archive}
+
+  This table contains a record for each file associated with a granule. This table allows for more than one file per granule. Most dataset granules consist of a single data file but others also include metadata and checksum files.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| granule_id | NUMBER | granuleId | The identifier for the granule. This column is a foreign key to the <{{{granule}granule}}> table. |
+*--++++
+| type | VARCHAR2(20) | | The type of file for the granule. |
+*--++++
+| file_size | NUMBER | | The size of the granule file in bytes. If the file is compressed, the size represents the compressed size. |
+*--++++
+| checksum | CHAR(32) | | A checksum value for the granule file. The type of checksum used for a granule is specified by the checksum type which is dataset specific. If the file is compressed, the checksum represents the compressed checksum. |
+*--++++
+| compress_flag | CHAR(1) | | A flag indicating whether a granule file is compressed or not. The type of compression used for a granule is specified by the compression type which is dataset specific. |
+*--++++
+| name | VARCHAR2(250) | | The name of the granule. |
+*--++++
+| status | VARCHAR2(10) | | The status of the granule file. |
+*--++++
+
+** {granule_contact}
+
+  This table relates contact information to the granule. A granule may have more than one associated contact. Granules will not normally have contacts beyond the dataset contacts, but some of the GHRSST-related granules do come with contact information.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| granule_id | NUMBER | granuleId | The identifier for the granule. This column is part of the primary key for this table and is a foreign key to the <{{{granule}granule}}> table. |
+*--++++
+| contact_id | NUMBER | contactId | The identifier for the contact. This column is part of the primary key for this table and is a foreign key to the <{{{provider.html#contact}contact}}> table. |
+*--++++
+
+** {granule_meta_history}
+
+  This table tracks the modifications to the granule metadata record. GHRSST policy was to delete duplicate records based on the granule identifier. Because of this only the latest record exists for GHRSST-related granules.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| granule_id | NUMBER | granuleId | The identifier for the granule. This column is part of the primary key for this table and is a foreign key to the <{{{granule}granule}}> table. |
+*--++++
+| version_id | NUMBER | | A generated identifier, unless this value is provided with the granule metadata upon ingestion, which is unique within a Granule and represents the version of the metadata record. This column is part of the primary key for this table. |
+*--++++
+| creation_date_long | NUMBER | | The date (represented in milliseconds since the EPIC time January 1, 1970) the original metadata record was created. |
+*--++++
+| last_revision_date_long | NUMBER | | The date (represented in milliseconds since the EPIC time January 1, 1970) the current metadata record was revised. |
+*--++++
+| revision_history | VARCHAR2(1024) | | A description of the changes made to the metadata record. |
+*--++++
+| echo_submit_date_long | NUMBER | | The date (represented in milliseconds since the EPIC time January 1, 1970) when the granule metadata was submitted to the ECHO metadata registry. |
+*--++++
+
+** {granule_reference}
+
+  This table contains a record for each granule data file reference. This table allows for more than reference per granule to accommodate for multiple access mechanisms (e.g., FTP, OPENDAP, etc.) and/or remote access.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| granule_id | NUMBER | granuleId | The identifier for the granule. This column is a foreign key to the <{{{granule}granule}}> table. |
+*--++++
+| path | VARCHAR2(1024) | | The path of the granule data file in the form of a Uniform Resource Identifier (URI).
+*--++++
+| type | VARCHAR2(31) | | The type of access for the reference path. This is inherited from the <type> column of the <{{{dataset.html#dataset_location_policy}dataset_location_policy}}> table. |
+*--++++
+| status | VARCHAR2(10) | | The status of the granule file. |
+*--++++
+| description | VARCHAR2(1024) | | A description of the reference for the granule. |
+*--++++
+
+** {granule_sip}
+
+  This table relates contact information to the granule. A granule may have more than one associated contact. Granules will not normally have contacts beyond the dataset contacts, but some of the GHRSST-related granules do come with contact information.
+
+*--++++
+| <<Column Name>> | <<Data Type>> | <<Element Map>> | <<Definition>> |
+*--++++
+| granule_id | NUMBER | granuleId | The identifier for the granule. This column is the primary key for this table and is a foreign key to the <{{{granule}granule}}> table. |
+*--++++
+| sip | CLOB | | The Submission Information Package (SIP) for the granule. |
+*--++++
+

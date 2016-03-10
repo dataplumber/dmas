@@ -1,0 +1,108 @@
+~~ Copyright 2007-2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index.apt 2229 2008-11-03 09:03:45Z thuang $
+
+  ---
+  JBoss Application Server
+  ---
+  Thomas Huang, Atsuya Takagi
+  ---
+  
+JBoss Application Server
+
+[../images/jboss_inc_logo.gif]
+
+   {{{http://www.jboss.org}JBoss(tm)}} is an open source Java Enterprise Middleware System.  Key features of JBoss Application Server include:
+
+   * It is officially certified to be fully compliant to the {{{http://java.sun.com/j2ee/1.4/index.jsp}J2EE 1.4}} specification.
+
+   * It provides full support for J2EE Web Services and Service-Oriented Architectures (SOAs).
+
+   * It supports the Aspect-Oriented Programming (AOP) model for developing middleware solutions.
+
+   * It tightly integrates with Hibernate, the world's most popular object persistence framework.
+
+   * It is shipped with clustering and distributed caching support.
+
+[]
+
+   The JBoss Application Server {{{http://labs.jboss.com/jbossas/docs}documentation}} is available online. The following sections can be found in this document:
+
+   * {{{#Installing_JBoss_for_PO.DAAC}Installing JBoss for PO.DAAC}}
+
+   * {{{#Configure_JMS}Configure JMS}}
+
+   * {{{#Securing_The_JMX-Console_and_Web-Console}Securing The JMX-Console and Web-Console}}
+
+   * {{{#Starting_JBoss_Server}Starting JBoss Server}}
+
+   * {{{#Shutting_Down_JBoss_Server}Shutting Down JBoss Server}}
+
+{Installing JBoss for PO.DAAC}
+
+   JBoss is shipped in a self-contained deployment structure.  The diagram below illustrates the recommended customization for getting various JBoss instances to share the common binaries.
+
+[../images/jboss_dir.jpg]
+
+   The JBoss <server> directory encapsulates all various JBoss instances.  Each instance is contained within its own directory, where it should be symbolically linked to a directory that is own by the JBoss instance administrator, where he/she can perform domain/environment-specific customizations.  The <deploy> sub-directory is the container for all service components such as JAR, WAR, EAR, and all other service components that are integrated with the particular JBoss instance (e.g. management beans).
+
+{Configure JMS}
+
+   As an application server, JBoss relies on a list of pre-defined TCP ports for external systems to interact with the JBoss instance.  The following web site points to a list of JBoss ports that need to be open if the host machine has an active firewall:
+
+   * {{{http://wiki.jboss.org/wiki/Wiki.jsp?page=UsingJBossBehindAFirewall}Using JBoss Behind a Firewall}}
+
+[]
+
+   The PO.DAAC Ingest Server, code named <Horizon>, is deployed as a client of the standard {{{http://java.sun.com/products/jms}Java Message Service (JMS)}}.  JBoss is shipped with a standard-compliant JMS implementation.  This section describes the customization required before deploying a JMS-enabled Horizon server instance. The following commands check out the PO.DAAC-specific configuration files for JBoss from the associated release of the Ingest Program Set found in the PO.DAAC CM repository:
+
++--
+% setenv JBOSS_HOME <path to the JBoss installation>
+
+% svn checkout https://podaac-cm/repo/trunk/middleware/tags/X.X.X\
+/sigevent/src/main/resources/jboss jboss
+A    jboss/podaac-hsqdb-persistence-service.xml
+A    jboss/podaac-destinations-service.xml
++--
+
+  Replace the <X.X.X> in the above command with the version of the current release.  The <<<svn>>> command has also been broken into two lines for readability. The configuration files are described as follows:
+
+   * <<<podaac-hsqdb-persistence-service.xml>>> - this file contains pairs of username and password for JMS.
+
+   * <<<podaac-destinations-service.xml>>> - this file contains JMS destinations.
+
+[]
+
+   After any of the above modifications are complete, continue with the following steps:
+
++--
+% cp jboss/podaac-*.xml ${JBOSS_HOME}/servers/<jboss instance>/deploy/messaging
++--
+
+  The following diagram details the database tables that are created and populated by the JBoss Application Server for message persistence:
+
+[../images/jboss_schema.jpg]
+
+  The diagram above indicates that the <podaac-test> user is the owner of the tables. That may not be the case depending on the environment where the JBoss Application Server is installed.
+
+{Securing The JMX-Console and Web-Console}
+
+   Adding administrator authentication to JBoss prevents unauthorized user from performing administration tasks on the JBoss Application Server.  This {{{http://wiki.jboss.org/wiki/Wiki.jsp?page=SecureTheJmxConsole}link}} contains steps for securing both the JMX and Web Consoles.
+
+{Starting JBoss Server}
+
+   This section details the command to start the JBoss server.  The <<<'run.sh'>>> is the launcher to startup the server.  The <<<'-c'>>> option specifies which configuration (or instance) to startup.   The <<<'-b'>>> option specifies which host IP the server needs to bind to.  The <<<'-b'>>> option is important, because by default JBoss binds to localhost (127.0.0.1).
+
++--
+% ${JBOSS_HOME}/bin/run.sh -c <jboss instance> -b <host name/ip address>
++--
+
+{Shutting Down JBoss Server}
+
+   This section details the command to shutdown the JBoss server.  The <<<'shutdown.sh'>>>  is the launcher to shutdown the server.  The <<<'-s'>>>  option specifies the JNDI URL of the JBoss server.  The <<<'-u'>>> and the <<<'-p'>>> specify the administrator login information if the JBoss instance requires authentication.
+
++--
+% ${JBOSS_HOME}/bin/shutdown.sh -s jnp://<jboss server host>:1099
++--
+

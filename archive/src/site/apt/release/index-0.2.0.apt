@@ -1,0 +1,157 @@
+~~ Copyright 2008, by the California Institute of Technology.
+~~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+~~
+~~ $Id: index-0.2.0.apt 6256 2010-11-12 19:16:50Z thuang $
+
+  ---
+  Release Description 0.2.0
+  ---
+  Cynthia Wong, Sean Hardman
+  ---
+  
+Release Description 0.2.0
+
+  This release of the Archive Program Set is a component of the integrated release ({{{../../cm/release/index-0.3.0.html}0.3.0}}) of the PO.DAAC System. This release is intended as a test release and not an operational release. The following sections can be found in this document:
+
+  * {{{Capabilities}Capabilities}}
+
+  * {{{Liens}Liens}}
+
+  * {{{System_Requirements}System Requirements}}
+
+  * {{{Compilation}Compilation}}
+
+  * {{{Installation}Installation}}
+
+  * {{{Operation}Operation}}
+
+  * {{{Appendix_A_-_Requirements_Support}Appendix A - Requirements Support}}
+
+  * {{{Appendix_B_-_Test_Status}Appendix B - Test Status}}
+
+{Capabilities}
+
+  This section details the new, modified and corrected capabilities that comprise this release of the Archive Program Set. In lieu of listing the capabilities by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix_A_-_Requirements_Support}Appendix A}}.
+
+* New Capabilities
+
+  The following capabilities are new for this release:
+
+  * Remote Archive Support
+
+    This release supports remote movement of granule files from the Ingest staging area to the appropriate archive directory location. The previous release relied on local disk access to move granule files.
+
+  * Archive Verification
+
+    This release supports the verification of files associated with a granule as registered in the Inventory database. Verification is limited to the files listed in the <granule_archive> table.
+
+* Modified Capabilities
+
+  The following capabilities have been modified for this release:
+
+  * {{{https://podaac-cm.jpl.nasa.gov/trac/ticket/107}CR-107}} - Support for log file configuration
+
+  * {{{https://podaac-cm.jpl.nasa.gov/trac/ticket/117}CR-117}} - Enhance log file entries
+
+* Corrected Capabilities
+
+  There were no capabilities corrected for this release.
+
+{Liens}
+
+  This section details the liens against the capabilities that have yet to be implemented or are partially implemented. In lieu of listing the liens by requirement they have been summarized. For a complete list of the requirements and their support status, see {{{Appendix_A_-_Requirements_Support}Appendix A}}.
+
+  * Update Granule Status
+
+    Still need to update the granule status once the files for a granule have been copied to their archive location. This capability is waiting on {{{https://podaac-cm.jpl.nasa.gov/trac/ticket/106}IR-106}}, which is assigned to the Inventory program set.
+
+  * Documentation and Software
+
+    Still need to address the management of documentation and software in the archive as specified by <L3.201>.
+
+  * Scalability
+
+    Still need to address how the design supports the scalability capability specified by <L3.292>.
+
+  * Archive Verification
+
+    Still need to address part of the archive verification capability specified by <L3.323>.
+
+  * Directory Creation
+
+    When creating sub-directories under the base directory for a dataset, the software currently supports </\<YEAR\>/\<DOY\>> based on the start time for the granule. Not all granules for the QuikSCAT project have a start time, so in those cases create time is substituted. In the next release, the software will need to support other naming schemes for dataset sub-directories.
+
+{System Requirements}
+
+  The software contained in this program set was developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The software was specifically developed under Sun Java version 1.5 and has only been tested with this version.
+
+  * PO.DAAC Standard Computing Environment
+
+  This will eventually be documented on the Wiki and linked to in future releases. For now, the following software and tools should be available in the current environment:
+
+    * Sun Java Standard Edition (J2SE) 1.5.X
+
+    * Perl 5.X
+
+    * Subversion Client 1.3.X
+
+    * Maven 2.0.X
+
+{Compilation}
+
+  This section details the procedures for setting up and building the software in this program set. Compilation is covered in a separate {{{../compile/index.html}Compilation}} document.
+
+{Installation}
+
+  This section details the procedures for installing and configuring the software in this program set. Installation is covered in a separate {{{../install/index.html}Installation}} document.
+
+{Operation}
+
+  This section details any necessary setup and the commands for running the applications in this program set. Operation is covered in a separate {{{../operate/index.html}Operation}} document.
+
+{Appendix A - Requirements Support}
+
+  The capabilities in this release are detailed in the table below based on the requirements specified in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Document-279402/PO.DAAC_Reqs_20070726.xls}PO.DAAC User and System Requirements}} document. The allocation of the Level 3 system requirements to the program sets is captured in the {{{https://bravo-lib.jpl.nasa.gov/docushare/dsweb/Get/Version-548802/podaac_req_alloc_20080427.xls}Level 3 Requirements Allocation}} document. The values for the Support column are defined as follows:
+
+  * <<Full>> - The capability specified by the associated requirement has been implemented and tested at the program set level.
+
+  * <<Partial>> - The capability has been partially implemented. The content of the Description column should provide more details.
+
+  * <<No>> - The capability has not yet been implemented.
+
+[]
+
+*--+++
+|| <<Requirement>> || <<Support>> || <<Description>> |
+*--+++
+| L3.201 The PO.DAAC shall store data files, metadata, documentation, and software in an on-line system. | Partial | This release supports storage of data files and associated metadata files. Documentation and software may reside in the archive but are not actively managed yet. |
+*--+++
+| L3.203 The PO.DAAC shall transfer data, documentation and software via agreed upon interface described in the Interface Control Document (ICD) or Memorandum Of Understanding (MOU) in cooperation with external long-term archive agency (i.e. NOAA) | No | Implementation is planned for phase II or beyond. |
+*--+++
+| L3.292 The PO.DAAC shall be scalable for storage growth to 85 TB in 2008, 105 TB in 2009, and  and 130 TB in 2010 [according to PO.DAAC capacity plan]. | No | Not been addressed yet, but when it is the software will be limited to the ability to relocate files and updated metadata in Inventory appropriately. |
+*--+++
+| L3.323 The PO.DAAC shall routinely verify data store against the database. | No | Not been addressed yet. |
+*--+++
+| L3.328 The PO.DAAC shall maintain metadata for locating backup data at remote locations. | No | Implementation is planned for phase II. |
+*--+++
+| L3.329 The PO.DAAC shall maintain information of backup data holdings stored in a separate location for retrieval. | No | Implementation is planned for phase II. |
+*--+++
+| L3.330 The PO.DAAC shall maintain a backup schedule of all archive data. | No | Implementation is planned for phase II. |
+*--+++
+| L3.332 The PO.DAAC shall verify random samples of media for readability. | No | Implementation is planned for phase II. |
+*--+++
+
+
+{Appendix B - Test Status}
+
+  This appendix details tests and test procedures for unit and program set level testing performed prior to integration and test by the development staff.
+
+* Unit Tests
+
+  The results of unit testing prior to deployment can be found in the {{{../surefire-report.html}Maven Surefire Report}}. Descriptions of the unit tests can be found in the {{{../testapidocs/index.html}Test JavaDocs}}.
+
+  <<Note:>> The unit tests were disabled at the time of this site's deployment due to environmental dependencies. This will be addressed in the next release.
+
+* Program Set Tests
+
+  TBD

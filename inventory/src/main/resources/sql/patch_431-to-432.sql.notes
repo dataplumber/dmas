@@ -1,0 +1,2 @@
+Run the patch 431-to-432.sql file to remove the granule/dataset spatial tables.
+then run the 'create_inventory_package.sql' file to replace the granule spatial entries in the inventory package 

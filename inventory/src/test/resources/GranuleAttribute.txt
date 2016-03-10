@@ -1,0 +1,38 @@
+Short Name	Long Name	Definition	Data Type
+accessType	Access Type	The access type for the granule. This value should be initially inherited from the access type for the dataset.	character
+ancillaryName	Ancillary Name	"Used to group files when more than one type of data are stored within a single dataset, such as with ancillary or auxiliary data."	character
+comment	Comment	A comment pertaining to the granule.	character
+createTime	Create Time	The date/time when the granule was created as specified by the provider.	time
+cycle	Cycle	"A designated interval of time, usually a repeat cycle where the spacecraft begins to repeat the same coverage path."	integer
+dayNightOrbitType	Day/Night Orbit Type	Day or Night orbit type for this granule.	character
+dayNightType	Day/Night Type	Indicates whether the pass was in daytime or nighttime.	character
+eastLongitude	Eastern Longitude	"Eastern most longitude or the right-hand border of a 360 degree area, normally 360 of a 0 to 360 degree or +180 of a -180 to +180."	real
+equatorCrossingLongitude	Equator Crossing Longitude	Longitude of the first equatorial crossing.	real
+equatorCrossingTime	Equator Crossing Time	Time of the first equatorial crossing.	time
+checksum	File Checksum	A checksum value for the granule file. The type of checksum used for a granule is specified by the checksum type which is dataset specific.	character
+path	File Path	The location of the granule file in the PO.DAAC archive repository in the form of a Uniform Resource Identifier (URI).	character
+fileSize	File Size	"The size of the granule file in bytes. If the file is compressed, the size represents the compressed size."	integer
+fileType	File Type	The type of file for the granule.	character
+granuleId	Granule Identifier	An automatically generated identifier which is unique within a Dataset.	integer
+name	Granule Name	The name of the granule which will normally be the name of the raw data file (uncompressed).	character
+ingestTime	Ingest Time	The date/time when the granule was placed in the PO.DAAC inventory.	time
+maxAltitude	Maximum Altitude	"The altitude level which represents the upper limit of data coverage, as measured from mean sea level (primarily used for model outputs)."	real
+maxDepth	Maximum Depth	"The depth level which represents the lower-most depth of data coverage, as measured from mean sea level (primarily for model outputs)."	real
+minAltitude	Minimum Altitude	"The altitude level which represents the lower limit of data coverage, as measured from mean sea level (primarily used for model outputs)."	real
+minDepth	Minimum Depth	"The depth level which represents the lower-most depth of data coverage, as measured from mean sea level (primarily for model outputs)."	real
+northLatitude	Northern Latitude	Northern most latitude or the top border of a rectangular area.	real
+pass	Pass	Half-revolution count. Usually count repeats for each cycle number of other repeating interval.	integer
+passType	Pass Type	Indicates whether the pass was ascending or descending.	character
+pointLatitude	Point Latitude	Latitude of the center point of a circle.	real
+pointLongitude	Point Longitude	Longitude of the center point of a circle.	real
+pointOrder	Point Order	Defines the ordering direction of a collection of points that make up a bounding polygon.	character
+radius	Radius	Radius	real
+revolution	Revolution	Revolution count. Used when data files are divided into revs or smaller.	integer
+southLatitude	Southern Latitude	Southern most latitude or the lower border of a rectangular area.	real
+dayOfYearStart	Start Day-of-Year	Day of the year for the start of this granule (normally used for daily or multi-day granules).	integer
+startTime	Start Time	The start time for data within this granule.	time
+stopTime	Stop Time	The end time for data within this granule.	time
+version	Version	The version of the granule as specified by the Data Provider.	integer
+versionDate	Version Date	A date/time value associated with a granule version.	date
+volumeName	Volume Name	"The original volume name (e.g., tape) for this granule."	character
+westLongitude	Western Longitude	"Western most longitude or the left-hand border of a 360 degree area, normally 0 of a 0 to 360 degree or -180 of a -180 to +180."	real

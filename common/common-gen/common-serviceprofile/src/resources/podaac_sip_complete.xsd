@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+   Copyright (c) 2008
+   Jet Propulsion Laboratory, California Institute of Technology
+   All rights reserved
+   
+   This XML schema defines the Submission Information Package handled by the new
+   PO.DAAC product ingestion services.  It contains complete granule data and
+   references to the collection of files the granule associates to.
+   
+   @author T. Huang {Thomas.Huang@jpl.nasa.gov}
+   @version $Id: podaac_sip_complete.xsd 602 2008-02-14 22:15:05Z thuang $
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:podaac.nasa="http://podaac.jpl.nasa.gov" targetNamespace="http://podaac.jpl.nasa.gov"
+   elementFormDefault="qualified">
+   <xsd:include schemaLocation="podaac_common.xsd"/>
+   <xsd:include schemaLocation="podaac_spatial.xsd"/>
+   <xsd:complexType name="CompleteSubmissionType">
+      <xsd:annotation>
+         <xsd:documentation> Defines the collection of granule element objects. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="granule" type="podaac.nasa:GranuleType" minOccurs="1"
+            maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="GranuleType">
+      <xsd:annotation>
+         <xsd:documentation> Defines the granule data structure. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="id" type="xsd:long" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> An automatically generated identifier which is unique within a
+                  dataset. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="name">
+            <xsd:annotation>
+               <xsd:documentation> The name of the granule. This could be the same as the origial
+                  granule file name. For GHRSST MMR this maps to 'File_Name' </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="120"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="officialName" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The official name of the granule. This could be the same as the
+                  granule name. For versioning support where the version is part of the granule file
+                  name, this field can be use to associate various versions of the granule. This is
+                  an optional element. If it is missing, it is assumed the official name of the
+                  granule is the same as the granule name. </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="120"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="replace" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The name of the granule to be replaced by this entry.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="120"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="collectionId" type="xsd:long" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> An automatically generated identifier which is unique.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="datasetName" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Domain-specific dataset name. For GHRSST MMR this maps to
+                  'Entry_ID' </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="160"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="productType" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The name of the product type this granule is registered under.
+                  This name here will be used for naming the granule file and where to stage the
+                  ingested data files. </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="160"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="group" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Element for user to define project-specific product groups.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="name" type="xsd:string">
+                     <xsd:annotation>
+                        <xsd:documentation> Name of the group </xsd:documentation>
+                     </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="storeAsGroup" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+                     <xsd:annotation>
+                        <xsd:documentation> Flag to direct the product to be stored in a group
+                           directory. </xsd:documentation>
+                     </xsd:annotation>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="version" type="xsd:string">
+            <xsd:annotation>
+               <xsd:documentation> The version of this given granule. For GHRSST MMR this maps to
+                  'File_Version'. For OCO this maps to 'GDS build'.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="files">
+            <xsd:annotation>
+               <xsd:documentation> The collection of files the granule describes.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="file" type="podaac.nasa:GranuleFileType" minOccurs="0"
+                     maxOccurs="unbounded"/>
+                  <xsd:element name="link" type="podaac.nasa:GranuleFileLinkType" minOccurs="0"
+                     maxOccurs="unbounded"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="temporalCoverage" type="podaac.nasa:TimeStampType" minOccurs="0"
+            maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The start and stop time for data within this granule.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="createTime" type="xsd:nonNegativeInteger">
+            <xsd:annotation>
+               <xsd:documentation> The granule creation time. For GHRSST MMR this maps to
+                  'File_Release_Date'. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="collectionName" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Used to sub-group files within a dataset. </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:maxLength value="31"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="ancillaryName" type="xsd:string" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Used to group files when more than one type of data are stored
+                  within a single dataset, such as with ancillary or auxiliary data.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="revolution" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Revolution count. Used when data files are divided into revs or
+                  smaller. For OCO this maps to 'Orbit range'.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="cycle" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> A designated interval of time, usually a repeat cycle where the
+                  spacecraft begins to repeat the same coverage path. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="pass" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Half-revolution count. Usually count repeats for each cycle
+                  number of other repeating interval. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="passType" type="podaac.nasa:DataPassType" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Indicates whether the pass was ascending or descending.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="dayNightMode" type="podaac.nasa:DayNightType" minOccurs="0"
+            maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Day or Night orbit mode of this granule. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="dayOfYearStart" type="xsd:nonNegativeInteger" minOccurs="0"
+            maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Day of the year for the start of this granule (normally used for
+                  daily or multi-day granules). </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="observationMode" type="xsd:string" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>For OCO this maps to 'Observation mode' {Glint, Nadir, Target,
+                  Calibration, All}</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="surfaceType" type="xsd:string" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>For OCO this maps to 'Surface Type' {Land, Ocean,
+                  All}.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="projection" type="xsd:string" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>Map projection algorithm</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="latitudeUnits" type="xsd:string" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Units used in all latitude values </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="longitudeUnits" type="xsd:string" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Units used in all longitude values </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="latitudeStep" type="xsd:double" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Latitudinal distance between lines </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="longitudeStep" type="xsd:double" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Longitudinal distance between lines </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="numberOfLines" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Number of points in the vertical (longitudinal) direction
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="numberOfColumns" type="xsd:nonNegativeInteger" minOccurs="0"
+            maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Number of points in the horizontal (latitudinal) direction
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="scaling" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Scaling type </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:enumeration value="LOGARITHMIC"/>
+                  <xsd:enumeration value="LINEAR"/>
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+         <xsd:element name="scalingEquation" type="xsd:string" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Scaling equation </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="slope" type="xsd:double" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Value used to convert data into geophysical values when
+                  scaling=LOGARITHMIC </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="intercept" type="xsd:double" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Value used to convert data into geophysical values when
+                  scaling=LINEAR </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="inputParameters" type="xsd:string" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> All input and processing control parameters used by the calling
+                  program to generate the product. Veritcal bars or carriage return characters serve
+                  as parameter information delimiters. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="spatialCoverage" type="podaac.nasa:SpatialDomainType" minOccurs="0"
+            maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Spatial attributes. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="accessConstraint" type="podaac.nasa:AccessRoleType" minOccurs="0"
+            maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The default access type for the granule. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="extras" type="podaac.nasa:DomainAttributeType" minOccurs="0"
+            maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> List of domain-specific attributes and values.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="history" type="podaac.nasa:GranuleHistoryType" minOccurs="0"
+            maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>Historical information on the granule</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="comment" type="xsd:string" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> A comment pertaining to the granule. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="GranuleFileLinkType">
+      <xsd:annotation>
+         <xsd:documentation> Defines a link to a granule file object </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="granule" type="xsd:string"/>
+         <xsd:element name="name" type="xsd:string"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="GranuleFileType">
+      <xsd:annotation>
+         <xsd:documentation> Defines a single data file object. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="group" type="xsd:string" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> This is an optional element for a granule file to point back to
+                  the original group it was submitted with. This only applicable to files that were
+                  submitted using the classic submition message. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="name" type="xsd:string">
+            <xsd:annotation>
+               <xsd:documentation> The actual name of the file, since different provider might have
+                  different naming convention for their files. The actual file name will simplfy
+                  user search. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="sources">
+            <xsd:annotation>
+               <xsd:documentation> Allows the submitter to specify multiple download links to the
+                  data file. </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="source" type="podaac.nasa:FileType" minOccurs="1"
+                     maxOccurs="unbounded"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="type" type="podaac.nasa:FileClassType" minOccurs="0" maxOccurs="1"
+            default="DATA">
+            <xsd:annotation>
+               <xsd:documentation> Description of the file type. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="format" type="podaac.nasa:DataFormatType" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The data format for the data granule file. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="ingest" type="podaac.nasa:IngestDetailsType" minOccurs="0" maxOccurs="1"
+         />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="GranuleHistoryType">
+      <xsd:sequence>
+         <xsd:element name="version" type="xsd:string">
+            <xsd:annotation>
+               <xsd:documentation> The version of the granule</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="createDate" type="xsd:nonNegativeInteger">
+            <xsd:annotation>
+               <xsd:documentation> The creation date of the granule </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="lastRevisionDate" type="xsd:nonNegativeInteger">
+            <xsd:annotation>
+               <xsd:documentation>The latest revision date of the granule.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="revisionHistory" type="xsd:string">
+            <xsd:annotation>
+               <xsd:documentation>Revision history of the granule</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

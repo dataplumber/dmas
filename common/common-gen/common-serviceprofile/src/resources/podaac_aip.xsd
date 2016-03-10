@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+   Copyright (c) 2008
+   Jet Propulsion Laboratory, California Institute of Technology
+   All rights reserved
+   
+   This XML schema defines Archive Information Package used by the PO.DAAC
+   archive services.
+   
+   @author C. Wong {Cynthia.Wong@jpl.nasa.gov}
+   @author T. Huang {Thomas.Huang@jpl.nasa.gov}
+   @version $Id: podaac_aip.xsd 593 2008-02-12 23:34:46Z thuang $
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:podaac.nasa="http://podaac.jpl.nasa.gov"
+   targetNamespace="http://podaac.jpl.nasa.gov" elementFormDefault="qualified">
+   <xsd:include schemaLocation="podaac_common.xsd" />
+   <xsd:complexType name="ArchiveType">
+      <xsd:sequence>
+         <xsd:element name="granule" type="podaac.nasa:ArchiveGranuleType"
+            minOccurs="1" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation> A list of granules to be archived.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="ArchiveGranuleType">
+      <xsd:sequence>
+         <xsd:element name="name" type="xsd:string">
+            <xsd:annotation>
+               <xsd:documentation> Name of the granule </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="datasetName" type="xsd:string">
+            <xsd:annotation>
+               <xsd:documentation> The dataset name </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="productType" type="xsd:string">
+            <xsd:annotation>
+               <xsd:documentation> The product type name used by Ingest to
+                  organize ingested products/granules. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="granuleId" type="xsd:nonNegativeInteger">
+            <xsd:annotation>
+               <xsd:documentation> The granule ID according to the inventory
+                  catalog. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="files">
+            <xsd:annotation>
+               <xsd:documentation> List of files for this granule
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+               <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+                  <xsd:element name="file"
+                     type="podaac.nasa:ArchiveGranuleFileType" />
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="delete" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> This element will only be specified if the
+                  granule to be archived will replace an existing granule.
+               </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="name" type="xsd:string">
+                     <xsd:annotation>
+                        <xsd:documentation>Name of the granule to be replaced by
+                           this new granule.</xsd:documentation>
+                     </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="uri" type="xsd:anyURI" minOccurs="1"
+                     maxOccurs="unbounded">
+                     <xsd:annotation>
+                        <xsd:documentation>URIs to files to be
+                           removed.</xsd:documentation>
+                     </xsd:annotation>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="accessConstraint" type="podaac.nasa:AccessRoleType"
+            minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The default access type for the granule.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="archiveSuccess" type="xsd:boolean" default="false">
+            <xsd:annotation>
+               <xsd:documentation> Flag to indicate if the archive process was
+                  successful or not. Default should be false.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="archiveNote" type="xsd:string" minOccurs="0"
+            maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Archive note to be cataloged by ingest.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="archiveTime" type="podaac.nasa:TimeStampType"
+            minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The archive time coverage.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="ArchiveGranuleFileType">
+      <xsd:annotation>
+         <xsd:documentation> Description of an individual granule file.
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="ingest" type="podaac.nasa:IngestDetailsType">
+            <xsd:annotation>
+               <xsd:documentation> The ingest details which captures the staging
+                  location, file size and checksum, etc. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="type" type="podaac.nasa:FileClassType">
+            <xsd:annotation>
+               <xsd:documentation> The type of the file (e.g. METADATA, DATA,
+                  etc.) </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="destination" type="xsd:anyURI">
+            <xsd:annotation>
+               <xsd:documentation> The archive destinataion for the file.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="archiveTime" type="podaac.nasa:TimeStampType"
+            minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The archive time coverage.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+
+</xsd:schema>

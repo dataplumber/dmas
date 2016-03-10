@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+   Copyright (c) 2008
+   Jet Propulsion Laboratory, California Institute of Technology
+   All rights reserved
+   
+   This XML schema defines the Submission Information Package (SIP)
+   message header
+   
+   @author T. Huang {Thomas.Huang@jpl.nasa.gov}
+   @version $Id: podaac_sip_header.xsd 631 2008-02-26 02:11:32Z thuang $
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:podaac.nasa="http://podaac.jpl.nasa.gov"
+   targetNamespace="http://podaac.jpl.nasa.gov" elementFormDefault="qualified">
+   <xsd:include schemaLocation="podaac_common.xsd"/>
+   <xsd:complexType name="SubmissionHeaderType">
+      <xsd:sequence>
+         <xsd:element name="project" type="xsd:string">
+            <xsd:annotation>
+               <xsd:documentation> The project for this given package.
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="batch" type="xsd:string">
+            <xsd:annotation>
+               <xsd:documentation> The batch name/identifier that is unique for
+                  the specific project. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="contributor">
+            <xsd:annotation>
+               <xsd:documentation> The email address of the contributor for this
+                  given package. </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="email" type="xsd:string">
+                     <xsd:annotation>
+                        <xsd:documentation> The contributor email address.
+                        </xsd:documentation>
+                     </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="messageLevel"
+                     type="podaac.nasa:MessageFrequencyType" default="VERBOSE"
+                     minOccurs="0" maxOccurs="1">
+                     <xsd:annotation>
+                        <xsd:documentation> Allow the contributor to configure
+                           the notification verbosity. </xsd:documentation>
+                     </xsd:annotation>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="acquired" type="xsd:nonNegativeInteger"
+            minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The time when the acquisition was made by the
+                  data-handler. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="requested" type="xsd:nonNegativeInteger"
+            minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> The time when the ingestion request was made.
+                  This should be automatically filled in by ingestion service
+                  when it receives the request. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="time" type="podaac.nasa:TimeStampType" minOccurs="0"
+            maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> This will be automatically filled in by the
+                  ingestion service. The start and stop time for ingesting the
+                  package. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="inventoryCoverage" type="podaac.nasa:TimeStampType"
+            minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> This element is to be filled in by the ingest
+                  service to track the time spent on registering all the
+                  granules to the database.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="submissionId" minOccurs="0" maxOccurs="1"
+            type="xsd:string">
+            <xsd:annotation>
+               <xsd:documentation> The internal submission identifier assigned
+                  by the Ingest service to help uniquly identify each submitted
+                  SIP. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="status" type="podaac.nasa:submitStatusValue"
+            default="READY">
+            <xsd:annotation>
+               <xsd:documentation> Submission status value. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="comment" type="xsd:string" minOccurs="0"
+            maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation> Comment provided by the contributor regarding
+                  this batch. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

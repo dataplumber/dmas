@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://podaac.jpl.nasa.gov"
+	xmlns:tns="http://podaac.jpl.nasa.gov" elementFormDefault="qualified">
+
+	<annotation>
+		<documentation xml:lang="en"> This schema defines the structure for the metadataManifest
+			XML. </documentation>
+	</annotation>
+
+
+	<complexType name="field">
+		<attribute name="type" type="string"/>
+		<attribute name="name" type="string"/>
+		<attribute name="required" type="boolean"/>
+	</complexType>
+
+	<element name="dataset" type="tns:dataset"/>
+	<element name="collection" type="tns:dataset"/>
+	<element name="granule" type="tns:dataset"/>
+	<element name="source" type="tns:dataset"/>
+	<element name="sensor" type="tns:dataset"/>
+	<element name="contact" type="tns:dataset"/>
+	<element name="provider" type="tns:dataset"/>
+	<element name="project" type="tns:dataset"/>
+	<element name="element" type="tns:dataset"/>
+
+	<complexType name="dataset">
+		<sequence>
+			<element name="field" type="tns:field" maxOccurs="unbounded" minOccurs="0"> </element>
+		</sequence>
+		<attribute name="type" type="string"/>
+	</complexType>
+
+	<complexType name="collection">
+		<sequence>
+			<element name="field" type="tns:field" maxOccurs="unbounded" minOccurs="0"> </element>
+		</sequence>
+		<attribute name="type" type="string"/>
+	</complexType>
+
+	<complexType name="granule">
+		<sequence>
+			<element name="field" type="tns:field" maxOccurs="unbounded" minOccurs="0"> </element>
+		</sequence>
+		<attribute name="type" type="string"/>
+	</complexType>
+
+	<complexType name="source">
+		<sequence>
+			<element name="field" type="tns:field" maxOccurs="unbounded" minOccurs="0"> </element>
+		</sequence>
+		<attribute name="type" type="string"/>
+	</complexType>
+
+	<complexType name="sensor">
+		<sequence>
+			<element name="field" type="tns:field" maxOccurs="unbounded" minOccurs="0"> </element>
+		</sequence>
+		<attribute name="type" type="string"/>
+	</complexType>
+	<complexType name="contact">
+		<sequence>
+			<element name="field" type="tns:field" maxOccurs="unbounded" minOccurs="0"> </element>
+		</sequence>
+		<attribute name="type" type="string"/>
+	</complexType>
+	<complexType name="provider">
+		<sequence>
+			<element name="field" type="tns:field" maxOccurs="unbounded" minOccurs="0"> </element>
+		</sequence>
+		<attribute name="type" type="string"/>
+	</complexType>
+	<complexType name="project">
+		<sequence>
+			<element name="field" type="tns:field" maxOccurs="unbounded" minOccurs="0"> </element>
+		</sequence>
+		<attribute name="type" type="string"/>
+	</complexType>
+	<complexType name="element">
+		<sequence>
+			<element name="field" type="tns:field" maxOccurs="unbounded" minOccurs="0"> </element>
+		</sequence>
+		<attribute name="type" type="string"/>
+	</complexType>
+
+
+</schema>

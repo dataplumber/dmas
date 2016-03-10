@@ -1,0 +1,9 @@
+<source type="template"> 
+	<field name="source_sourceId" type="int" required="true"></field>
+	<field name="source_shortName" type="char" required="true"></field>
+	<field name="source_longName" type="char" required="true"></field>
+	<field name="source_type" type="string" required="true"></field>
+	<field name="source_orbitPeriod" type="double" required="true"></field>
+	<field name="source_inclinationAngle" type="double" required="true"></field>
+	<field name="source_description" type="char" required="true"></field>
+</source>
