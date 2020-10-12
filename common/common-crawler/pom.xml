@@ -91,7 +91,7 @@ $Id: pom.xml 14516 2015-12-03 21:22:49Z nchung $
       <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
-         <version>4.8.1</version>
+         <version>4.13.1</version>
          <scope>test</scope>
       </dependency>
       <dependency>
