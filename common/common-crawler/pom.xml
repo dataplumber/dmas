@@ -84,7 +84,7 @@ $Id: pom.xml 14516 2015-12-03 21:22:49Z nchung $
       <dependency>
          <groupId>com.jcraft</groupId>
          <artifactId>jsch</artifactId>
-         <version>0.1.42</version>
+         <version>0.1.54</version>
          <scope>compile</scope>
       </dependency>
 
