@@ -60,7 +60,7 @@ $Id: pom.xml 14516 2015-12-03 21:22:49Z nchung $
       <dependency>
          <groupId>commons-net</groupId>
          <artifactId>commons-net</artifactId>
-         <version>2.0</version>
+         <version>3.9.0</version>
          <scope>compile</scope>
       </dependency>
       <dependency>
